@@ -1,0 +1,4 @@
+Directory	Parent_directory	Full_Directory	file_created_time	last_modified_on	size_in _kb	size_in _mb	size_in_gb
+stats	basic_parallel	D:\Ajith\_code\basic_parallel\stats	Fri Jun 22 13:03:43 2018	Wed Oct 17 10:04:54 2018	187564.31	206.29	0.0	Not deleted
+w_fiind_xyz8	basic_parallel	D:\Ajith\_code\basic_parallel\w_fiind_xyz8	Fri Jun 22 13:04:09 2018	Wed Oct 17 10:20:08 2018	11455372.98	11184.88	0.0	Not deleted
+_data	basic_parallel	D:\Ajith\_code\basic_parallel\_data	Tue Oct 16 20:17:33 2018	Wed Oct 17 10:04:50 2018	28039.14	26.67	0.0	Not deleted
