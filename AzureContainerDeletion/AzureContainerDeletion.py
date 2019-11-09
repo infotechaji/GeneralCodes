@@ -135,16 +135,4 @@ if __name__=="__main__":
         print each_blob.properties.
         print each_blob.name
         print each_blob.properties.last_modified
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('-d','--delete_before_days',nargs='?',help='No of days ',required=False,type=int)
-    # parser.add_argument('-date','--delete_before_date',nargs='?',help='sample date format :YYYY-MM-DD',required=False)
-    # parser.add_argument('-c','--container_name',nargs='?',help='Container name ',default='databasebackup-new')
-    # args=parser.parse_args()
-    # account_name='alldbbackupbizplus'
-    # account_key='I+uuIHHrkwzETBTHrrJcrFn2dH43Wj+bXhkKK8GDula6zHXhUu+dQKjRfrA9/coTjAZpdaXVlMHeGLFRFV6S+Q=='
-    # container_name=args.container_name
-    # delete_before_days=args.delete_before_days
-    # delete_before_date=args.delete_before_date#
-    # azure_obj=AzureAccess(account_name=account_name,account_key=account_key)
-    # azure_obj.delete_old_blobs(container_name=container_name,delete_before_days=delete_before_days,delete_before_date=delete_before_date)
     
