@@ -120,8 +120,8 @@ class AzureAccess():
             exit()
 
 if __name__=="__main__":
-    account_name='fiindmllabs'
-    account_key='odsS8z/XCVaE+ccTHaaLULfvHfnDS/3tNmd/Otf99CFR7P5ckqEeFKzxPE08p5auBNQZ04GZ7vC1jxY2QCc6IQ=='
+    account_name='xxxxxxxx'
+    account_key='xxxxxxxxx'
     container_name='exceltest'
     marker='ns534636_testingMango.txt'
     azure_obj=AzureAccess(account_name=account_name,account_key=account_key)
