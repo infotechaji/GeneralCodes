@@ -23,7 +23,7 @@ from email import encoders
 
 
 class Gmail():
-    def __init__(self,sender="fiindinsights@gmail.com",password='$11nd@dmin',developer_mode=True):
+    def __init__(self,sender="xxx@gmail.com",password='password',developer_mode=True):
         self.sender=sender
         self.password=password
         self.developer_mode=developer_mode
@@ -165,7 +165,7 @@ class Gmail():
 if __name__=="__main__":
     gm_obj=Gmail()
     #gm_obj.read_email_from_gmail()
-    receivers='ajith@fiind.com'
+    receivers='ajith@xxx.com'
     input_dict={}
     input_dict['subject']='Testing Mail Please Ignore !!'
     input_dict['body']={
@@ -186,6 +186,6 @@ if __name__=="__main__":
                                 # 'full_file_path':'D:\\Ajith\\_code\\GeneralCodes\\Mail\\Dummy_textFile.txt'}
     
     subject='Periodic Memory Check done in the Machine "Ajith-Local" on 25_02_2019'
-    receivers=['ajith@fiind.com']
+    receivers=['ajith@xxx.com']
     gm_obj.send_mail(input_dict=input_dict,receivers=receivers)
     #gm_obj.read_email_from_gmail(subject,receivers)

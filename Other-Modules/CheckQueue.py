@@ -11,7 +11,7 @@ from SQLConnection import *
 import datetime
 from CustomEmail import *
 class CheckQueue(object):
-    def __init__(self,account_name='fiindmllabs',account_key='odsS8z/XCVaE+ccTHaaLULfvHfnDS/3tNmd/Otf99CFR7P5ckqEeFKzxPE08p5auBNQZ04GZ7vC1jxY2QCc6IQ==',queue_name='',send_mail_to_list=[],minimum_run_count=10,developer_mode=False):
+    def __init__(self,account_name='queue_name',account_key='key',queue_name='',send_mail_to_list=[],minimum_run_count=10,developer_mode=False):
         self.account_name=account_name
         self.account_key=account_key
         self.queue_name=queue_name
@@ -244,9 +244,9 @@ class CheckQueue(object):
 if __name__ == '__main__':
     if True:
         queue_list=['hgnewdomainsset1']#,'hgusset1'
-        receivers=['ajith@fiind.com']
+        receivers=['ajith@xxx.com']
         for each_queue in queue_list:
-            obj=CheckQueue(queue_name=each_queue,account_name='fiindmllabs',account_key='odsS8z/XCVaE+ccTHaaLULfvHfnDS/3tNmd/Otf99CFR7P5ckqEeFKzxPE08p5auBNQZ04GZ7vC1jxY2QCc6IQ==',send_mail_to_list=receivers)
+            obj=CheckQueue(queue_name=each_queue,account_name='queue',account_key='Key',send_mail_to_list=receivers)
             obj.run()   
     if not True:
         queue_name='basichome92k'

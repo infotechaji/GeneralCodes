@@ -1,0 +1,333 @@
+{
+  "amazon": {
+    "ads": [
+      "amazon ad network"
+    ], 
+    "ssl": [
+      "amazon"
+    ], 
+    "platform": [
+      "amazon", 
+      "amazon ad network", 
+      "amazon cloudfront", 
+      "aws"
+    ], 
+    "cdn": [
+      "amazon", 
+      "amazon cloudfront"
+    ], 
+    "hosting": [
+      "amazon data services canada", 
+      "amazon data services ireland limited", 
+      "amazon data services japan", 
+      "amazon technologies inc.", 
+      "amazon.com, inc.", 
+      "aws"
+    ], 
+    "analytics": [
+      "amazon ad network"
+    ], 
+    "nameserver": [
+      "amazon data services ireland limited", 
+      "amazon technologies inc.", 
+      "amazon.com, inc.", 
+      "aws", 
+      "amazon data services ireland limited", 
+      "amazon data services japan", 
+      "amazon technologies inc.", 
+      "amazon.com, inc."
+    ], 
+    "mailserver": [
+      "amazon", 
+      "amazon ses", 
+      "aws", 
+      "amazon ses"
+    ]
+  }, 
+  "google": {
+    "ads": [
+      "google adsense", 
+      "google analytics"
+    ], 
+    "platform": [
+      "google", 
+      "google adsense", 
+      "google analytics"
+    ], 
+    "cdn": [
+      "google apis", 
+      "google static", 
+      "google syndication", 
+      "onapp"
+    ], 
+    "hosting": [
+      "google cloud", 
+      "google fiber inc.",
+      "google llc"
+    ], 
+    "analytics": [
+      "google adsense", 
+      "google analytics"
+    ], 
+    "seo verified": [
+      "google seo verified"
+    ], 
+    "nameserver": [
+      "google cloud", 
+      "google fiber inc."
+    ], 
+    "mailserver": [
+      "google apps for business", 
+      "google postini services", 
+      "google apps for business", 
+      "google postini services"
+    ]
+  }, 
+  "microsoft": {
+    "ssl": [
+      "microsoft it ssl sha2"
+    ], 
+    "cms": [
+      "dnn (dotnetnuke)", 
+      "microsoft content management server", 
+      "outlook", 
+      "sharepoint"
+    ], 
+    "cdn": [
+      "azure", 
+      "msn", 
+      "windows azure"
+    ], 
+    "vulnerability": [
+      "microsoft content management server"
+    ], 
+    "hosting": [
+      "microsoft", 
+      "microsoft corp", 
+      "microsoft corporation"
+    ], 
+    "platform": [
+      "asp.net", 
+      "iis", 
+      "microooft-iis", 
+      "microsoft", 
+      "microsoft office web server", 
+      "microsoft-httpapi", 
+      "microsooft-iis", 
+      "ms-iis", 
+      "windows-azure-blob"
+    ], 
+    "nameserver": [
+      "azure", 
+      "microsoft corporation", 
+      "microsoft corp", 
+      "microsoft corporation"
+    ], 
+    "os": [
+      "microsoft windows", 
+      "microsoft windows server"
+    ], 
+    "tool": [
+      "sharepoint url brute"
+    ], 
+    "mailserver": [
+      "azure", 
+      "azurepack", 
+      "microsoft", 
+      "microsoft exchange", 
+      "microsoft exchange online", 
+      "microsoftonline", 
+      "ourwindowsnetwork", 
+      "windowshosting", 
+      "microsoft exchange online"
+    ]
+  }, 
+  "third party/commercial": {
+    "ads": [
+      "app nexus ad network", 
+      "facebook analytics", 
+      "facebook custom audience", 
+      "mediaforge ad network", 
+      "yahoo analytics"
+    ], 
+    "ssl": [
+      "aetna inc. secure ca2", 
+      "aetna inc. secure ev ca", 
+      "alphassl ca - g2", 
+      "alphassl ca - sha256 - g2", 
+      "cloudflare inc ecc ca-2", 
+      "cybertrust japan ev ca g2", 
+      "cybertrust japan public ca g3", 
+      "cybertrust japan secure server ca", 
+      "digicert baltimore ca-2 g2", 
+      "digicert cloud services ca-1", 
+      "digicert ecc extended validation server ca", 
+      "digicert ecc secure server ca", 
+      "digicert grid trust ca g2", 
+      "digicert sha2 extended validation server ca", 
+      "digicert sha2 high assurance server ca", 
+      "digicert sha2 secure server ca", 
+      "d-trust ssl class 3 ca 1 2009", 
+      "d-trust ssl class 3 ca 1 ev 2009", 
+      "globalsign cloudssl ca - sha256 - g3", 
+      "globalsign domain validation ca - g2", 
+      "globalsign domain validation ca - sha256 - g2", 
+      "globalsign domain validation ca - sha256 - g3", 
+      "globalsign extended validation ca - sha256 - g2", 
+      "globalsign extended validation ca - sha256 - g3", 
+      "globalsign organization validation ca - g2", 
+      "globalsign organization validation ca - sha256 - g2", 
+      "icpedu", 
+      "justica", 
+      "multicert certification authority 002", 
+      "ncc group secure server ca g2", 
+      "nsw-dec-iss-ca1", 
+      "southern company external issuing ca 1", 
+      "symantec class 3 secure server ca - g4", 
+      "telesec serverpass ca 2", 
+      "terena ssl ca 3", 
+      "terena ssl high assurance ca 3", 
+      "thawte sgc ca - g2", 
+      "ti trust technologies global ca", 
+      "verizon akamai sureserver ca g14-sha2", 
+      "verizon public sureserver ca g14-sha2", 
+      "virginia tech global qualified server ca", 
+      "wosign ca free ssl certificate g2", 
+      "wosign class 3 ov server ca g2"
+    ], 
+    "platform": [
+      "akamai", 
+      "app nexus ad network", 
+      "facebook analytics", 
+      "facebook custom audience", 
+      "mediaforge ad network", 
+      "oracle", 
+      "yahoo analytics"
+    ], 
+    "cdn": [
+      "akamai", 
+      "azion", 
+      "bitgravity", 
+      "cachefly", 
+      "cdn77", 
+      "cdnetworks", 
+      "chinacache", 
+      "chinanetcenter", 
+      "cloudflare", 
+      "edgecast", 
+      "facebook cdn", 
+      "fastly", 
+      "highwinds", 
+      "hubspot", 
+      "internap", 
+      "keycdn", 
+      "leaseweb cdn", 
+      "level3", 
+      "limelight", 
+      "maxcdn", 
+      "oracle", 
+      "turbobytes", 
+      "yahoo apis"
+    ], 
+    "hosting": [
+      "fastly", 
+      "oracle"
+    ], 
+    "analytics": [
+      "app nexus ad network", 
+      "facebook analytics", 
+      "facebook custom audience", 
+      "yahoo analytics"
+    ], 
+    "os": [
+      "red hat enterprise linux"
+    ], 
+    "mailserver": [
+      "oracle"
+    ]
+  }, 
+  "open-source": {
+    "vulnerability": [
+      "concrete5", 
+      "django", 
+      "drupal", 
+      "joomla!", 
+      "phpmyadmin", 
+      "typo3", 
+      "wordpress"
+    ], 
+    "cms": [
+      "cakephp", 
+      "concrete5", 
+      "django", 
+      "drupal", 
+      "joomla!", 
+      "moodle", 
+      "phpmyadmin", 
+      "typo3", 
+      "umbraco", 
+      "wordpress"
+    ], 
+    "cdn": [
+      "wordpress"
+    ], 
+    "javascript": [
+      "jquery"
+    ], 
+    "hosting": [
+      "wordpress"
+    ], 
+    "platform": [
+      "apache", 
+      "apache2.2.17", 
+      "boa", 
+      "centos", 
+      "cherokee", 
+      "cloudflare-nginx", 
+      "cowboy", 
+      "embperl", 
+      "foundation", 
+      "jboss", 
+      "jetty", 
+      "jrun", 
+      "lighttpd", 
+      "litespeed", 
+      "mod_perl", 
+      "mod_python", 
+      "mod_ruby", 
+      "mod_ssl", 
+      "nginx", 
+      "nginx+", 
+      "nginx+varnish", 
+      "nginx-more", 
+      "nginx-vpssim", 
+      "openbsd", 
+      "openssl", 
+      "perl", 
+      "php", 
+      "php5", 
+      "php-cgi", 
+      "python", 
+      "resin", 
+      "ruby", 
+      "sun-java-system-web-server", 
+      "tengine", 
+      "unix", 
+      "varnish", 
+      "wordpress"
+    ], 
+    "os": [
+      "centos", 
+      "debian", 
+      "fedora", 
+      "freebsd", 
+      "openbsd", 
+      "opensuse", 
+      "scientific linux", 
+      "ubuntu"
+    ], 
+    "mailserver": [
+      "wordpress"
+    ]
+  }
+}
