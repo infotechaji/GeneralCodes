@@ -7,7 +7,7 @@ import requests
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-SLACK_URL='https://hooks.slack.com/services/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'
+SLACK_URL=''
 
 def send_status_email(task,receivers='',success=True,test_mail=True,subject_prefix=None,exception=''): #task: luigi.Task
     developer_mode=False
