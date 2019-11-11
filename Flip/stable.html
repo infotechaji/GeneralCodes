@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flip Game</title>
+	<link rel='stylesheet' href='mygame.css' type='text/css' />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	var decide=0
+	var b_array = [];
+ 
+	var player1=prompt("Name of the First Player : ");
+			var player2=prompt("Name of the Second Player : ");
+			var player1_symbol='$';
+			var player2_symbol='#';
+
+		$(document).ready(function(){
+			document.getElementById("id_player1").innerHTML =player1;
+			document.getElementById("sym_p1").innerHTML =player1_symbol;
+			document.getElementById("id_player2").innerHTML =player2;
+			document.getElementById("sym_p2").innerHTML =player2_symbol;
+
+			
+	$(".unclicked").click(function() {
+		decide+=1;
+    var bid=this.id;
+    b_array.push(bid);
+    length=b_array.length();
+    for(var i=0)
+    if (decide%2==0){
+    document.getElementById(bid).value ='#';
+    get_win('#'); }
+    else if(decide<=16)
+      {document.getElementById(bid).value ='$';
+    get_win('$'); }
+    else 
+    	{
+    		alert("Match Draw!!");
+window.location.reload();
+}
+    //alert("Value of "+(this.id)+"is "+this.id.val()); // or alert($(this).attr('id'));
+});
+	});
+	function get_win(num)
+	{ 
+		var num=num
+		//alert ("Recieved  is :"+num);
+		var b1 = document.getElementById("b1").value;
+		//alert("b1 val :"+b1);
+		var b2 = document.getElementById("b2").value;
+		//alert("b2 val :"+b2);
+		var b3 = document.getElementById("b3").value;
+		var b4 = document.getElementById("b4").value;
+		var b5 = document.getElementById("b5").value;
+		var b6 = document.getElementById("b6").value;
+		var b7 = document.getElementById("b7").value;
+		var b8 = document.getElementById("b8").value;
+		var b9 = document.getElementById("b9").value;
+		var b10 = document.getElementById("b10").value;
+		var b11 = document.getElementById("b11").value;
+		var b12 = document.getElementById("b12").value;
+		var b13= document.getElementById("b13").value;
+		var b14= document.getElementById("b14").value;
+		var b15= document.getElementById("b15").value;
+		var b16= document.getElementById("b16").value;
+		
+		if ((b1==num) && (b2==num) && (b3==num) && (b4==num)){print_win(num);}
+		else if ((b5==num) && (b6==num) && (b7==num) && (b8==num)){print_win(num);}
+		else if ((b9==num) && (b10==num) && (b11==num) && (b12==num)){print_win(num);}
+		else if ((b13==num) && (b14==num) && (b15==num) && (b16==num)){print_win(num);}
+		else if ((b1==num) && (b5==num) && (b9==num) && (b13==num)){print_win(num);}
+		else if ((b2==num) && (b6==num) && (b10==num) && (b14==num)){print_win(num);}
+		else if ((b3==num) && (b7==num) && (b11==num) && (b15==num)){print_win(num);}
+		else if ((b4==num) && (b6==num) && (b12==num) && (b16==num)){print_win(num);}
+		else if ((b1==num) && (b6==num) && (b11==num) && (b16==num)){print_win(num);}
+		else if ((b4==num) && (b7==num) && (b10==num) && (b13==num)){print_win(num);}
+		
+	
+}
+
+function print_win(num)
+	{
+		var num=num
+		if (num==player1_symbol) {alert("Mr / Mrs. "+player1+" Wins!! ");window.location.reload()}
+		else if (num==player2_symbol) {alert("Mr / Mrs. "+player2+" Wins!! ");window.location.reload()}
+	}
+
+
+	</script>
+	</head>
+<body>
+<form name="mygame">
+<br><br><br><br>
+<h3>Player 1 :</h3> <h2 id="id_player1"></h2><p id="sym_p1"></p>
+<h3>Player 2 :</h3> <h2 id="id_player2"></h2><p id="sym_p2"></p>
+<center>
+<table bgcolor="skyblue">
+<tr>
+	
+	<tr>
+		<td><input type="button" class="unclicked" id="b1" width="40" height="40" name="b1"  ></td>
+		<td><input type="button" class="unclicked" id="b2" width="40" height="40" name="b2" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b3" width="40" height="40" name="b3" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b4" width="40" height="40" name="b4" src="images/default.png"></td>
+	</tr>
+	<tr>
+		<td><input type="button" class="unclicked" id="b5" width="40" height="40" name="b5" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b6" width="40" height="40" name="b6" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b7" width="40" height="40" name="b7" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b8" width="40" height="40" name="b8" src="images/default.png"></td>
+	</tr>
+	<tr>
+		<td><input type="button" class="unclicked" id="b9" width="40" height="40" name="b9" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b10" width="40" height="40" name="b10" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b11" width="40" height="40" name="b11" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b12" width="40" height="40" name="b12" src="images/default.png"></td>
+	</tr>
+	<tr>
+		<td><input type="button" class="unclicked" id="b13" width="40" height="40" name="b13" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b14" width="40" height="40" name="b13" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b15" width="40" height="40" name="b14" src="images/default.png"></td>
+		<td><input type="button" class="unclicked" id="b16" width="40" height="40" name="b15" src="images/default.png"></td>
+	</tr>
+
+</table>
+</center>
+</form>
+
+</body>
+</html>

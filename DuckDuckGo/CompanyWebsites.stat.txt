@@ -1,0 +1,50 @@
+D:	United States	21010034777883200	INDUSTRIES & FINANCES PARTENAIRES linkedin	13	None	NA				duckduckgo
+D:	United States	20010034771670200	PREPAR VIE linkedin	12	None	NA				duckduckgo
+D:	United States	20010035048833600	MUTUELLE INTEGRANCE linkedin	10	None	NA				
+D:	United States	20010034807038100	STOLZ SEQUIPAG linkedin	12	None	NA				duckduckgo
+D:	United States	31010004613053300	MIKLI DIFFUSION FRANCE linkedin	12	None	NA				duckduckgo
+D:	United States	11010035017081700	Gardinier&Fils linkedin	12	None	NA				duckduckgo
+D:	United States	21010000897564700	IPRAD GROUP linkedin	10	None	NA				
+D:	United States	20010034807947500	LEXTENSO EDITIONS linkedin	10	None	NA				
+D:	United States	22010035033818500	FLEURET ASSOCIE EXPERTISE linkedin	12	None	NA				duckduckgo
+D:	United States	11010034966150000	IN TEMPO linkedin	11	None	NA				duckduckgo
+D:	United States	22010034953543800	EPE ECOLE PARENTS EDUCATEURS linkedin	10	None	NA				
+D:	United States	12010035006753800	VVR INTERNATIONAL linkedin	12	https://www.vvrinternational.com/en/home/	:ABBR(4):DOMAINTITLE(2.5)-CNTR-NA(0):SUBDOMAIN-N(0.5):ORDER(-0.5)	2	6.5	[(2, 6.5, 3, ':ABBR(4):DOMAINTITLE(2.5)-CNTR-NA(0):SUBDOMAIN-N(0.5):ORDER(-0.5)', 'https://www.vvrinternational.com/en/home/')]	duckduckgo,vvrinternational
+D:	United States	20010035048941000	ISEFAC linkedin	11	None	NA				duckduckgo
+D:	United States	21010034972128000	LES EDITION INDEPENDANTES linkedin	12	None	NA				duckduckgo
+D:	United States	22010034987598300	PROLOG INGENIERIE linkedin	10	None	NA				
+D:	United States	12010034971888200	LEFEVRE SA linkedin	10	None	NA				
+D:	United States	11010034808348900	CYRUS CONSEIL linkedin	10	None	NA				
+D:	United States	21010035017674500	GROUPE THEOPHANE linkedin	10	None	NA				
+D:	United States	22010034986178700	GROUPE PHR linkedin	10	None	NA				
+D:	United States	21010021673690000	CADESIS linkedin	12	None	NA				duckduckgo
+D:	United States	12010034962022500	Groupe HCR linkedin	10	None	NA				
+D:	United States	12010034948600200	DAPSA linkedin	10	None	NA				
+D:	United States	22010002050573200	BANQUE DE DEVELOPPEMENT DU CONSEIL linkedin	10	None	NA				coe
+D:	United States	12054035022749200	NELITE linkedin	13	None	NA				duckduckgo
+D:	United States	20010035039376200	TUNISIAN FOREIGN BANK linkedin	10	None	NA				bank-code,sfconsultingbd
+D:	United States	32010034786618700	ASSOUN DISTRIBUTION linkedin	10	None	NA				canoe
+D:	United States	21010002094931600	METANEXT linkedin	11	None	NA				duckduckgo
+D:	United States	21010035004529400	UNICEM ILE DE FRANCE linkedin	10	None	NA				
+D:	United States	21010005843990600	INDIGO PUBLICATIONS linkedin	10	None	NA				
+D:	United States	11010034955777300	FINANCIERE BERNARD linkedin	10	None	NA				
+D:	United States	12010035008734900	Wooweyewear linkedin	12	None	NA				duckduckgo,mynewsdesk,optomed
+D:	United States	10010351067989500	Netapsys Conseil SAS linkedin	10	None	NA				creditriskmonitor,thebrokersite,sitsi
+D:	United States	21010000241018000	CADERAS MARTIN SA linkedin	10	None	NA				
+D:	United States	11023034836826700	GECI SYSTEMES linkedin	10	None	NA				
+D:	United States	21010034814997900	Mama Shelter linkedin	10	None	NA				
+D:	United States	21010035040695800	ONOMO INTERNATIONAL linkedin	10	https://www.onomohotel.com/en/	:DOMAINTITLE(2.5)-CNTR-NA(0):SUBDOMAIN-N(0.5):TOPOCCUR(*1.5):ORDER(-0.5)	2	4.0	[(2, 4.0, 3, ':DOMAINTITLE(2.5)-CNTR-NA(0):SUBDOMAIN-N(0.5):TOPOCCUR(*1.5):ORDER(-0.5)', 'https://www.onomohotel.com/en/')]	onomohotel
+D:	United States	12010034964130900	HUMANE SI linkedin	10	None	NA				
+D:	United States	22010035020011300	KERTEL CLOUD linkedin	12	None	NA				duckduckgo
+D:	United States	20010000582794900	SA QUADRATUS linkedin	10	None	NA				asahq
+D:	United States	22010035037328900	INFEENY linkedin	11	None	NA				duckduckgo
+D:	United States	21010035015304400	DUALIS linkedin	12	None	NA				duckduckgo
+D:	United States	12010035013349700	CENSIO linkedin	11	None	NA				duckduckgo
+D:	United States	21010034934142400	ASS ARALIS linkedin	10	None	NA				researchgate
+D:	United States	21010000681445700	HORIZON SOFTWARE linkedin	13	None	NA				duckduckgo
+D:	United States	21010005112163400	EQUITY linkedin	13	None	NA				duckduckgo
+D:	United States	12010034953760700	FRANCE ERMITAGE linkedin	13	None	NA				duckduckgo
+D:	United States	12010003939455800	ARCHITECTURE FACE A FACE linkedin	10	None	NA				opengroup,archinect
+D:	United States	22010034807781600	ANDRE CHENUE SA linkedin	12	None	NA				duckduckgo
+D:	United States	20010035035549300	GEOP ASSISTANCE linkedin	12	None	NA				duckduckgo
+D:	United States	12010035000896000	TETE DEFENSE linkedin	12	None	NA				duckduckgo

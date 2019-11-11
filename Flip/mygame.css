@@ -1,0 +1,113 @@
+
+.unclicked {
+    background-image: url("images/default.png");
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+     height: 40px;
+     width: 40px;
+    border: 5px solid yellow;
+    border-radius: 50%;
+    padding: 25px;
+    margin: 25px;
+}
+#system{
+background-image: url("images/clock1.gif");
+background-size: 250px 250px;
+height: 250px;
+width:250px;
+position: fixed;
+right: 180px;
+top:200px;
+
+
+
+}
+#only_one{
+background-color: green    
+}
+#logo_p1{
+background-image: url("images/player1.png");
+background-size: 50px 50px;
+height: 50px;
+width:50px;
+position: fixed;
+left: 180px;
+top:100px;
+
+}
+#logo_p2
+{
+background-image: url("images/player2.png");
+background-size: 50px 50px;
+height: 50px;
+width:50px;
+position: fixed;
+right: 180px;
+top:100px;
+}
+#display_p1{
+left: 40px;
+border-radius: 50px 0px 0px 50px;
+border: 5px solid pink;
+position: fixed;
+background-color: yellow;
+}
+#display_p2{
+right:40px;
+border-radius: 0px 50px 50px 0px;
+border: 5px solid green;
+position: fixed;
+background-color: yellow;
+}
+table {
+    border-radius: 50px 50px 50px 50px;
+    background-image: none;
+    padding: 20px; 
+    width: 200px;
+    height: 200px; 
+    position:0px 10px 20px 30px;
+    
+    
+}
+
+#default{
+background: #0033cc;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color:black;
+    top:0;
+    left:650px;
+    position:fixed;
+    border: 5px solid white;
+    
+
+}
+#circle {
+    background: #0033cc;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color:blue;
+    position: center
+    border: 5px solid white;
+
+}
+#circle1 {
+     background: #0033cc;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color:blue;
+    position: center
+    border: 5px solid white;
+
+}
+h1{
+size: 200px
+
+}
+h2{
+
+	color: red;
+}
