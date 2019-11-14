@@ -67,11 +67,11 @@ logging.basicConfig(filename='DataLoadAutomation.log') # for logging luigi comma
 # DB_DATABASE="minicus_prod"
 # TABLE_SCHEMA='unicode'
 
-DB_HOST="ssci.database.windows.net"
-DB_USERNAME="Fiinduser"
-DB_PASSWORD="Welcome$11nd"
-DB_DATABASE="ssci_stage_new"
-TABLE_SCHEMA='unicode'
+DB_HOST="xxxxxxxx"
+DB_USERNAME="xxxx"
+DB_PASSWORD="xxxx"
+DB_DATABASE="xcxcxc"
+TABLE_SCHEMA='xcxc'
 #TABLE_SCHEMA='core_automation'
 DEVELOPER_MODE=False
 #send_mail=False
