@@ -10,7 +10,7 @@ EXEC part_sale_order_inv_pop_sp
 		@gen_date_frm_grid				=null,
 		@gen_date_to_grid				=null,
 		@generated_by_grid				=null,
-		@hguid_able						='3333',
+		@hguid_able						='033',
 		@report_name_grid				=null,
 		@s_no_grid_grer					=null
 
@@ -26,3 +26,9 @@ EXEC part_sale_order_inv_pop_sp
 --delete FROM pso_inv_tcd_dtl_tmp	WHERE guid = '12345'
 --delete FROM pso_inv_part_dtl_tmp	WHERE guid = '12345'
 --delete FROM pso_invoice_tmp		WHERE guid = '12345'
+
+
+
+--PSINV0000022017
+--PSINV0000032017
+--PSINV0000042017

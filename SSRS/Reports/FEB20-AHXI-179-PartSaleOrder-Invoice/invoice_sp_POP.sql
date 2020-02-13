@@ -53,6 +53,7 @@ BEGIN
 			cus_currency,					inv_comments,				bill_to_id,
 			custno,							pay_term,					apprd_total_amount,
 			cus_part_sale_order_no,			pso_ref_doc_type,			pso_shipping_note_no,
+			apprd_user_name, 
 			guid,							ouid
 	) 
 	SELECT	DISTINCT
@@ -61,14 +62,14 @@ BEGIN
 			hdr.tran_currency,				hdr.comments,						hdr.bill_to_id,
 			hdr.custno,						hdr.pay_term,						hdr.item_amount,
 			dtl.packslip_no,				CASE WHEN refdoctype ='PSO' THEN 'Part Sale Order' ELSE refdoctype END,
-			dtl.shpno,		
+			dtl.shpno,						hdr.modifiedby,
 			@hguid_able,					@ctxt_ouinstance
 	FROM 	cdi_invoice_hdr							hdr WITH(NOLOCK)
 	JOIN	cdi_item_dtl							dtl WITH(NOLOCK)
 	ON		dtl.tran_no							=	hdr.tran_no
 	AND		dtl.tran_ou							=	hdr.tran_ou
 	AND		dtl.refdoctype						=	'PSO'
-	AND		hdr.tran_status							in  ('AUT')
+	--AND		hdr.tran_status							in  ('AUT')
 	AND		hdr.tran_type							in	('RM_CPIN','RM_RCPIN')
 	AND		dtl.packslip_no							is not null 	
 	AND		tran_date								BETWEEN isnull(@date_from_grid,tran_date)	AND isnull(@date_to_grid,tran_date)
@@ -135,12 +136,14 @@ BEGIN
 	(
 			part_sale_order_no,		part_line_num,		part_no,			part_description,
 			part_qty,				uom,				part_serial_no,		part_lot_no,	
-			part_unit_price,		part_net_value,		guid,				ouid
+			part_unit_price,		part_net_value,		part_mrno,
+			guid,					ouid
 	) 
 	SELECT	DISTINCT
-			dtl.pso_no,				pso_ref_lineno,		pso_partno,			pso_partdesc,
+			dtl.pso_no,				pso_lineno,			pso_partno,			pso_partdesc,
 			pso_ordqty,				pso_prtuom,			null,				null,
-			pso_act_uprice,			pso_exnetvalue,		@hguid_able,		@ctxt_ouinstance
+			pso_act_uprice,			pso_exnetvalue,		pso_mrno,
+			@hguid_able,			@ctxt_ouinstance
 	FROM	pso_invoice_tmp							tmp
 	JOIN	pso_prtinfo_dtl							dtl WITH(NOLOCK) 
 	ON		pso_no								=	tmp.cus_part_sale_order_no
@@ -153,15 +156,13 @@ BEGIN
 	(
 			part_sale_order_no,		tcd_no,				tcd_variant_no,
 			tcd_rate,				tcd_amount,			tcd_type,
-			tcd_auto_num,
-			guid,					ouid
+			tcd_auto_num,			guid,				ouid
 	)
-
+	
 	SELECT DISTINCT 
 			tcd.pso_no,				pso_tcdcode,		pso_tcdvar,
 			pso_rate,				pso_tcd_amt,		r.parameter_text,
-			pso_tcdlineno,
-			@hguid_able,			@ctxt_ouinstance
+			pso_tcdlineno,			@hguid_able,		@ctxt_ouinstance
 	FROM	pso_tcd_dtl								tcd WITH(NOLOCK)
 	JOIN	pso_invoice_tmp							tmp
 	ON		tcd.pso_no							=	tmp.cus_part_sale_order_no
@@ -201,6 +202,29 @@ BEGIN
 	ON		ac.company_code						=	tmp.company_id
 
 
+	--Signature 
+	UPDATE	tmp
+	SET		apprd_signature						=	CI_SubSegment
+	FROM	pso_invoice_tmp							tmp 
+	JOIN	Cu_CI_Commercial_Info					ci WITH(NOLOCK)
+	ON		CI_Cust_Code						=	tmp.custno
+	AND		CI_Created_OUInstance				=	tmp.ouid
+	WHERE	guid								=	@hguid_able
+	AND		ouid								=	@ctxt_ouinstance
+	
+	
+	--Pay term details 
+	UPDATE	tmp
+	SET		part_serial_no						=	dtl.Smn_Serial_no,
+			part_lot_no							=	dtl.Smn_Lot_no
+	FROM	pso_inv_part_dtl_tmp					tmp 
+	JOIN	SMN_SMN_SRL_LOT_PART_HISTORY			dtl WITH(NOLOCK)
+	ON		dtl.Smn_Part_no						=	tmp.part_no
+	AND		dtl.Smn_RefDoc_No					=	tmp.part_mrno
+	AND		dtl.Smn_Transaction_OU				=	tmp.ouid
+	WHERE	tmp.guid							=	@hguid_able
+	AND		tmp.ouid							=	@ctxt_ouinstance
+
 	--Pay term details 
 	UPDATE	tmp
 	SET		ft_due_days							=	dtl.PyTmDt_Due_Days,
@@ -221,10 +245,10 @@ BEGIN
 
 	SELECT		DISTINCT
 				
-				dbo.trm(hdr.hd_address_1) + char(13) +
-				dbo.trm(hdr.hd_address_2)+ ',' +dbo.trm(hdr.hd_address_3)+','+dbo.trm(hdr.hd_city)+ ',' +dbo.trm(hdr.hd_state)+ ',' + dbo.trm(hdr.hd_country) + char(13) + 
-				'Attention: '+ dbo.trm(dbo.CapitalizeFirstLetter((hdr.hd_attention))) + char(13) + 
-				'Email: ' + dbo.trm(lower(hdr.hd_receivable_mail)) + char(13) + 
+				dbo.trm(hdr.hd_address_1) + CONCAT (CHAR(13) , CHAR(10)) +
+				dbo.trm(hdr.hd_address_2)+ ',' +dbo.trm(hdr.hd_address_3)+','+dbo.trm(hdr.hd_city)+ ',' +dbo.trm(hdr.hd_state)+ ',' + dbo.trm(hdr.hd_country) + CONCAT (CHAR(13) , CHAR(10)) + 
+				'Attention: '+ dbo.trm(dbo.CapitalizeFirstLetter((hdr.hd_attention))) + CONCAT (CHAR(13) , CHAR(10)) + 
+				'Email: ' + dbo.trm(lower(hdr.hd_receivable_mail)) + CONCAT (CHAR(13) , CHAR(10))+ 
 				'Web site: '+dbo.trm(lower(hdr.hd_website))					'hd_add_single_data',
 				hdr.hd_ou_name												'hd_ou_name',
 				hdr.hd_address_1											'hd_address_1',
@@ -251,13 +275,9 @@ BEGIN
 				part.part_description										'part_description',
 				part.part_unit_price										'part_unit_price',
 				part.part_net_value											'part_net_value',
-				case when part.part_serial_no is not null 
-				or part_lot_no is not null 
-				then part_serial_no 
-				+'/'+part_lot_no 
-				else null end												'part_serial_lot_no',
 				part.part_qty												'part_qty',
 				upper(part.uom)												'part_uom',
+				dbo.get_serial_lot(part.part_serial_no,part.part_lot_no) 	'part_serial_no_lot_no',
 				tcd.tcd_auto_num											'tcd_auto_num',
 				tcd.tcd_no													'tcd_no',
 				tcd.tcd_description											'tcd_description',
@@ -277,7 +297,8 @@ BEGIN
 				apprd_user_name												'apprd_user_name',
 				apprd_total_amount											'apprd_total_amount',
 				apprd_currency												'apprd_currency',
-				apprd_signature												'apprd_signature',
+				upper(apprd_signature)										'apprd_signature', 
+				--'01-PS'														'apprd_signature',
 				ft_due_days													'ft_due_days',
 				ft_penalty													'ft_penalty',
 				DBO.RAS_GETDATE(@ctxt_ouinstance)							'ft_cur_date_time',
@@ -293,6 +314,16 @@ BEGIN
 	ON			tcd.guid							=	tmp.guid
 	AND			tcd.part_sale_order_no				=	tmp.cus_part_sale_order_no
 	WHERE		tmp.guid							=	@hguid_able
-
+	AND			tmp.hd_invoice_no					=	'PSINV0000022017'
+	-- PSINV0000022017
+--PSINV0000032017
+--PSINV0000042017
+	DELETE FROM pso_inv_hdr_dtl_tmp		WHERE guid = @hguid_able
+	DELETE FROM pso_inv_tcd_dtl_tmp		WHERE guid = @hguid_able
+	DELETE FROM pso_inv_part_dtl_tmp	WHERE guid = @hguid_able
+	DELETE FROM pso_invoice_tmp			WHERE guid = @hguid_able
 
 END
+
+
+

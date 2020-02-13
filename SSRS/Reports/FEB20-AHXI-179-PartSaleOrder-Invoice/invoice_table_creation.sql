@@ -79,6 +79,8 @@ ALTER TABLE pso_invoice_tmp ADD ac_bank_ref_no	udd_refdocno
 ALTER TABLE pso_invoice_tmp ADD ac_company_code	udd_refdocno
 
 ALTER TABLE pso_invoice_tmp ADD pay_term udd_refdocno
+ALTER TABLE pso_invoice_tmp ADD part_mrno udd_refdocno
+--ALTER TABLE pso_invoice_tmp DROP COLUMN part_mrno 
 
 pay_term
 
@@ -152,6 +154,12 @@ ouid ctxt_ouinstance,
 guid udd_guid
 )
 
+ALTER TABLE pso_inv_part_dtl_tmp ADD part_mrno udd_refdocno 
+ALTER TABLE pso_inv_part_dtl_tmp ADD part_serial_no_lot_no udd_refdocno 
+sp_rename 'pso_inv_part_dtl_tmp.part_serial_no_lot_no','part_serial_no'
+ALTER TABLE pso_inv_part_dtl_tmp DROP COLUMN part_serial_no_lot_no udd_refdocno -- 
+
+
 
 CREATE TABLE pso_inv_tcd_dtl_tmp
 (
@@ -199,3 +207,13 @@ CREATE Synonym pso_inv_tcd_dtl_tmp for AVNAPPDB_TEMPDB..pso_inv_tcd_dtl_tmp
 	delete FROM pso_inv_tcd_dtl_tmp	WHERE guid = '12345'
 	delete FROM pso_inv_part_dtl_tmp	WHERE guid = '12345'
 	delete FROM pso_invoice_tmp		WHERE guid = '12345'
+
+
+
+
+
+
+	
+
+
+	sp_tables 'pso%'
