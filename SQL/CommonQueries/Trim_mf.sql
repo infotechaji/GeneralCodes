@@ -1,3 +1,6 @@
+
+
+--Version 1: 
 CREATE FUNCTION trm
 (
 --string need to format
@@ -11,7 +14,12 @@ END
 
 --Declare Variables
 
-len(dbo.trm('ajith'))
-len(dbo.trm(' a j i t h '))
-len(dbo.trm('ajith                '))
-len(dbo.trm('              ajith'))
+--len(dbo.trm('ajith'))
+--len(dbo.trm(' a j i t h '))
+--len(dbo.trm('ajith                '))
+--len(dbo.trm('              ajith'))
+
+--DECLARE @a nvarchar(40) ='ajith '
+--select len(@a)
+--select ltrim('a',@a)
+--select len(ltrim(@a)) 

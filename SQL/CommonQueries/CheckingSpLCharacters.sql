@@ -50,7 +50,6 @@ begin
 		begin
 			select	@errorid	=	1
 		end 	
-	   
 	   select @position = @position + 1
 	end
 		
