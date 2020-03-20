@@ -1,0 +1,8 @@
+WMA_RepRul_Sp_Save_hrf_stub.sql	@ajith		@ajith              		hrint, --input/output
+WMA_RepRul_Sp_Save_hrf_stub.sql	@vijay		@vijay              		hrint, --input/output
+WMA_RepRul_Sp_Save_hrf_stub.sql	@vijay		@vijay              		hrint, --input/output	2	0
+WMA_RepRul_Sp_Save_hrf_stub.sql	@ajith		@ajith              		hrint, --input/output	2	1
+WMA_RepRul_Sp_Save_hrf_stub.sql	@vijay		@vijay              		hrint, --input/output	2	1
+WMA_RepRul_Sp_Save_hrf_stub.sql	@ajith		@ajith              		hrint, --input/output	2	2
+WMA_RepRul_Sp_Save_hrf_stub.sql	@vijay		@vijay              		hrint, --input/output	2	1
+WMA_RepRul_Sp_Save_hrf_stub.sql	@ajith		@ajith              		hrint, --input/output	2	2
