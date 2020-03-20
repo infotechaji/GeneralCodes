@@ -88,7 +88,7 @@ if __name__ == '__main__':
 	out_file_name='added_variables.txt'
 	for i,each in enumerate(newly_added):
 		index= result_set1['variables'].index(each)
-		each_line=args.stub_file+'\t'+each+'\t'+result_set1['content'][index]+'\t'+str(len(newly_added))+'\t'+str(i+1)+'\n'
+		each_line=args.stub_file+'\t'+each+'\t'+(result_set1['content'][index].replace('\t','    '))+'\t'+str(len(newly_added))+'\t'+str(i+1)+'\n'
 		fp=open(out_file_name,'a')
 		fp.write(each_line)
 		fp.close()
