@@ -1,0 +1,16 @@
+wms_bin_dtl	wms_bin_anti_cap_ethu	udd_quantity 
+wms_bin_dtl	wms_bin_rem_cap_qty	udd_quantity 
+wms_bin_dtl	wms_bin_blocked_sa_ml	udd_desc255 
+wms_bin_dtl	wms_bin_rem_cap_ci	udd_quantity 
+wms_bin_dtl	wms_bin_blocking_reason_ml	udd_desc40 
+wms_bin_dtl	wms_bin_rem_cap_ethu	udd_quantity 
+wms_bin_dtl	wms_bin_anti_cap_ci	udd_quantity 
+wms_bin_dtl	wms_bin_blocked_pick_ml	udd_desc255 
+wms_bin_dtl	wms_bin_rem_cap_vol	udd_quantity 
+wms_bin_dtl	wms_bin_rem_cap_wgt	udd_quantity 
+wms_bin_dtl	wms_bin_blocked_pawy_ml	udd_desc255 
+wms_bin_dtl	wms_bin_anti_cap_wgt	udd_quantity 
+wms_bin_dtl	wms_bin_bin_checkbit_ml	udd_desc40 
+wms_bin_dtl	wms_bin_anti_cap_qty	udd_quantity 
+wms_bin_dtl	wms_bin_anti_cap_vol	udd_quantity 
+wms_bin_dtl	wms_bin_bin_full_ml	udd_desc255
