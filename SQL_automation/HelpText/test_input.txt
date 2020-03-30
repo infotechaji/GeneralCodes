@@ -1,0 +1,3 @@
+dbo.wma_wave_sp_avl_qty
+fin_german_raiserror_sp
+wms_bin_sp_cmn_pln_dtl
