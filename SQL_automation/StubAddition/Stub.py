@@ -24,12 +24,24 @@ def list_difference(stub_param_list,actual_list):
 def get_parameters(input_text,developer_mode=False):
 	temp_text=input_text.lower().split('create '.lower())[1]
 	begin_split=''
-	for each_line in input_text.split('\n'):
+	for as_index,each_line in enumerate(input_text.split('\n')):
 		if 'begins' not in each_line.lower() and 'begin' in each_line.lower():
-			begin_split=each_line
-			break
-	if not begin_split:begin_split='begin '
+			if 'as' in input_text[as_index-1].lower() or 'as' in input_text[as_index-2].lower():
+				# print ('Previous line has as key ',input_text[as_index-1])
+				# print ('Previous line has as key ',input_text[as_index-2])
+				begin_split=each_line
+				break
+			# else:print ('Does not endswith as ')
+			
+	if not begin_split:begin_split='begin'
 	actual_text=temp_text.split(begin_split)[0]
+	if actual_text.strip('\n').endswith('as'):
+		# print ('Ends with as ')#,actual_text)
+		pass
+		# input('Proceed ??')
+	else:
+		print ('VARIABLE TEXT DOES NOT ENDS WITH "AS" ')
+		input('New case found !!')
 	# print (actual_text.split('\n'))
 	if developer_mode==True : print ('actual_text :',actual_text)
 	actual_list=actual_text.split('\n')
@@ -97,6 +109,7 @@ def stub_comparison(stub_file_name,server_version_name):
 	result_set2=get_parameters(get_file_content(server_version_name))
 	print ('Stub variables :',len(result_set1['variables']))
 	print ('sp variables :',len(result_set2['variables']))
+	# print ('sp variables :',result_set2['variables'])
 	newly_added=list_difference(result_set1['variables'],result_set2['variables'])
 	print ('Total added variables :',len(newly_added))
 	print ('Added variables :',newly_added)
@@ -139,17 +152,17 @@ def stub_comparison(stub_file_name,server_version_name):
 						null_checks.append(each_line)
 					elif "rtrim" in each_line  or  "ltrim" in each_line or "set " in each_line.lower():
 						term='space_check'
-						space_checks.append(each_line)
+						space_checks.append(each_line.lower().replace('set ','SELECT '))
 					else:
 						term='variable'
-						variables.append(each_line)
+						variables.append(each_line.strip('\t'))
 
 				final_text=stub_file_name+'\t'+each_var.strip()+'\t'+str(each_line.replace('\t',' ').strip())+'\t'+str(var_index+1)+'\t'+str(index+1)+'\t'+str(term)+'\n'
 				write_into_file('SpaceAndNull_checks.sql',final_text,'a')
 
 	# get last index from the sp file to add these lines 
 	var_index,null_index,space_index,out_index=0,0,0,0
-	print ('Trim and null checkings are added in file :SpaceAndNull_checks.sql')
+	# print ('Trim and null checkings are added in file :SpaceAndNull_checks.sql')
 	return {
 			'stub_variables':result_set1['variables'],
 			'sp_variables':result_set2['variables'],
@@ -180,12 +193,13 @@ def stub_comparison(stub_file_name,server_version_name):
 if __name__ == '__main__':
 	arg = argparse.ArgumentParser('Program to Help stub addition!!',add_help=True)
 	# arg.add_argument('-i','--input_file',help='Trace file name',required=True)+str(
-	arg.add_argument('--stub_file'+"'",help='Trace file name',required=True)
+	arg.add_argument('--stub_file',help='Trace file name',required=True)
 	arg.add_argument('--sp',help='actual_file',required=True)
 	# arg.add_argument('-i','--input_file',help='Trace file name',default ='scorpio,pisces',required=False)
 	# arg.add_argument('-d','--destroy_time',help='delay time',type=int,default =10,required=False)
 	args = arg.parse_args()
-	stub_comparison(stub_file_name=args.stub_file,server_version_name=args.sp)
+	print (stub_comparison(stub_file_name=args.stub_file,server_version_name=args.sp)['added_variables'])
+
 	# stub_file_contents=get_file_content(args.stub_file)
 	# result_set1=get_parameters(stub_file_contents)
 	# result_set2=get_parameters(get_file_content(args.sp))
