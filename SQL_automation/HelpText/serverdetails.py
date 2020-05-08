@@ -1,4 +1,5 @@
-SERVER='172.16.10.68'
-DB='scmdb'
-UID='Sa'
-PWD='war3sa*'
+#Enhancement server
+SERVER='xx'
+DB='xx'
+UID='xx'
+PWD='xx'

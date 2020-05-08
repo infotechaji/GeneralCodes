@@ -1,9 +1,10 @@
 """
 Description : Script which get help text of all the procedures for single and multi input 
 Version     : 
-				v1.0
+				v1.1
 History     :
 				v1.0  - 30/03/2020 - initial version
+				v1.1  - 29/04/2020 - Global cursor is added to the function
 
 Input       : --sp_name sp_name 
 			  -i input_filename which contains the list of sps
@@ -13,6 +14,7 @@ Output      : Stored procedure as new file which can be extracted from DB
 """
 import pyodbc 
 import argparse
+import os,sys
 from serverdetails import * 
 from CustomisedFileOperation import * 
 # conn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=172.16.17.168,50196;DATABASE=AVNAPPDB_TEMPDB;UID=rvwuser;PWD=rvw;Trusted_Connection=no;')
@@ -50,8 +52,15 @@ def get_file_name(sp_name):
 	return file_name
 
 def get_sptext(sp_name):
+	
 	sp_name=sp_name.strip()
+	if sp_name.lower().endswith('.sql'):
+		file_name=sp_name
+		sp_name=sp_name.strip('.sql')
+	else:
+		file_name=str(sp_name)+'.sql'
 	full_text=''
+	global cursor
 	try:
 		cursor.execute("sp_helptext '"+sp_name+"'")
 		for row in cursor.fetchall():
@@ -60,9 +69,10 @@ def get_sptext(sp_name):
 		return {'help_text':full_text}
 	except Exception as e :
 		print ('Error while getting procedure text :',e)
-		return {'help_text':full_text}
+		return {'help_text':full_text,
+				'file_name':file_name}
 
-
+cursor=connect()# connects to the server
 if __name__ == '__main__':
 	arg = argparse.ArgumentParser('Program to Help stub addition !!',add_help=True)
 	# arg.add_argument('-i','--input_file',help='Trace file name',required=True)
@@ -77,12 +87,18 @@ if __name__ == '__main__':
 		help_text=get_sptext(args.sp_name)['help_text']
 		write_into_file(file_name=file_name,contents=help_text,mode='w')
 	elif args.input_file:
+		# file_directory='G:\\Ajith\\Issues\\Logistics\\2020\\LRT-5244\\Bin_Plan_updated\\Bin_Plan_updated\\188_server_latest_version'
+		# file_directory='G:\\Ajith\\Issues\\Logistics\\2020\\LRT-5244\\Bin_updated\\MailVersion'
+		file_directory='G:\\Ajith\\Issues\\Logistics\\2020\\LRT-5244\\PICK_and_BIN_updated\\188_version'
 		cursor=connect()# connects to the server
 		file_lines=get_file_content(args.input_file)
 		for index,each_line in enumerate(file_lines):
 			each_line=each_line.strip('\t\r\n')
 			print ('processing :',index)
 			file_name =get_file_name(each_line)
+			if file_directory:
+				file_name=os.path.join(file_directory,file_name)
+				print ('file_name :',)
 			help_text=get_sptext(each_line)['help_text']
 			write_into_file(file_name=file_name,contents=help_text,mode='w')
 	else:

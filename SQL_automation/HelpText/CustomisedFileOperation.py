@@ -2,6 +2,7 @@
 Description : Contains all the common file operations
 """
 
+
 def get_file_content(filename,return_lines=True):
 	try:
 		if return_lines==True:
@@ -17,3 +18,6 @@ def write_into_file(file_name,contents,mode='w'):
 		fp=open(file_name,mode)
 		fp.write(contents)
 		fp.close()
+
+def get_file_presence(file):
+	return os.path.exists(file)
