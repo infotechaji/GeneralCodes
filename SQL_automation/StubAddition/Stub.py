@@ -155,7 +155,8 @@ def stub_comparison(stub_file_name,server_version_name):
 						space_checks.append(each_line.lower().replace('set ','SELECT '))
 					else:
 						term='variable'
-						variables.append(each_line.strip('\t'))
+						temp=each_line.strip('\t')
+						variables.append('    '+str(temp))
 
 				final_text=stub_file_name+'\t'+each_var.strip()+'\t'+str(each_line.replace('\t',' ').strip())+'\t'+str(var_index+1)+'\t'+str(index+1)+'\t'+str(term)+'\n'
 				write_into_file('SpaceAndNull_checks.sql',final_text,'a')

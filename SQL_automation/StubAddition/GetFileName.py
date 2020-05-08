@@ -28,7 +28,7 @@ def get_today_date():
 	current_date = current_date.strftime("%d-%m-%Y")
 	return current_date
 
-def get_all_files(rtrack_id,input_directory,server_directory='files_from_server',get_help_text=False,developer_mode=False,strict_mode=True):
+def get_all_files(rtrack_id,input_directory,server_directory='files_from_server',get_help_text=False,developer_mode=False,strict_mode=False):
 	"""
 	Input : A directory
 	Process : get all the file names present in that directory
@@ -92,15 +92,16 @@ def get_all_files(rtrack_id,input_directory,server_directory='files_from_server'
 				print ('Lines After addition :',after_addition)
 				log_data=str(str(datetime.datetime.now()).split('.')[0])+'\t'+str(each_file)+'\t'+str(stub_file_name)+'\t'
 				log_data+=str(server_file_name)+'\t'+str(updated_file)+'\t'
-				log_data+str(len(stub_dict['stub_variables']))+'\t'+str(len(stub_dict['sp_variables']))+'\t'+str(len(stub_dict['added_variables']))+'\t'+str(before_addition)+'\t'+str(after_addition)+'\n'
+				log_data+=str(len(stub_dict['stub_variables']))+'\t'+str(len(stub_dict['sp_variables']))+'\t'+str(len(stub_dict['added_variables']))+'\t'+str(before_addition)+'\t'+str(after_addition)+'\n'
 				write_into_file(file_name='logs.txt',contents=log_data,mode='a')
-			
+				# if count>=2:break # for processing certain limits
 			except Exception as e :
 				print ('Error  while reading file',e)
 				e_log_data=str(get_today_date())+'\t'+str(each_file)+'\t'+str('Error')+'\t'+str(e)+'\n'
 				write_into_file(file_name='Error_logs.txt',contents=e_log_data,mode='a')
-				# if count>=5:break
+				
 				print ('--------------------------------------------------------------------------------------------')
+
 				pass
 		break # to end this current directory 
 	
@@ -150,12 +151,18 @@ def get_variable_index(file_lines):
 		# 	temp_index=index
 		# 	break
 		if header_index==0:
-			if 'create ' in each_line.lower():#'********' in each_line or 
-				header_index=index-1
+			if 'create ' in each_line.lower():
+				if '********' in file_lines[index-1]:
+					header_index=index-1
+				elif '********' in file_lines[index-2]:
+					header_index=index-2
+				else:
+					header_index=index-1
 		if var_index==0:
-			if '@m_errorid ' in each_line.lower() and not each_line.strip().startswith('--'):
-				# print ('Error id index ',index,each_line)
-				var_index=index
+			if '@m_errorid' in each_line.lower() and not each_line.strip().startswith('--'):
+			# if '@m_errorid' in each_line.lower() and "udd_int" in each_line.lower() and  not each_line.strip().startswith('--'):
+				# print ('Variable id index ',index,each_line)
+				var_index=index+1
 		if space_index==0:
 			if  "rtrim" in each_line.lower()  and  "ltrim" in each_line.lower():# or "set " in each_line.lower()
 				if ensure_space_check(index,file_lines)==True:
@@ -194,7 +201,11 @@ def get_variable_index(file_lines):
 	
 
 if __name__=="__main__":
-	input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\PICK&BIN\\PICK&BIN'
+	try:
+		input_directory=sys.argv[1]
+	except:
+		print ('Give the valid Stub files directory ')
+	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\PICK&BIN\\PICK&BIN'
 	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin\\Bin'
 	#input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin_Plan\\Bin_Plan'
 	rtrack_id='EPE-20094'
