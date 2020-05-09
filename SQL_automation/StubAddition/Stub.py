@@ -1,12 +1,13 @@
 """
 Functionality : Script to help stub addition
-version : v2.2
+version : v2.3
 
 History :
 		  v1.0  - 01/03/2020 - initial version
 		  v2.0  - 02/04/2020 - trim and null check functions are also added 
 		  v2.1  - 02/04/2020 - splitting logic is enhanced
 		  v2.2  - 29/04/2020 - Separate function is added for stub operation
+		  v2.3  - 08/05/2020 - Logic for variable separation is added using regex
 
 Pending : 
 			1,Output varibable detection in the stub file
@@ -24,25 +25,44 @@ def list_difference(stub_param_list,actual_list):
 def get_parameters(input_text,developer_mode=False):
 	temp_text=input_text.lower().split('create '.lower())[1]
 	begin_split=''
-	for as_index,each_line in enumerate(input_text.split('\n')):
-		if 'begins' not in each_line.lower() and 'begin' in each_line.lower():
-			if 'as' in input_text[as_index-1].lower() or 'as' in input_text[as_index-2].lower():
-				# print ('Previous line has as key ',input_text[as_index-1])
-				# print ('Previous line has as key ',input_text[as_index-2])
-				begin_split=each_line
-				break
-			# else:print ('Does not endswith as ')
-			
-	if not begin_split:begin_split='begin'
-	actual_text=temp_text.split(begin_split)[0]
-	if actual_text.strip('\n').endswith('as'):
-		# print ('Ends with as ')#,actual_text)
-		pass
-		# input('Proceed ??')
-	else:
-		print ('VARIABLE TEXT DOES NOT ENDS WITH "AS" ')
-		input('New case found !!')
-	# print (actual_text.split('\n'))
+	# print ('temp_text',temp_text)
+	
+	# write_into_file('testing_file.txt',str(temp_text),'w')
+	# input('Testing caused text')
+	# if False:
+	# 	for as_index,each_line in enumerate(input_text.split('\n')):
+	# 		if 'begins' not in each_line.lower() and 'begin' in each_line.lower():
+	# 			if 'as' in input_text[as_index-1].lower() or 'as' in input_text[as_index-2].lower():
+	# 				# print ('Previous line has as key ',input_text[as_index-1])
+	# 				# print ('Previous line has as key ',input_text[as_index-2])
+	# 				begin_split=each_line
+	# 				break
+	# 			# else:print ('Does not endswith as ')
+				
+	# 	if not begin_split:begin_split='begin'
+	# 	if developer_mode==True: print ("Stub.py:\tget_parameters:\tbegin split ",begin_split)
+	# 	actual_text=temp_text.split(begin_split)[0]
+	# 	if developer_mode==True: print ("Stub.py:\tget_parameters:\t Actual text ( normal case ) ",actual_text)
+	# 	if actual_text.strip('\n').endswith('as'):
+	# 		# print ('Ends with as ')#,actual_text)
+
+	# 		pass
+	# 		# input('Proceed ??')
+	# 	else:
+	# 		print ('VARIABLE TEXT DOES NOT ENDS WITH "AS" ')
+	# 		input('New case found !!')
+	# 		actual_text=temp_text.split(begin_split)[:1]
+	# 		if developer_mode==True: print ("Stub.py:\tget_parameters:\t Actual text newly added case ",actual_text)
+	# 		input('Check the new case !!')
+
+	# New logic added for regex
+	try:
+		patters='[\n\s](?i)as?[\s\n]*(?i)begin[\s]'
+		splits=re.split(patters, temp_text,re.IGNORECASE)
+		actual_text=splits[0]
+	except Exception as e:
+		print ('Error while splitting variable text :',e)
+		return False
 	if developer_mode==True : print ('actual_text :',actual_text)
 	actual_list=actual_text.split('\n')
 	# print ('actual_list :',actual_list)
@@ -103,12 +123,17 @@ def get_sp_help_text():
 # 			fp.write(each_line)
 # 		fp.close()
 
-def stub_comparison(stub_file_name,server_version_name):
+def stub_comparison(stub_file_name,server_version_name,developer_mode=False):
 	stub_file_contents=get_file_content(stub_file_name)
-	result_set1=get_parameters(stub_file_contents)
-	result_set2=get_parameters(get_file_content(server_version_name))
+	if developer_mode==True : print ('stub_comparison:\t len(stub_file_contents):',len(stub_file_contents))
+	result_set1=get_parameters(stub_file_contents,developer_mode=developer_mode)
+	result_set2=get_parameters(get_file_content(server_version_name),developer_mode=developer_mode)
 	print ('Stub variables :',len(result_set1['variables']))
 	print ('sp variables :',len(result_set2['variables']))
+	if developer_mode==True : 
+		print ('stub_comparison:\t Variables in stub files :\n',result_set1['variables'])
+		print ('stub_comparison:\t Variables in files found :\n',result_set2['variables'])
+		input('Test')
 	# print ('sp variables :',result_set2['variables'])
 	newly_added=list_difference(result_set1['variables'],result_set2['variables'])
 	print ('Total added variables :',len(newly_added))

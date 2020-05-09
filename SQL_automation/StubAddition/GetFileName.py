@@ -1,5 +1,10 @@
 """
 File to get the filenames from in the diven directory
+Version :v2.0
+History :
+		v1.0 -08/05/2020 - initial version 
+		v2.0 -08/05/2020 - name is added as input and few inputs are changed
+
 Pending actions : 
 				1, Header data need to be added - DONE
 				2, All Variables needs to be checked and form an testing  - DONE
@@ -28,7 +33,7 @@ def get_today_date():
 	current_date = current_date.strftime("%d-%m-%Y")
 	return current_date
 
-def get_all_files(rtrack_id,input_directory,server_directory='files_from_server',get_help_text=False,developer_mode=False,strict_mode=False):
+def get_all_files(rtrack_id,name,input_directory,server_directory='files_from_server',get_help_text=False,developer_mode=False,strict_mode=False):
 	"""
 	Input : A directory
 	Process : get all the file names present in that directory
@@ -55,10 +60,11 @@ def get_all_files(rtrack_id,input_directory,server_directory='files_from_server'
 					if developer_mode==True: print ('help_text :',help_text)
 					write_into_file(file_name=server_file_name,contents=str(help_text).strip(),mode='w')
 				server_file_name=os.path.join(server_directory,each_file)
-				
 				# stub file comparison for both modes
 				print ('stub_file_name:',stub_file_name)
+				if developer_mode==True : print ('get_all_files:\t stub_file_name presence:',get_file_presence(stub_file_name))
 				print ('sp file name :',server_file_name)
+				if developer_mode==True : print ('get_all_files:\t sp file name presence :',get_file_presence(server_file_name))
 				up_directory=os.path.join(input_directory,'updated_procedures')
 				if not os.path.exists(up_directory): os.makedirs(up_directory)
 				updated_file=os.path.join(up_directory,each_file)
@@ -67,7 +73,7 @@ def get_all_files(rtrack_id,input_directory,server_directory='files_from_server'
 					continue # if the updated file exists then the file will be skipped 
 				# continue # added for getting href 
 				
-				stub_dict=stub_comparison(stub_file_name=stub_file_name,server_version_name=server_file_name)
+				stub_dict=stub_comparison(stub_file_name=stub_file_name,server_version_name=server_file_name,developer_mode=developer_mode)
 				# print (stub_dict)
 			
 		# updating changes here !!
@@ -77,24 +83,25 @@ def get_all_files(rtrack_id,input_directory,server_directory='files_from_server'
 					file_contents2=file_contents
 					# print ('file_contents2 copied')
 					if stub_dict['variables']['list']:
-						file_contents2.insert(index_dict['header_index'],get_merged_content(rtrack_id,header=True))
-						file_contents2.insert(index_dict['variable_index'],get_merged_content(rtrack_id,stub_dict['variables']['list']).replace('\t','udd_'))
-						file_contents2.insert(index_dict['null_index'],get_merged_content(rtrack_id,stub_dict['null_checks']['list']))
-						file_contents2.insert(index_dict['space_index'],get_merged_content(rtrack_id,stub_dict['space_checks']['list']))
+						file_contents2.insert(index_dict['header_index'],get_merged_content(rtrack_id=rtrack_id,name=name,header=True))
+						file_contents2.insert(index_dict['variable_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['variables']['list']).replace('\t','udd_'))
+						file_contents2.insert(index_dict['null_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['null_checks']['list']))
+						file_contents2.insert(index_dict['space_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['space_checks']['list']))
 						print ('updated file name :',updated_file)
 						write_into_file(file_name=updated_file,contents=str(' '.join(file_contents2)).strip(),mode='w')
 				else:
 					print ('Issue in getting index',index_dict)
 				# file_contents2.insert(index_dict['out_index'],stub_dict['outs']['list'])
 				before_addition=len(get_file_content(server_file_name,return_lines=True))
-				after_addition=len(get_file_content(updated_file,return_lines=True))
+				if index_dict['variable_index']!=0:
+					after_addition=len(get_file_content(updated_file,return_lines=True))
 				print ('Lines before addition :',before_addition)
 				print ('Lines After addition :',after_addition)
 				log_data=str(str(datetime.datetime.now()).split('.')[0])+'\t'+str(each_file)+'\t'+str(stub_file_name)+'\t'
 				log_data+=str(server_file_name)+'\t'+str(updated_file)+'\t'
 				log_data+=str(len(stub_dict['stub_variables']))+'\t'+str(len(stub_dict['sp_variables']))+'\t'+str(len(stub_dict['added_variables']))+'\t'+str(before_addition)+'\t'+str(after_addition)+'\n'
 				write_into_file(file_name='logs.txt',contents=log_data,mode='a')
-				# if count>=2:break # for processing certain limits
+				# if count>=3:break # for processing certain limits
 			except Exception as e :
 				print ('Error  while reading file',e)
 				e_log_data=str(get_today_date())+'\t'+str(each_file)+'\t'+str('Error')+'\t'+str(e)+'\n'
@@ -106,10 +113,10 @@ def get_all_files(rtrack_id,input_directory,server_directory='files_from_server'
 		break # to end this current directory 
 	
 	return True
-def get_merged_content(rtrack_id,temp_list=[],header=False):
+def get_merged_content(rtrack_id,temp_list=[],name="Ajithkumar",header=False):
 	# rtrack_id='EPE-20094'
 	if header==True:
-		comments_header='/*Ajithkumar					'+str(get_today_date())+'				'+str(rtrack_id)+'				*/\n'
+		comments_header='/*'+str(name)+'\t\t\t'+str(get_today_date())+'\t\t\t\t'+str(rtrack_id)+'\t\t\t\t*/\n'
 		return comments_header
 	comments_starts='/*code added for '+str(rtrack_id)+' starts    */'
 	comments_ends='/*code added for '+str(rtrack_id)+'   ends        */'
@@ -129,7 +136,7 @@ def ensure_null_check(index,file_lines,depth=5):
 	# print ("Ensure null check :",index,file_lines[index])
 
 	for i in range(1,depth+1):
-		if "= '~#~'" in  file_lines[index+i] or "= -915" in file_lines[index+i]:
+		if "'~#~'" in  file_lines[index+i] or "-915" in file_lines[index+i]:# or "-915" in file_lines[index+i]:
 			# print ('Inside null checking  condition satisfied',file_lines[index+i])
 			return False
 	
@@ -170,7 +177,7 @@ def get_variable_index(file_lines):
 						space_index=index+4
 		if null_index==0:
 			if " = null" in each_line:
-				if ensure_null_check(index,file_lines)==True:
+				if ensure_null_check(index,file_lines,7)==True:
 						# print ('null checking is over :',index+1,file_lines[index+1])
 						null_index=index+4
 						break
@@ -208,8 +215,10 @@ if __name__=="__main__":
 	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\PICK&BIN\\PICK&BIN'
 	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin\\Bin'
 	#input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin_Plan\\Bin_Plan'
-	rtrack_id='EPE-20094'
-	print (get_all_files(rtrack_id,input_directory))
+	# rtrack_id='EPE-20094'
+	rtrack_id='EPE-20343'
+	name='Kasimaharajan T'
+	print (get_all_files(rtrack_id=rtrack_id,name=name,input_directory=input_directory,get_help_text=False,developer_mode=False))
 
 
 	# sp_name ='WMM_picpln_Sp_cmpimg_hrf.sql'
