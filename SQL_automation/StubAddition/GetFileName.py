@@ -84,7 +84,13 @@ def get_all_files(rtrack_id,name,input_directory,server_directory='files_from_se
 					# print ('file_contents2 copied')
 					if stub_dict['variables']['list']:
 						file_contents2.insert(index_dict['header_index'],get_merged_content(rtrack_id=rtrack_id,name=name,header=True))
-						file_contents2.insert(index_dict['variable_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['variables']['list']).replace('\t','udd_'))
+						variables_txt=get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['variables']['list'])
+						
+						print ("variables_txt :",variables_txt)
+						if 'udd_' not in variables_txt.lower():
+							variables_txt=variables_txt.replace('\t','udd_')
+						file_contents2.insert(index_dict['variable_index'],variables_txt)
+						# file_contents2.insert(index_dict['variable_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['variables']['list']).replace('\t','udd_'))
 						file_contents2.insert(index_dict['null_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['null_checks']['list']))
 						file_contents2.insert(index_dict['space_index'],get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['space_checks']['list']))
 						print ('updated file name :',updated_file)
@@ -118,8 +124,8 @@ def get_merged_content(rtrack_id,temp_list=[],name="Ajithkumar",header=False):
 	if header==True:
 		comments_header='/*'+str(name)+'\t\t\t'+str(get_today_date())+'\t\t\t\t'+str(rtrack_id)+'\t\t\t\t*/\n'
 		return comments_header
-	comments_starts='/*code added for '+str(rtrack_id)+' starts    */'
-	comments_ends='/*code added for '+str(rtrack_id)+'   ends        */'
+	comments_starts='    /*  CODE ADDED FOR '+str(rtrack_id)+' starts    */'
+	comments_ends  ='    /*  CODE ADDED FOR '+str(rtrack_id)+' ends      */'
 
 	temp_content=str(comments_starts)+'\n'
 	temp_content+='\n'.join(temp_list)+'\n'
