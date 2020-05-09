@@ -1,15 +1,13 @@
 """
 File to get the filenames from in the diven directory
-Version :v2.0
+Version :v2.1
 History :
-		v1.0 -08/05/2020 - initial version 
-		v2.0 -08/05/2020 - name is added as input and few inputs are changed
+		v1.0 -08/05/2020 -	Initial version 
+		v2.0 -08/05/2020 -	Name is added as input and few inputs are changed
+		v2.1 -09/05/2020 -	Argparse is added 
 
 Pending actions : 
-				1, Header data need to be added - DONE
-				2, All Variables needs to be checked and form an testing  - DONE
-				3, alter the modifed sp in _187 server and check it whether it is working fine ?
-				4, Need to cross check the out data 
+				1, Adding out variables to the procedures
 """
 import os,sys
 import os.path
@@ -86,7 +84,7 @@ def get_all_files(rtrack_id,name,input_directory,server_directory='files_from_se
 						file_contents2.insert(index_dict['header_index'],get_merged_content(rtrack_id=rtrack_id,name=name,header=True))
 						variables_txt=get_merged_content(rtrack_id=rtrack_id,temp_list=stub_dict['variables']['list'])
 						
-						print ("variables_txt :",variables_txt)
+						if developer_mode==True : print ("get_all_files:\t sp file name presence :\t variables_txt :",variables_txt)
 						if 'udd_' not in variables_txt.lower():
 							variables_txt=variables_txt.replace('\t','udd_')
 						file_contents2.insert(index_dict['variable_index'],variables_txt)
@@ -214,26 +212,39 @@ def get_variable_index(file_lines):
 	
 
 if __name__=="__main__":
-	try:
-		input_directory=sys.argv[1]
-	except:
-		print ('Give the valid Stub files directory ')
-	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\PICK&BIN\\PICK&BIN'
-	# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin\\Bin'
-	#input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin_Plan\\Bin_Plan'
-	# rtrack_id='EPE-20094'
-	rtrack_id='EPE-20343'
-	name='Kasimaharajan T'
-	print (get_all_files(rtrack_id=rtrack_id,name=name,input_directory=input_directory,get_help_text=False,developer_mode=False))
+	arg = argparse.ArgumentParser('Program to Automate stub addition !!',add_help=True)
+	arg.add_argument('-dir','--input_directory',help='Directory which contains stub files',required=True)
+	arg.add_argument('-r','--rtrack_id',help='Rtrack ID',required=True)
+	arg.add_argument('-name','--name',help='Name of the Developer ',default ='Ajithkumar M',required=False)
+	arg.add_argument('-dev_mode','--developer_mode',help='To enable print options specially for a developer ',nargs='?',const=True,default = False,required=False)
+	arg.add_argument('--skip_help_text',help='This option skips the extraction of helptext from DB',nargs='?',const=True,default = False,required=False)
+	arg.add_argument('--strict_mode',help='This Option is enabled hardly changes the updated procedure even if it is present',nargs='?',const=True,default = False,required=False)
+	# for Furture use 
+	# arg.add_argument('--host_ip',help='Host ip address to connect',const='172.16.6.85',required=False)
+	# arg.add_argument('--db',help='Database to connect ',const='scmdb',required=False)
+	# arg.add_argument('--username',help='Username',const='select',required=False)
+	# arg.add_argument('--password',help='Password',const='password12$',required=False)
+	args = arg.parse_args()
+	print (args)
+	input ('Check the details and Press enter to proceed !')
+	input_directory = args.input_directory
+	rtrack_id = args.rtrack_id
+	name = args.name
+	developer_mode = args.developer_mode
+	get_help_text = not args.skip_help_text
+	strict_mode = args.strict_mode
 
-
-	# sp_name ='WMM_picpln_Sp_cmpimg_hrf.sql'
-	# sp_name_full=os.path.join(input_directory,'files_from_server',sp_name)
-	# sp_name_full='G:\\Ajith\\OtherFiles\\HelpText_from_sp\\wms_bin_sp_cmn_pln_dtl.sql'
-	# print (get_indexes(sp_name_full))
-
-
-
-# read the stub file 
-# get the text from the server file and store it in given directory 
-# run the stub file difference for all the sps.
+	if True:
+		print (get_all_files(rtrack_id=rtrack_id,name=name,input_directory=input_directory,get_help_text=get_help_text,developer_mode=developer_mode,strict_mode=strict_mode))
+	if not True :
+		try:
+			input_directory=sys.argv[1]
+		except:
+			print ('Give the valid Stub files directory ')
+		# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\PICK&BIN\\PICK&BIN'
+		# input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin\\Bin'
+		#input_directory='G:\\Ajith\\Issues\\Logistics\\2020\\STUB-Addition\\April\\Bin_Plan\\Bin_Plan'
+		# rtrack_id='EPE-20094'
+		rtrack_id='EPE-20343'
+		name='Kasimaharajan T'
+		print (get_all_files(rtrack_id=rtrack_id,name=name,input_directory=input_directory,get_help_text=False,developer_mode=False))
