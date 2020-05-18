@@ -1,6 +1,6 @@
 """
 Functionality : Script to help stub addition
-version : v2.3
+version : v2.4
 
 History :
 		  v1.0  - 01/03/2020 - initial version
@@ -8,6 +8,7 @@ History :
 		  v2.1  - 02/04/2020 - splitting logic is enhanced
 		  v2.2  - 29/04/2020 - Separate function is added for stub operation
 		  v2.3  - 08/05/2020 - Logic for variable separation is added using regex
+		  v2.4  - 18/05/2020 - In funcion get_parameters() - consider full text option is added 
 
 Pending : 
 			1,Output varibable detection in the stub file
@@ -22,71 +23,50 @@ def list_difference(stub_param_list,actual_list):
 	# print ('Stublist len:',len(stub_param_list))
 	# print ('actual_list len:',len(actual_list))
 	return (list(set(stub_param_list) - set(actual_list)))
-def get_parameters(input_text,developer_mode=False):
-	temp_text=input_text.lower().split('create '.lower())[1]
-	begin_split=''
-	# print ('temp_text',temp_text)
-	
-	# write_into_file('testing_file.txt',str(temp_text),'w')
-	# input('Testing caused text')
-	# if False:
-	# 	for as_index,each_line in enumerate(input_text.split('\n')):
-	# 		if 'begins' not in each_line.lower() and 'begin' in each_line.lower():
-	# 			if 'as' in input_text[as_index-1].lower() or 'as' in input_text[as_index-2].lower():
-	# 				# print ('Previous line has as key ',input_text[as_index-1])
-	# 				# print ('Previous line has as key ',input_text[as_index-2])
-	# 				begin_split=each_line
-	# 				break
-	# 			# else:print ('Does not endswith as ')
-				
-	# 	if not begin_split:begin_split='begin'
-	# 	if developer_mode==True: print ("Stub.py:\tget_parameters:\tbegin split ",begin_split)
-	# 	actual_text=temp_text.split(begin_split)[0]
-	# 	if developer_mode==True: print ("Stub.py:\tget_parameters:\t Actual text ( normal case ) ",actual_text)
-	# 	if actual_text.strip('\n').endswith('as'):
-	# 		# print ('Ends with as ')#,actual_text)
-
-	# 		pass
-	# 		# input('Proceed ??')
-	# 	else:
-	# 		print ('VARIABLE TEXT DOES NOT ENDS WITH "AS" ')
-	# 		input('New case found !!')
-	# 		actual_text=temp_text.split(begin_split)[:1]
-	# 		if developer_mode==True: print ("Stub.py:\tget_parameters:\t Actual text newly added case ",actual_text)
-	# 		input('Check the new case !!')
-
-	# New logic added for regex
-	try:
-		patters='[\n\s](?i)as?[\s\n]*(?i)begin[\s]'
-		splits=re.split(patters, temp_text,re.IGNORECASE)
-		actual_text=splits[0]
-	except Exception as e:
-		print ('Error while splitting variable text :',e)
-		return False
-	if developer_mode==True : print ('actual_text :',actual_text)
-	actual_list=actual_text.split('\n')
+def get_parameters(input_text,developer_mode=False,check_full_text=False):
+	if check_full_text==True:
+		if type(input_text)==list:
+			actual_list=input_text
+		else:
+			actual_list=input_text.split('\n')
+	else:
+		temp_text=input_text.lower().split('create '.lower())[1]
+		begin_split=''
+			# New logic added for regex
+		try:
+			patters='[\n\s](?i)as?[\s\n]*(?i)begin[\s]'
+			splits=re.split(patters, temp_text,re.IGNORECASE)
+			actual_text=splits[0]
+		except Exception as e:
+			print ('Error while splitting variable text :',e)
+			return False
+		if developer_mode==True : print ('actual_text :',actual_text)
+		actual_list=actual_text.split('\n')
 	# print ('actual_list :',actual_list)
 	variables=[]
 	index_to_be_deleted=[]
 	if developer_mode==True : print ('Actual list :',len(actual_list))
 	for i,val in enumerate(actual_list):
 		if developer_mode==True : print ('i and val :',i,val)
-		temp=''
+		temps=[]
 		if val.strip(' \t\r\n').startswith('--'):
 			if developer_mode==True : print ('deleted:',actual_list[i])
 			actual_list[i]=''
 		else:
 			try:
 				if developer_mode==True : print ('val before regex :',val)
-				temp=re.findall("@\w+", val)[0]
+				temps=re.findall("@\w+", val)
+				# temps=re.findall("@\w+", val)[0] # code commented to handle multiple variables
 				# print (re.search("@\w+", val).group())
-				if developer_mode==True : print ('temp :',temp)
-				if developer_mode==True : print (temp)
-				if temp not in variables and len(temp)>1:
-					if developer_mode==True : print ('added to variables :',temp)
-					variables.append(temp)
-				else:
-					actual_list[i]=''
+				if developer_mode==True : print ('temps :',temps)
+				if developer_mode==True : print (temps)
+				print ('temps :',temps)
+				for temp in temps:
+					if temp not in variables and len(temp)>1:
+						if developer_mode==True : print ('added to variables :',temp)
+						variables.append(temp)
+					else:
+						actual_list[i]=''
 			except Exception as e :
 				if developer_mode==True : print ('Error :',e) 
 				actual_list[i]=''
@@ -225,31 +205,4 @@ if __name__ == '__main__':
 	# arg.add_argument('-d','--destroy_time',help='delay time',type=int,default =10,required=False)
 	args = arg.parse_args()
 	print (stub_comparison(stub_file_name=args.stub_file,server_version_name=args.sp)['added_variables'])
-
-	# stub_file_contents=get_file_content(args.stub_file)
-	# result_set1=get_parameters(stub_file_contents)
-	# result_set2=get_parameters(get_file_content(args.sp))
-	# print ('Stub variables :',len(result_set1['variables']))
-	# print ('sp variables :',len(result_set2['variables']))
-	# newly_added=list_difference(result_set1['variables'],result_set2['variables'])
-	# print ('Total added variables :',len(newly_added))
-	# print ('Added variables :',newly_added)
-	# out_file_name='added_variables.txt'
-	# for i,each in enumerate(newly_added):
-	# 	index= result_set1['variables'].index(each)
-	# 	each_line=args.stub_file+'\t'+each+'\t'+(result_set1['content'][index].replace('\t','    ').replace(' --input/output','').strip())+'\t'+str(len(newly_added))+'\t'+str(i+1)+'\n'
-	# 	fp=open(out_file_name,'a')
-	# 	fp.write(each_line)
-	# 	fp.close()
-	# # print ('Variables are written ')
-	# for index,each_line in enumerate(stub_file_contents.split('\n')):
-	# 	for var_index,each_var in enumerate(newly_added):
-	# 		# print ('var :',each_var)
-	# 		# print (index,each_line)
-	# 		if each_var.strip().lower() in each_line.lower():
-	# 			# print ('if matched - last')
-	# 			# input('test')
-	# 			final_text=args.stub_file+'\t'+each_var.strip()+'\t'+str(each_line.replace('\t',' ').strip())+'\t'+str(var_index+1)+'\t'+str(index+1)+'\n'
-	# 			write_into_file('SpaceAndNull_checks.sql',final_text,'a')
-	# print ('Trim and null checkings are added in file :SpaceAndNull_checks.sql')
 

@@ -1,0 +1,191 @@
+select					--code added balaji EPE-1375
+					cu.wms_customer_id		    'asn_customercode_ml',  
+					/* Code modified for ITS ID:EPE-3723 begins */     
+					--dtl.wms_asn_itm_code		'asn_customeritemcode_ml',
+					wms_itm_ref_no				'asn_customeritemcode_ml',
+					/* Code modified for ITS ID:EPE-3723 ends */     
+					cu.wms_customer_name        'asn_customername_ml',
+					itm.wms_itm_code      'asn_itemcode_ml', 
+					itm.wms_itm_long_desc		'asn_itemdesc_ml', 
+					ib.wms_inb_orderdate		'asn_inboundorderdate_ml', 
+					hdr.wms_asn_IB_order		'asn_inboundorderno_ml' ,	
+					hdr.wms_asn_no			    'asn_asnno_ml', 
+					hdr.wms_asn_date		    'asn_asndate_ml', 
+					hdr.wms_asn_prefdoc_no		'asn_primaryrefdocno_ml', 
+					prd.wms_code_desc			'asn_primaryrefdoctype_ml', 
+					sts.wms_paramdesc			'asn_status_ml', 
+					aty.wms_paramdesc           'asn_type',--code added for EPE-8806
+					vd.wms_vendor_id		    'asn_vendorcode_ml', 
+					vd.wms_vendor_name			'asn_vendorname_ml',
+					--dtl. wms_asn_master_uom_qty 'asn_masteruom_ml', --LRT-7291
+					itm.wms_itm_mas_unit		'asn_masteruom_ml',	--LRT-7291
+					dtl.wms_asn_qty	            'asn_orderqty_ml',  
+					null 						'asn_hdn_char_01', 
+					null 						'asn_hdn_char_02', 
+					null 						'asn_hdn_char_03', 
+					null 						'asn_hdn_int_01',  
+					null 						'asn_hdn_int_02',
+					--code added for epe-2637 begins
+					null						'internalnotes_asn_ml', 
+					hdr.wms_asn_dlv_date		'asn_expecteddeliverydate_ml' 
+					--code added for epe-2637 end
+					,hdr.wms_asn_shp_eqp_no		'equipmentnumber_asn_ml', --code added for EPE-3657
+					mas.wms_code_desc			'equipmenttype_asn_ml',	--code added for EPE-3657
+					/* code added for EPE-4535  starts here */
+					dtl.wms_asn_thu_qty				'asn_thuqty_ml', 
+					thu1.wms_code_desc				'asn_thutype_ml' ,
+					/* code added for EPE-4535  ends here */
+					/* Code added for EPE-9560 starts here*/
+					--dtl.wms_asn_lottable10						'lottable10_asn_ml', -- code commented for EPE-17674
+					dtl.wms_asn_item_attribute10				'lottable10_asn_ml', -- code added for EPE-17674
+					dtl.wms_asn_lottable1						'lottable1_asn_ml', 
+					dtl.wms_asn_lottable2						'lottable2_asn_ml', 
+					dtl.wms_asn_lottable3						'lottable3_asn_ml', 
+					dtl.wms_asn_lottable4						'lottable4_asn_ml', 
+					dtl.wms_asn_lottable5						'lottable5_asn_ml', 
+					/* code commented and added for EPE-17674 starts here */
+					/*
+					dtl.wms_asn_lottable6						'lottable6_asn_ml', 
+					dtl.wms_asn_lottable7						'lottable7_asn_ml', 
+					dtl.wms_asn_lottable8						'lottable8_asn_ml', 
+					dtl.wms_asn_lottable9						'lottable9_asn_ml'
+					*/
+					dtl.wms_asn_item_attribute6					'lottable6_asn_ml', 
+					dtl.wms_asn_item_attribute7					'lottable7_asn_ml', 
+					dtl.wms_asn_item_attribute8					'lottable8_asn_ml', 
+					dtl.wms_asn_item_attribute9					'lottable9_asn_ml'
+					/* code commented and added for EPE-17674 ends here */
+					/* Code added for EPE-9560 starts here*/
+					,wms_asn_order_uom							'asn_orderuom_ml',			--code added for EPE-12378
+					wms_asn_master_uom_qty						'asn_masuomqty_ml'			--code added for EPE-12378
+		from wms_asn_header	hdr	(nolock)
+		left outer join	wms_asn_detail	dtl	(nolock)
+		on				hdr.wms_asn_ou			=	dtl.wms_asn_ou
+		and				hdr.wms_asn_location	=	dtl.wms_asn_location
+		and				hdr.wms_asn_no			=	dtl.wms_asn_no
+		left outer join	wms_item_hdr	itm (nolock) 
+		on				itm.wms_itm_ou			=	@ctxt_ouinstance
+		and				itm.wms_itm_code		=	dtl.wms_asn_itm_code
+		left outer join wms_customer_hdr  cu(nolock)
+		on(		cu.wms_customer_id		=	hdr.wms_asn_cust_code
+		and		cu.wms_customer_ou		=	hdr.wms_asn_ou
+		 )
+		 left outer join wms_vendor_hdr	 vd(nolock)
+		on(		vd.wms_vendor_id		=	hdr.wms_asn_sup_asn_no
+		and		vd.wms_vendor_ou		=	hdr.wms_asn_ou
+		)
+		/* code added balaji dts id: EPE-805 starts */
+		left outer join wms_equipment_hdr	 eqp(nolock)
+		on(		eqp.wms_eqp_equipment_id	=	hdr.wms_asn_shp_eqp_no
+		and		eqp.wms_eqp_ou				=	hdr.wms_asn_ou
+		)
+		left outer join wms_veh_mas_hdr	 veh(nolock)
+		on(		veh.wms_veh_id		=	hdr.wms_asn_shp_vh_no
+		and		veh.wms_veh_ou		=	hdr.wms_asn_ou
+		)
+		/* code added balaji dts id: EPE-805 ends */ 
+		left outer join wms_inbound_header  ib(nolock)
+		on(     ib.wms_inb_orderno      =    hdr.wms_asn_IB_order
+		and      ib.wms_inb_ou          =    hdr.wms_asn_ou
+		)
+		left outer join	wms_quick_code_master prd	(nolock) 
+		on				prd.wms_code_type		=	'IBPREFDC'
+		and				prd.wms_code_ou			=	hdr.wms_asn_ou
+		and				prd.wms_langid			=	@ctxt_language
+		and				prd.wms_code			=	hdr.wms_asn_prefdoc_type
+		/*code added  for EPE-3657 begins*/
+		left outer join	wms_quick_code_master mas	(nolock) 
+		on				mas.wms_code_type		=	'EQPTYP'
+		and				mas.wms_code_ou			=	hdr.wms_asn_ou
+		and				mas.wms_langid			=	@ctxt_language
+		and				mas.wms_code			=	hdr.wms_asn_shp_eqp_typ
+		/*code added  for EPE-3657 ends*/
+		left outer join wms_component_met	sts	(nolock) 
+		on 				sts.wms_componentname 	=	'WMActivity' 
+		and 			sts.wms_paramcategory	=	'COMBO' 
+		and 			sts.wms_paramtype		=	'ASN_STS' 
+		and 			sts.wms_paramcode		=	hdr.wms_asn_status
+		and 			sts.wms_langid			=	@ctxt_language
+
+		/*code added for EPE-8806 starts here*/
+		left outer join wms_component_met	aty	(nolock) 
+		on 				aty.wms_componentname 	=	'WMActivity' 
+		and 			aty.wms_paramcategory	=	'COMBO'
+		and 			aty.wms_paramtype		=	'INB_ORD_TYPE'
+		and 			aty.wms_paramcode		=    hdr.wms_asn_type
+		and 			aty.wms_langid			=	@ctxt_language
+		/*code added for EPE-8806 ends here*/
+
+		left outer join wms_thu_hdr	thu	(nolock)
+		on		wms_thu_ou		=		dtl.wms_asn_ou
+		and		wms_thu_id		=		dtl.wms_asn_thu_id
+		left outer join wms_quick_code_master thu1(nolock)
+		on		thu1.wms_code_ou				=	thu.wms_thu_ou
+		and		thu1.wms_code					=	thu.wms_thu_class
+		/* code added for EPE-4535  ends here */
+		where	hdr.wms_asn_ou					=	@ctxt_ouinstance
+			and  hdr.wms_asn_location                                   =          @location
+		  --and		isnull(hdr.wms_asn_dlv_date, '01/01/1900')		    =	       isnull(@As_DeliveryDate_hdr,isnull(hdr.wms_asn_dlv_date, '01/01/1900'))--code cmd EPE-3261
+			 and		isnull(convert(date,hdr.wms_asn_dlv_date,120), '01/01/1900')		   =	       isnull(@asn_hub_deliverydate_hdr,isnull(convert(date,hdr.wms_asn_dlv_date,120), '01/01/1900'))--code added EPE-3261
+			and		isnull(hdr.wms_asn_status, '')		                =	       isnull(@asn_status,isnull(hdr.wms_asn_status, ''))
+				/* Code added for ITS ID :EPE-794 Begins */
+			and		isnull(hdr.wms_asn_no,'%') 	                        between	  isnull(@asn_asnnofrom,isnull(hdr.wms_asn_no,'%'))	and  isnull(@asn_asnnoto,isnull(hdr.wms_asn_no,'%'))
+			and		isnull(	cu.wms_customer_id	,'%')	                like	replace(isnull(@asn_customercode,isnull(cu.wms_customer_id	,'%')),'*','%')+'%'
+			and		isnull(cu.wms_customer_name,'%') 	                like	replace(isnull(@asn_customername,isnull(cu.wms_customer_name,'%')),'*','%')+'%'
+			and		isnull(vd.wms_vendor_id,'%')	                    like	replace(isnull(@asn_vendorcode,isnull(vd.wms_vendor_id,'%')),'*','%')+'%'
+			and		isnull(vd.wms_vendor_name,'%')	                    like 	replace(isnull(@asn_vendorname,isnull(vd.wms_vendor_name,'%')),'*','%') +'%'   		
+			--and 	isnull(hdr.wms_asn_prefdoc_no,'%')	                between	replace(isnull(@asn_primaryrefdocnofrom+'%',isnull(hdr.wms_asn_prefdoc_no,'')),'*','%')        
+			--										                    and		replace(isnull(@asn_primaryrefdocnoto+'%',isnull(hdr.wms_asn_prefdoc_no,'')),'*','%')
+			 /* Code added for ITS ID :EPE-794 ends */
+			and		isnull(hdr.wms_asn_prefdoc_type, '')		        =	    isnull(@asn_primaryrefdoctype, isnull(hdr.wms_asn_prefdoc_type, ''))	
+			--and		isnull(	ib.wms_inb_orderdate,'01/01/1900')          between	isnull(@asn_inboundorderdatefrom,'01/01/1900')
+																	   -- and		isnull(@asn_inboundorderdateto,@sysdate)--code commented forepe-5078
+			and		isnull(convert(date, wms_inb_orderdate,120),'01/01/1900')	between isnull(@asn_inboundorderdatefrom,isnull(convert(date,wms_inb_orderdate,120),'01/01/1900')) 
+																				and isnull(@asn_inboundorderdateto,isnull(convert(date,wms_inb_orderdate,120),'01/01/1900')) --code added forepe-5078
+		   and 	isnull(hdr.wms_asn_IB_order,'')	                      between	isnull(@asn_inboundordernofrom,isnull(hdr.wms_asn_IB_order,''))
+																		and		isnull(@asn_inboundordernoto,isnull(hdr.wms_asn_IB_order,''))
+			/* code added balaji dts id: EPE-805 starts */
+			and 	isnull(hdr.wms_asn_prefdoc_no,'')		like	replace(isnull(@asn_primaryrefdocnofrom,isnull(hdr.wms_asn_prefdoc_no,'%')),'*','%')+'%'
+			/*code commented and added for EPE-5409 begins*/
+			/*and		isnull(	hdr.wms_asn_prefdoc_date,'01/01/1900') between	isnull(@asn_primaryrefdocdatefromhdr,'01/01/1900')
+																	and		isnull(@asn_primaryrefdocnoto,@sysdate)*/
+			/*Code Commended By VijayaKumar
+			and		isnull(convert(date,hdr.wms_asn_prefdoc_date,120),'01/01/1900') between	isnull(@asn_primaryrefdocdatefromhdr,isnull(convert(date,hdr.wms_asn_prefdoc_date,120),'01/01/1900'))
+																					and		isnull(@asn_primaryrefdocnoto,isnull(convert(date, hdr.wms_asn_prefdoc_date,120),@sysdate)) */
+			/*code added for EPE-7500 Starts Here*/
+			/*Code Added And Commended For PROCPSS-464 Starts Here */
+			--and		isnull(convert(date,hdr.wms_asn_prefdoc_date,120),'01/01/1900') between	isnull(@asn_primaryrefdocdatefromhdr,isnull(convert(date,hdr.wms_asn_prefdoc_date,120),'01/01/1900'))
+			--																				and		isnull(@asn_primaryrefdocnoto,isnull(convert(date,hdr.wms_asn_prefdoc_date,120),@sysdate))
+			and		isnull(cast(hdr.wms_asn_prefdoc_date as date),'01/01/1900') between	isnull(@asn_primaryrefdocdatefromhdr,isnull(cast(hdr.wms_asn_prefdoc_date as date),'01/01/1900'))
+																							and		isnull(@asn_primaryrefdocnoto,isnull(cast(hdr.wms_asn_prefdoc_date as date),@sysdate))
+			/*Code Added And Commended For PROCPSS-464 Starts Here */
+			/*code added for EPE-7500 Ends Here*/
+			/*code commented and added for EPE-5409 ends*/
+			and		isnull(hdr.wms_asn_shp_eqp_typ, '')		=	isnull(@asn_equipmenttype_hdr, isnull(hdr.wms_asn_shp_eqp_typ, ''))
+			and		isnull(hdr.wms_asn_shp_vh_typ, '')		=	isnull(@asn_vehicletype_hdr, isnull(hdr.wms_asn_shp_vh_typ, ''))
+			and		isnull(hdr.wms_asn_shp_vh_no, '')   like	replace(isnull(@asn_vehiclenumber_hdr, isnull(hdr.wms_asn_shp_vh_no,'%')),'*','%')+'%'
+			and		isnull(hdr.wms_asn_shp_eqp_no, '')	    like	replace(isnull(@asn_equipmentnumber_hdr, isnull(hdr.wms_asn_shp_eqp_no,'%')),'*','%')+'%'
+			/*code commented and added for EPE-3043 begins*/                                               	
+			/* and		isnull(hdr.wms_asn_date,'01/01/1900') between isnull(@asn_asndatefrom,isnull(hdr.wms_asn_date,'01/01/1900'))
+														  and     isnull(@asn_asndateto,isnull(hdr.wms_asn_date,@sysdate))--code added for ITS ID:EPE-2511*/
+					--and		convert(date, hdr.wms_asn_date,120)				between isnull(@asn_asndatefrom,convert(date, hdr.wms_asn_date,120)) 
+																		--and     isnull(@asn_asndateto,convert(date, hdr.wms_asn_date,120)) --code commented epe-5078
+			/*code commented and added for EPE-5409 begins*/	
+
+			/*and		isnull(convert(date, hdr.wms_asn_date,120),'01/01/1900')				between isnull(@asn_asndatefrom,isnull(convert(date, hdr.wms_asn_date,120),'01/01/1900')) --code added for epe-5078
+																		and     isnull(@asn_asndateto,convert(date, hdr.wms_asn_date,120)) 	*/
+			/*code commented and added for EPE-3043 ends*/ 
+			/* code added balaji dts id: EPE-805 ends */
+			--a/* code commented and added for cam-1137 begin */
+		 --and	isnull(convert(date, hdr.wms_asn_date,120),'01/01/1900')	between isnull(@asn_asndatefrom,isnull(convert(date,hdr.wms_asn_date,120),'01/01/1900')) 
+			--																and     isnull(@asn_asndateto,isnull(convert(date, hdr.wms_asn_date,120),'01/01/9999'))
+        and	isnull(convert(date, hdr.wms_asn_date,120),'01/01/1900')	between isnull(convert(date,@asn_asndatefrom,120),isnull(convert(date,hdr.wms_asn_date,120),'01/01/1900')) 
+																			and     isnull(convert(date,@asn_asndateto,120),isnull(convert(date, hdr.wms_asn_date,120),'01/01/9999'))
+	/* code commented and added for cam-1137 ends */
+			/*code commented and added for EPE-5409 ends*/		
+			/* code added for EPE-4274 starts here */
+			and		isnull(wms_asn_shp_carrier,'')	like	isnull(@carriername_asn_hdr,isnull(wms_asn_shp_carrier,''))
+			and		isnull(wms_asn_sup_asn_no,'')	like	isnull(@vendorasnno_asn_hdr,isnull(wms_asn_sup_asn_no,''))
+			/* code added for EPE-4274 ends here */  
+			and  isnull(hdr.wms_asn_type,'')  =  isnull(@asn_type_hdr,isnull(hdr.wms_asn_type,'')) --code added for EPE-8806      	
+			Order by hdr.wms_asn_no asc
