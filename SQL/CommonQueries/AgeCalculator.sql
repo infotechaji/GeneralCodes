@@ -1,4 +1,4 @@
-create
+    create
 alter  procedure calculate_age(@input_date as date )
 as 
 select DATEDIFF(year,cast(@input_date as date),cast(getdate() as date)) age 
