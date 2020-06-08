@@ -112,7 +112,7 @@ def copy_file(src, dst,files_list='',file_suffix='', copy_all_files=False,symlin
                 shutil.copytree(s, d, symlinks, ignore)
             else:
                 shutil.copy2(s,d)
-    elif files_list and not copy_all_files:
+    elif files_list:# and not copy_all_files:
         for each_file_name in files_list:
             s=os.path.join(src, each_file_name)
             #file_suffix=src.split(os.sep)[-1]
