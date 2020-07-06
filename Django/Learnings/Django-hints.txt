@@ -1,0 +1,35 @@
+Links : 
+Django Tutorial A polling app : https://docs.djangoproject.com/en/3.0/intro/tutorial01/
+Django documentation : https://docs.djangoproject.com/en/3.0/
+Django community : https://www.djangoproject.com/community/
+
+
+22/06/2020 \
+
+
+Model View controller we usually have in all the other frame works
+
+In Django we have MVT - model view template. 
+Why we prefer Django?
+1,It is faster.
+2,Components ( DB components and other things on you ) 
+3,Security 
+4,Scalablity 
+
+
+
+pip install virtualenvwrapper-win
+mkvirtualenv Test
+
+
+pip install django
+
+python manage.py runserver 
+
+Visual studio 
+workon Test ( for using Virtual environment ) 
+python manage.py startapp calc
+
+
+ORM 
+
