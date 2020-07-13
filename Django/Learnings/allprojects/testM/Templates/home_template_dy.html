@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testing templates</title>
+</head>
+<body>
+{%extends 'Base.html' %}
+
+{%block content %}
+<h1>
+    Simple variable : {{name}}
+</h1>
+<form action="add">
+    Number 1 : <input type="text" name="num1"><br>
+    Number 2 : <input type="text" name="num2"><br>
+<input type="submit">
+
+
+</form>
+
+{% endblock %}
+
+
+</body>
+</html>
