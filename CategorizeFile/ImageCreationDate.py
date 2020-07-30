@@ -3,6 +3,9 @@ from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS, GPSTAGS
 import datetime
 import calendar
+"""
+Version : 'IMG%Y%m%d%H%M%S' this pattern is added 
+"""
 # from datetime import datetime
 def get_details_from_dateobj(date_obj):
     year=date_obj.strftime('%Y')
@@ -70,8 +73,17 @@ def get_image_details(filename,developer_mode=False):
             except:
                 if developer_mode : print('get_image_details:\t Error while looking for pattern "20171008_195417.jpg"', e)
                 if developer_mode : print("get_image_details:\t Trying to look for pattern...'IMG_20200423_194412' ")
-                try:date_obj = datetime.datetime.strptime(temp_file_name, 'IMG_%Y%m%d_%H%M%S')
-                except:pass
+                try:
+                    date_obj = datetime.datetime.strptime(temp_file_name, 'IMG_%Y%m%d_%H%M%S')
+
+                except:
+                    if developer_mode : print("get_image_details:\t Trying to look for pattern...'IMG20200423194412.jpg' ")
+                    try:
+
+                        date_obj = datetime.datetime.strptime(temp_file_name, 'IMG%Y%m%d%H%M%S')
+                    except:
+                        pass
+
     if developer_mode : print('get_image_details:\t date_obj :',date_obj)
     if date_obj:
         return get_details_from_dateobj(date_obj)

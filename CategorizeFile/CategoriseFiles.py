@@ -188,3 +188,9 @@ if __name__ =='__main__':
 	cus_obj=CategorizeFile(split_by_year=args.year,split_by_month=args.month,split_by_date=args.date,move_file=args.move,developer_mode=args.dev_mode)
 	result_dict=cus_obj.categorise_file(input_directory=args.input_directory,output_directory=output_directory,classification_type=args.classification_type)
 	print('Process status :',result_dict)
+
+	# New Pattern to be added in the date classification_type
+	# IMG20191105195030 
+
+	# sample command to run  
+	# python CategoriseFiles.py -i G:\Ajith\Others\MyImages\DCIM\TestCase
