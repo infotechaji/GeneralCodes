@@ -3,9 +3,15 @@ from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS, GPSTAGS
 import datetime
 import calendar
+
 """
-Version : 'IMG%Y%m%d%H%M%S' this pattern is added 
+Version : v2.1 
+
+Modifications :
+                v2.0 20/07/2020 'IMG%Y%m%d%H%M%S' this pattern is added 
+                v2.1 20/07/2020 'Screenshot_2018-03-11-19-16-59' this pattern is also added 
 """
+
 # from datetime import datetime
 def get_details_from_dateobj(date_obj):
     year=date_obj.strftime('%Y')
@@ -63,27 +69,23 @@ def get_image_details(filename,developer_mode=False):
             try:date_obj = datetime.datetime.strptime(exif['DateTime'], '%Y:%m:%d %H:%M:%S')
             except:pass
     else:
+        
         temp_file_name = (filename.split(os.sep)[-1]).split('.')[0]
+        if len(temp_file_name.strip())==66 and len(temp_file_name.strip().split('_'))==3:
+            # PAttern Screenshot_2020-07-29-12-06-52-59_f2cb81fb7cf38af7978f186f2a61634a
+            # temp_file_name=temp_file_name.strip().split('_')[:-1]
+            temp_file_name='_'.join(temp_file_name.strip().split('_')[:-1])
+            if developer_mode: print('get_image_details:\tLengthy pattern matches ',temp_file_name)
         if developer_mode: print('temp_file_name :',temp_file_name)
-        try:date_obj = datetime.datetime.strptime(temp_file_name, 'Screenshot_%Y-%m-%d-%H-%M-%S')
-        except Exception as e:
-            if developer_mode : print('get_image_details:\t Error while looking for pattern "Screenshot_2018-03-11-11-14-33"',e)
-            if developer_mode : print("get_image_details:\t Trying to look for pattern...'20171008_195417.jpg' ")
-            try:date_obj = datetime.datetime.strptime(temp_file_name, '%Y%m%d_%H%M%S')
-            except:
-                if developer_mode : print('get_image_details:\t Error while looking for pattern "20171008_195417.jpg"', e)
-                if developer_mode : print("get_image_details:\t Trying to look for pattern...'IMG_20200423_194412' ")
-                try:
-                    date_obj = datetime.datetime.strptime(temp_file_name, 'IMG_%Y%m%d_%H%M%S')
-
-                except:
-                    if developer_mode : print("get_image_details:\t Trying to look for pattern...'IMG20200423194412.jpg' ")
-                    try:
-
-                        date_obj = datetime.datetime.strptime(temp_file_name, 'IMG%Y%m%d%H%M%S')
-                    except:
-                        pass
-
+        MATCHING_PATTERNS=['Screenshot_%Y-%m-%d-%H-%M-%S','Screenshot_%Y-%m-%d-%H-%M-%S-%f','%Y%m%d_%H%M%S','IMG_%Y%m%d_%H%M%S','IMG%Y%m%d%H%M%S']
+        for each_pattn in MATCHING_PATTERNS:
+            try:
+                date_obj = datetime.datetime.strptime(temp_file_name,each_pattn)
+                if developer_mode : print ('Matched pattern found !',each_pattn,temp_file_name)
+                break
+            except Exception as e:            
+                if developer_mode : print('get_image_details:\t pattern not Found !',each_pattn)
+                pass
     if developer_mode : print('get_image_details:\t date_obj :',date_obj)
     if date_obj:
         return get_details_from_dateobj(date_obj)
