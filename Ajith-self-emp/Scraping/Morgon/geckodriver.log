@@ -1,0 +1,81 @@
+1605663030444	geckodriver	INFO	Listening on 127.0.0.1:61402
+1605663033647	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\AJITHK~1\\AppData\\Local\\Temp\\rust_mozprofile4vicAY"
+JavaScript error: qzjwotom3j2.cfg, line 2: ReferenceError: Components is not defined
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1605663042692	Marionette	INFO	Listening on port 61412
+1605663042901	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605663337172	Marionette	INFO	Stopped listening on port 61412
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1605663371470	geckodriver	INFO	Listening on 127.0.0.1:62082
+1605663374552	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\AJITHK~1\\AppData\\Local\\Temp\\rust_mozprofileLwAjsF"
+JavaScript error: qzjwotom3j2.cfg, line 2: ReferenceError: Components is not defined
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1605663384043	Marionette	INFO	Listening on port 62092
+1605663384546	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Child 10364, Chrome_ChildThread] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:545
+1605663499963	Marionette	INFO	Stopped listening on port 62092
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1605682702579	geckodriver	INFO	Listening on 127.0.0.1:57045
+1605682705626	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\AJITHK~1\\AppData\\Local\\Temp\\rust_mozprofile2dLDLq"
+JavaScript error: qzjwotom3j2.cfg, line 2: ReferenceError: Components is not defined
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1605682714701	Marionette	INFO	Listening on port 57055
+1605682715114	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605683260261	Marionette	INFO	Stopped listening on port 57055
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1605777742001	geckodriver	INFO	Listening on 127.0.0.1:54319
+1605777745211	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\AJITHK~1\\AppData\\Local\\Temp\\rust_mozprofiletoCUK7"
+JavaScript error: qzjwotom3j2.cfg, line 2: ReferenceError: Components is not defined
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1605777771858	Marionette	INFO	Listening on port 54328
+1605777772096	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.error: Region.jsm: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 726))
+console.error: Region.jsm: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 376))
+Marionette threw an error: TypeError: driver.dialogObserver is null
+waitForNavigationCompleted/<@chrome://marionette/content/navigate.js:364:5
+
+1605778699431	Marionette	INFO	Stopped listening on port 54328
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1605778700763	geckodriver	INFO	Listening on 127.0.0.1:54731
+1605778706208	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\AJITHK~1\\AppData\\Local\\Temp\\rust_mozprofileFeoVqv"
+JavaScript error: qzjwotom3j2.cfg, line 2: ReferenceError: Components is not defined
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+console.error: "Could not write session state file " (new Error("_initWorker called too early! Please read the session file from disk first.", "resource:///modules/sessionstore/SessionFile.jsm", 375)) "_initWorker/<@resource:///modules/sessionstore/SessionFile.jsm:375:15\n_initWorker@resource:///modules/sessionstore/SessionFile.jsm:368:12\n_postToWorker@resource:///modules/sessionstore/SessionFile.jsm:410:16\nwrite@resource:///modules/sessionstore/SessionFile.jsm:448:24\nwrite@resource:///modules/sessionstore/SessionFile.jsm:75:32\n_writeState@resource:///modules/sessionstore/SessionSaver.jsm:360:24\n_saveState@resource:///modules/sessionstore/SessionSaver.jsm:294:17\n_saveStateAsync@resource:///modules/sessionstore/SessionSaver.jsm:344:10\nsaveStateAsyncWhenIdle@resource:///modules/sessionstore/SessionSaver.jsm:191:14\ncallback@resource://gre/modules/Timer.jsm:127:16\n"
+1605778723389	Marionette	INFO	Listening on port 54740
+1605778723822	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605779327661	Marionette	INFO	Stopped listening on port 54740
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
