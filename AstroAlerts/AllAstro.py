@@ -1,5 +1,3 @@
-
-#--testing commit
 from Generic_Scrapy import * 
 from custom_mail import * 
 from AutoAstroDeccan import * 

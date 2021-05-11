@@ -1,9 +1,10 @@
 """
 Functionality :Script to replace the variables by the corresponding values
-Version :	v2.0
+Version :	v2.1
 History :
 			v1.0 - 18/05/2020 initial version - 
 			v2.0 - 18/05/2020 Logic for input set 2 is updated
+			v2.1 - 23/10/2020 logic for splitting the variable is improved and missing values are added into a separate file 
 Input:
 Process:
 Output :
@@ -13,7 +14,7 @@ Open issues :
 Comments :
 """
 
-import os,argparse,sys
+import os,argparse,sys,re
 sys.path.insert(0,'G:\Ajith\OtherFiles\HelpText_from_sp')
 from CustomisedFileOperation import * 
 
@@ -40,7 +41,7 @@ def get_var_values(input_list,developer_mode=True):
 def extract_variables_and_values(variables,developer_mode=True):
 	var_dict={}	
 	# {variable1: value1 , variable1: value1 }
-	print ('Type :',type(variables))
+	# print ('Type :',type(variables))
 	# if type(variables)!=list:
 
 	if len(variables)==2:
@@ -56,17 +57,24 @@ def extract_variables_and_values(variables,developer_mode=True):
 		var_text=var_text.replace("N'","'")
 		variables_list=var_text.split(',')
 		for index,each_line in enumerate(variables_list):
-			if index==0:
-				temp_var=each_line.split('@')[1]
-				temp_var='@'+str(temp_var)
-			elif '@' in each_line: temp_var=each_line
-			else:continue
+			# if index==0:
+			# 	temp_var=each_line.split('@')[1]
+			# 	temp_var='@'+str(temp_var)
+			# elif '@' in each_line: temp_var=each_line
+			# else:continue
 
-			if developer_mode==True:
-				print('extract_variables_and_values\t Variable before dividing:',temp_var)
-			temp_var=temp_var.strip('\t\r\n')
-			variable,value=temp_var.split('=')
-			var_dict[variable.strip('\t ')]=value.strip('\t ')
+			# if developer_mode==True:
+			# 	print('extract_variables_and_values\t Variable before dividing:',temp_var)
+			# temp_var=temp_var.strip('\t\r\n')
+			# variable,value=temp_var.split('=')
+
+			pattern = "(@\w+)|\s+=\s+|(\w+|'\w+')"
+			res = re.findall(pattern,str(each_line))
+			variable = res[0][0]
+			value = res[1][1]
+			
+			# print(variable,value)
+			var_dict[variable.strip()]=value.strip()
 		if developer_mode==True:
 			print('extract_variables_and_values\t Results before returning:',var_dict)
 	return var_dict
@@ -77,6 +85,7 @@ def get_replaced_text(variables,sp_text,developer_mode=True):
 	Output : replaced contents 
 	Comments :
 	"""
+	missing_variables =[]
 	if developer_mode==True:
 		print('get_replaced_text\tvariables:',variables)
 		print('get_replaced_text\tsp_text:',sp_text)
@@ -94,9 +103,13 @@ def get_replaced_text(variables,sp_text,developer_mode=True):
 
 	if actual_text.lower()==temp_text.lower():
 		temp_text=''
+	if '@' in temp_text:
+		mis_var_pattern = "@\w+"
+		missing_variables = re.findall(mis_var_pattern,str(temp_text))
 	return {
-			'content':sp_text,
-			'replaced_content':temp_text
+			'content':sp_text
+			,'replaced_content':temp_text
+			,'missing_variables':missing_variables
 	}
 
 
@@ -106,9 +119,22 @@ if __name__=="__main__":
 	arg.add_argument('-sp','--select_query',help='SQL file contains the select statements in which the variables can be replaced',required=True)
 	# # arg.add_argument('-d','--destroy_time',help='delay time',type=int,default =10,required=False)
 	args = arg.parse_args()
-	variables_text=get_file_content(args.input_file,return_lines=True) # returns a single line 
-	select_statement_text=get_file_content(args.select_query) # returns all the file content as a single line 
+	select_query = args.select_query
+	input_file = args.input_file
+
+	variables_text=get_file_content(input_file,return_lines=True) # returns a single line 
+	select_statement_text=get_file_content(select_query) # returns all the file content as a single line 
 	result=get_replaced_text(variables_text,select_statement_text,False)
 	if result['replaced_content']:
-		out_file_name=args.select_query.replace('.','_REPLACED_VARIABLES_OUTPUT.')
+		out_file_name=select_query.replace('.','_REPLACED_VARIABLES_OUTPUT.')
 		write_into_file(out_file_name,str(result['replaced_content']),'w')
+	if result['missing_variables']:
+		print ('Missing variables :',result['missing_variables'])
+		mis_file_name=select_query.replace('.','_MISSING_VARIABLES.')
+		write_into_file(mis_file_name,str('\n'.join(result['missing_variables'])),'w')
+
+	
+	print('Output file :',out_file_name)
+	print('mis_file_name:',mis_file_name)
+
+#python ReplaceVariable.py -q G:\Ajith\Logistics\2020\LRT-17139\test_sp.txt -sp G:\Ajith\Logistics\2020\LRT-17139\select_query.txt

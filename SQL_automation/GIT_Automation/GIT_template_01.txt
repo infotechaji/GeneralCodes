@@ -1,0 +1,8 @@
+cd <git_master_path>
+git checkout -b <ut_main_branch>
+git fetch origin
+git reset --hard origin/<ut_main_branch>
+git pull origin <ut_main_branch>
+git branch -D dev-<epe_id>
+git push origin :dev-<epe_id>
+git checkout -b dev-<epe_id>

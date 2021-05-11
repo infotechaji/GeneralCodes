@@ -1,0 +1,2 @@
+git commit -m [<epe_id>]
+git push --set-upstream origin dev-<epe_id>

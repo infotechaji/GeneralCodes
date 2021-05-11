@@ -1,0 +1,1 @@
+DEVELOPER_PRINT_PATTERN = "print(isnull(OBJECT_NAME(@@PROCID),'NA')+':	<variable_name> : '+cast(isnull(<variable_name>,'NULL') as nvarchar(max)))"

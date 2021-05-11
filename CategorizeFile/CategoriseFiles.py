@@ -103,6 +103,8 @@ class CategorizeFile():
 		if self.developer_mode:
 			print(self.class_name,self.module_name,'input_directory :',input_directory,'\nOutput directory :',output_directory)
 		file_count = 0
+		copied_files=0
+		errored_files=0
 		status = 'copied'
 		skipped_count=0
 		for root, dirs, files in os.walk(input_directory):
@@ -110,7 +112,6 @@ class CategorizeFile():
 				file_count+=1
 				# if each_file.endswith(delete_extension):
 				full_file_path=os.path.join(input_directory,each_file)
-				print('Processing file :',file_count)
 				if self.developer_mode:
 					print(self.class_name, self.module_name,'File name : ',full_file_path)
 				if self.is_image(full_file_path)==True:
@@ -147,8 +148,19 @@ class CategorizeFile():
 					os.makedirs(output_directory_temp)
 				# dest_file_name=os.path.join(output_directory_temp,each_file)
 				# if self.developer_mode: print('Destination file (full path) :', dest_file_name)
+				if os.path.exists(os.path.join(output_directory_temp,each_file)):
+					# print ('Skipping existing files......')
+					sys.stdout.write("\r")
+					sys.stdout.write("Skipping existing files")
+					sys.stdout.write("\r")
+					sys.stdout.write("Skipping existing files......."+str(file_count))
+					skipped_count+=1
+					# time.sleep(1)
+					continue
+				print('Processing file :',file_count)
 				try:
 					copy_file(src=input_directory, dst=output_directory_temp, files_list=[each_file])  # copies the selected files
+					copied_files+=1
 					if self.move_file==True:
 						status='moved'
 						try:
@@ -157,11 +169,14 @@ class CategorizeFile():
 							print('Error while deleting the file :',full_file_path)
 				except Exception as e:
 					print('Got the Error',str(e),' while copying file:',each_file,dest_file_name)
+					errored_files+=1
 				# if file_count >=3:break
 			break # for skipping directories
 		temp_d={'Total_files':file_count,
 				'status':status,
-				'skipped':skipped_count}
+				'copied_files':copied_files,
+				'skipped':skipped_count,
+				'errored_files':errored_files}
 		return temp_d
 
 
@@ -193,4 +208,4 @@ if __name__ =='__main__':
 	# IMG20191105195030 
 
 	# sample command to run  
-	# python CategoriseFiles.py -i G:\Ajith\Others\MyImages\DCIM\TestCase
+	# python CategoriseFiles.py -i G:\Ajith\Others\MyImages\DCIM\TestCase --out G:\Ajith\Others\MyImages\DCIM\TestCase
