@@ -1,7 +1,7 @@
 """
 Description : Script which get help text of all the procedures for single and multi input 
 Version     : 
-				v3.4
+				v3.5
 History     :
 				v1.0  - 30/03/2020 - initial Version
 				v1.1  - 29/04/2020 - Global cursor is added to the function
@@ -24,6 +24,7 @@ History     :
 				v3.2  - 02/11/2020 -  Validation minor logic change with consolidated sps
 				v3.3  - 23/12/2020 -  Looping is added for the cursors to save connection time.
 				v3.4  - 26/04/2021 -  File input is upgraded and server choosing options is centralised.
+				v3.5  - 07/05/2021 -  function get_sps_from_trace() and option '-t' is added to extract sps directly from the trace file.
 
 
 Input       : --sp_name sp_name 
@@ -642,7 +643,20 @@ def get_missing_defects(file_lines ,host_list,extract_from_header = True,develop
 
 	# extracted_fix_ids = get_all_fix_id(file_content=help_text, extract_from_header=extract_from_header, developer_mode=developer_mode)['valid_fixes']
 	# extracted_fix_ids = get_all_fix_id(file_content=help_text, extract_from_header=extract_from_header, developer_mode=developer_mode)['valid_fixes']
-
+def get_sps_from_trace(file_name,write_output=False,developer_mode = False):
+	filelines = open(file_name).read()
+	modified_pattern = 'exec (\w+)'
+	total_ids = re.findall(modified_pattern, str(filelines),re.IGNORECASE)
+	# print ('total_ids :',total_ids)
+	total_ids = list(set(total_ids))
+	if write_output:
+		output_file = sys.argv[1].replace('.','_ExtractedSps.')
+		with open (output_file,'a') as fp:
+			fp.write('\n'.join(total_ids)+str('\n'))
+	if developer_mode:
+		print (' Total sps:',len(total_ids))
+		print (' Output file :',output_file)
+	return {'sps':total_ids}
 
 if __name__ == '__main__':
 	start = time.time()
@@ -659,6 +673,7 @@ if __name__ == '__main__':
 		arg.add_argument('--check_missing_defects',help='This option helps to find the missing defects between different version', nargs='?', const=True,default=False, required=False)
 		arg.add_argument('--save_files',help='This option helps to save the sps for future refereces', nargs='?', const=True,default=False, required=False)
 		arg.add_argument('--use_local_files',help='This option helps to ignore the extraction of sps from SERVER', nargs='?', const=True,default=False, required=False)
+		arg.add_argument('-t','--trace_file',help='This option extracts sp from a trace file', nargs='?', const=True,default=False, required=False)
 		# arg.add_argument('-i','--input_file',help='Trace file name',default ='scorpio,pisces',required=False)
 		# arg.add_argument('-d','--destroy_time',help='delay time',type=int,default =10,required=False)
 		args = arg.parse_args()
@@ -671,7 +686,9 @@ if __name__ == '__main__':
 		save_files = args.save_files
 		use_local_files = args.use_local_files
 		directory = args.directory
+		source_dir = args.directory
 		sp_name = args.sp_name
+		trace_file = args.trace_file
 
 
 		# --certrali
@@ -682,9 +699,9 @@ if __name__ == '__main__':
 							# {'hostname': '172.27.7.94'} # UT
 							# {'hostname': '172.27.7.93'} # UT
 							# {'hostname': '172.27.5.100,50196','username': 'haecologin','password': 'AvnH@ec0Dev12$','database': 'AVNAPPDB'} # Haeco  AVNAPPDB   Integdb
-							# {'hostname': '172.27.5.100,52183','username': 'ericksonlogin','password': 'AvnEr!kDev12$','database': 'Integdb'} # Eriksonm 
-							{'hostname': '172.27.5.100,54986','username': 'ramcoadmin','password': 'password12$','database': 'AVNAPPDB'} # AACL  AVNAPPDB   Integdb
-							# ,{'hostname': '172.27.5.100,54986','username': 'ramcoadmin','password': 'password12$','database': 'Integdb'} # AACL  AVNAPPDB   Integdb
+							{'hostname': '172.27.5.100,52183','username': 'ericksonlogin','password': 'AvnEr!kDev12$','database': 'Integdb'} # Eriksonm 
+							# {'hostname': '172.27.5.100,54986','username': 'ramcoadmin','password': 'password12$','database': 'AVNAPPDB'} # AACL  AVNAPPDB   Integdb
+ 							# {'hostname': '172.27.5.100,54986','username': 'ramcoadmin','password': 'password12$','database': 'Integdb'} # AACL  AVNAPPDB   Integdb
 
 							]
 			# 			'username': 'select',
@@ -740,6 +757,10 @@ if __name__ == '__main__':
 					sp_name = str(input('Enter the sp names :\t')).strip()
 				total_sps = str(sp_name).strip().split(',')
 				# print ('Total sps :',','.join(total_sps))
+				if len(total_sps)>0 and not directory:
+					print('Previous directory has been used for extraction')
+					directory = source_dir
+
 				print ('Total sps :',len(total_sps))
 				print ('Entered directory :',directory)	
 				for cur_index,cursor in enumerate(cursors):
@@ -781,12 +802,21 @@ if __name__ == '__main__':
 					sp_name = str(input('Enter the sp names or input file path  :\t')).strip()
 
 				try:
-					total_sps=get_file_content(sp_name)
+					if trace_file==True:
+						total_sps=get_sps_from_trace(file_name= sp_name,write_output=False,developer_mode = developer_mode)['sps']
+					elif not total_sps:
+						total_sps=get_file_content(sp_name)
+					else:
+						total_sps=get_file_content(sp_name)
 				except Exception as e:
 					print('Error while reading as file  :',e)
 					total_sps = str(sp_name).strip().split(',')
 
+				if len(total_sps)>0 and not directory:
+					print('Previous directory has been used for extraction')
+					directory = source_dir
 				print (' total_sps  :',len(total_sps))#,file_lines)
+				print (' Directory  :',len(directory))#,file_lines)
 
 				for cur_index,cursor in enumerate(cursors):
 					if not cursor: 
