@@ -11,12 +11,12 @@ History :
 
 import requests, zipfile, io
 from selenium import webdriver
-from urllib.parse import quote
+from urllib2 import quote
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
 import sys,time
 #from urllib.parse import urljoin
-from urllib.parse import urljoin
+from urlparse import urljoin
 import os
 import os.path
 from os import path
@@ -43,7 +43,7 @@ class MasterScrape():
 			if check_files==True:
 				file_presence=self.check_file_presence(link)
 				if file_presence['status']:
-					print('Page source from File !')
+					print 'Page source from File !'
 					page_source=file_presence['file_content']
 			if len(page_source)<=2 and use_request==True:
 				page_source = requests.get(link).text
@@ -60,25 +60,25 @@ class MasterScrape():
 					self.browser_opened=False
 			if page_source and save_file==True:self.save_file(page_source)
 		except Exception as e:
-			print('Exception in getting page source ',e)
+			print 'Exception in getting page source ',e
 			return ''
 		return page_source
 
 	def get_page_source(self,browser_current_url,use_selenium=True,close_browser=False,extract=True):
 			if not browser_current_url:browser_current_url=self.browser.current_url
-			print('scraping url :',browser_current_url)
+			print 'scraping url :',browser_current_url
 			#file_presence=self.check_file_presence(browser_current_url)
 			if check_files==True:
 				file_presence=self.check_file_presence(browser_current_url+str(self.universal_count))
 				retry_count=0
 				if file_presence['status']:
-					print('Page source from File !')
+					print 'Page source from File !'
 					page_source=file_presence['file_content']
 					if len(page_source)==237:
 						page_source=self.browser.get(browser_current_url)
 					else:	
 						self.send_error_mail(exception='Page source from File !',url=browser_current_url)
-						print('Quitting code....')
+						print 'Quitting code....'
 						exit()
 					page_source=file_presence['file_content']
 			else:
@@ -90,12 +90,12 @@ class MasterScrape():
 				self.browser.get(browser_current_url) # tesing 
 				time.sleep(10)
 				page_source=self.browser.page_source
-				print('page_source :',len(page_source))
+				print 'page_source :',len(page_source)
 				for i in range(0,3):
 					if len(page_source)==237 and retry_count<=3:
 						retry_count+=1
 						time.sleep(10)
-						print('Retrying count :',retry_count)
+						print 'Retrying count :',retry_count
 						self.browser.get(browser_current_url)
 						time.sleep(10)
 						page_source=self.browser.page_source
@@ -103,7 +103,7 @@ class MasterScrape():
 				if page_source:
 					self.save_file(page_source)
 				browser_current_url=self.browser.current_url
-			print('browser_current_url :',browser_current_url)
+			print 'browser_current_url :',browser_current_url
 			if extract:
 				soup=self.soup_modification(page_source)
 			if close_browser:
@@ -114,7 +114,7 @@ class MasterScrape():
 			self.browser.quit()
 			return True
 		except Exception as e:
-			print('Exception in closing browser !' ,e)
+			print 'Exception in closing browser !' ,e
 			return False
 	def get_text_from_tag(self,selected_tag):
 		temp_text=selected_tag.text.strip(' ')
@@ -127,7 +127,7 @@ class MasterScrape():
 		table_element=soup.find_all("table")
 		#print 'table_element :',table_element
 		if not table_element: 
-			print('table table_element  missing !')
+			print 'table table_element  missing !'
 			table_element=soup
 		#print 'table_element :',table_element
 		tbody=table_element.find('tbody')
@@ -135,7 +135,7 @@ class MasterScrape():
 		count=0
 		if tbody:
 			tr_elements=table_element.find_all('tr')
-			print('Total Rows :',len(tr_elements))
+			print 'Total Rows :',len(tr_elements)
 			tr_count=0
 			if tr_elements:
 				for each_tr in tr_elements:
@@ -164,9 +164,9 @@ class MasterScrape():
 		return True
 	def get_nextpage_url(self):
 		self.source_count+=50
-		print("self.source_url :",self.source_url)
+		print "self.source_url :",self.source_url
 		normalised_url=(self.source_url).replace('<index>',str(self.source_count))
-		print('next page url  : ',normalised_url)
+		print 'next page url  : ',normalised_url
 		#raw_input('raw_input : ')
 		return normalised_url
 		#self.browser.get(normalised_url)
@@ -180,9 +180,9 @@ class MasterScrape():
 		try:
 			self.browser.find_element_by_id('sbmButton2').click()
 			#self.browser.find_element_by_partial_link_text('Next')
-			print('Next page button clicked !!')
+			print 'Next page button clicked !!'
 			return True
-		except: print('Exception in gettiing next page.')
+		except: print 'Exception in gettiing next page.'
 		return False
 	def write_content(self,file_name='',file_content='',mode='a'):
 		if not file_name:file_name=self.output_file_name
@@ -199,7 +199,7 @@ class MasterScrape():
 			temp_name=temp_name.replace(i,replace_by)
 		return temp_name
 	def __del__(object):
-		print("MasterScrape Object Deleted !!")
+		print "MasterScrape Object Deleted !!"
 	def check_file_presence(self,browser_current_url):
 		self.file_name=self.get_file_name(browser_current_url+str(self.universal_count))
 		self.full_file_path=os.path.join(self.collected_path,self.file_name)
@@ -231,10 +231,10 @@ class MasterScrape():
 		return soup
 	def unicode_data(self, data):
 		if not data: 
-			return ''
-		if type(data) in [int, float, int]:
-			data = str(data)
-		if not isinstance(data, str):
+			return u''
+		if type(data) in [int, float, long]:
+			data = unicode(data)
+		if not isinstance(data, unicode):
 			data = data.decode('utf-8')
 		return data
 	
@@ -277,7 +277,7 @@ class MasterScrape():
 				table_element =page_soup.find('table',{"id":"tlzRDTIDom"})
 				#print 'table_element',table_element
 				if table_element:
-					print(self.get_table_data(table_element))
+					print self.get_table_data(table_element)
 					#if self.click_next_page():
 					temp_url=self.get_nextpage_url()
 					self.universal_count+=1
@@ -291,14 +291,14 @@ class MasterScrape():
 						continue
 					else:
 						url=temp_url
-						print('Sleeping for '+str(waiting_time_mins)+' minutes  !!')
+						print 'Sleeping for '+str(waiting_time_mins)+' minutes  !!'
 						for i in range(int(waiting_time_mins)*60,0,-1):
 							sys.stdout.write('Code is under sleep.. Seconds remaining  :'+str(i)+'  \r')
 							time.sleep(1)
 			except Exception as e:
-				print('Got Exception :',e)
+				print 'Got Exception :',e
 				self.send_error_mail(exception=e,url=url)
-				print('Quitting script !')
+				print 'Quitting script !'
 				break
 
 

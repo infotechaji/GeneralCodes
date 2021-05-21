@@ -46,9 +46,9 @@ class Astro():
 		else:source_list=self.astro_list
 		for each_astro in source_list:
 			for each_dict in self.main_list:
-				print('Current Website  :',each_dict['website'])
+				print 'Current Website  :',each_dict['website']
 				temp_link=each_dict['link'].format(each_astro)
-				print('processing link :',temp_link)
+				print 'processing link :',temp_link
 				page_source=self.scrapy_obj.GetPageSoure(link=temp_link,use_request=True,check_files=False,save_file=False)
 				#print 'page_source :',len(page_source)
 				soup=self.scrapy_obj.soup_modification(page_source)
@@ -85,9 +85,9 @@ class Astro():
 					prediction=prediction.replace('  ',' ').strip(' ').strip(' \r\n')
 				
 				try:
-					print(each_astro, ' :',str(prediction))
+					print each_astro, ' :',str(prediction)
 				except:
-					print(each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8')))
+					print each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8'))
 
 				try: final_text=str(each_dict['website'])+'\t'+str(prediction)+'\n'
 				except : final_text=str(each_dict['website'].encode('utf-8'))+'\t'+str(prediction.encode('utf-8'))+'\n'
@@ -106,7 +106,7 @@ class Astro():
 		else:source_list=self.astro_list
 		for each_astro in source_list:
 			temp_link=self.astro_yogi_link.format(each_astro)
-			print('processing link :',temp_link)
+			print 'processing link :',temp_link
 			page_source=self.scrapy_obj.GetPageSoure(link=temp_link,use_request=True,check_files=False,save_file=False)
 			#print 'page_source :',len(page_source)
 			soup=self.scrapy_obj.soup_modification(page_source)
@@ -118,10 +118,10 @@ class Astro():
 			prediction=prediction.replace('Click here for a more personalised reading','')
 			prediction=prediction.replace('  ',' ').strip(' ').strip(' \r\n')
 			try:
-				print(each_astro, ' :',str(prediction))
+				print each_astro, ' :',str(prediction)
 			except:
-				print(each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8')))
-			print() 
+				print each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8'))
+			print 
 			result_dict[each_astro]=prediction
 		return result_dict
 
@@ -131,7 +131,7 @@ class Astro():
 		else:source_list=self.astro_list
 		for each_astro in source_list:
 			temp_link=self.cyber_astro_link.format(each_astro)
-			print('processing link :',temp_link)
+			print 'processing link :',temp_link
 			page_source=self.scrapy_obj.GetPageSoure(link=temp_link,use_request=True,check_files=False,save_file=False)
 			#print 'page_source :',len(page_source)
 			soup=self.scrapy_obj.soup_modification(page_source)
@@ -141,10 +141,10 @@ class Astro():
 			#print 'get_div_tag :',get_div_tag.text.strip(' \r\n')
 			prediction=p_tag.text.strip(' \r\n')
 			try:
-				print(each_astro, ' :',str(prediction))
+				print each_astro, ' :',str(prediction)
 			except:
-				print(each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8')))
-			print() 
+				print each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8'))
+			print 
 			result_dict[each_astro]=prediction
 		return result_dict
 
@@ -154,7 +154,7 @@ class Astro():
 		else:source_list=self.astro_list
 		for each_astro in source_list:
 			temp_link=self.ganesha_speaks_link.format(each_astro)
-			print('processing link :',temp_link)
+			print 'processing link :',temp_link
 			page_source=self.scrapy_obj.GetPageSoure(link=temp_link,use_request=True,check_files=False,save_file=False)
 			#print 'page_source :',len(page_source)
 			soup=self.scrapy_obj.soup_modification(page_source)
@@ -162,10 +162,10 @@ class Astro():
 			#print 'get_div_tag :',get_div_tag.text.strip(' \r\n')
 			prediction=get_div_tag.text.strip(' \r\n')
 			try:
-				print(each_astro, ' :',str(prediction))
+				print each_astro, ' :',str(prediction)
 			except:
-				print(each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8')))
-			print() 
+				print each_astro.encode('utf-8'), ' :',str(prediction.encode('utf-8'))
+			print 
 			result_dict[each_astro]=prediction
 		return result_dict
 		

@@ -55,7 +55,7 @@ def execute_query(SQLCommand,fetch_all=True,connection_type='pyodbc'):
         #print 'result_status :',result_status
         if (SQLCommand.lower()).startswith('insert') or (SQLCommand.lower()).startswith('update'):
             conn.commit()
-            print('Connection commited ')
+            print 'Connection commited '
         if fetch_all:
             row = cursor.fetchall()
         else:
@@ -65,11 +65,11 @@ def execute_query(SQLCommand,fetch_all=True,connection_type='pyodbc'):
         conn.close()
         return row
     except Exception as e:
-        print('Exception while executing the query :',e)
+        print 'Exception while executing the query :',e
         comments=str(e)
         query_status='Success(select & Insert statements)'
         if len(str(e))>=65:
-            print('Code will be executed , Skipping monitor  ')
+            print 'Code will be executed , Skipping monitor  '
             query_status='Errored'
             return False
         pass
@@ -84,7 +84,7 @@ def getNormlaisedDict(input_dict,separator=','):
         combined_statement+=separator
     combined_statement=combined_statement.strip(' ')
     combined_statement=combined_statement.strip(separator)
-    print('combined_statement :',combined_statement)
+    print 'combined_statement :',combined_statement
     return combined_statement
 
 def get_update_command(values={},conditions={},table_name="code_execution_status",schema='core_stage'):
@@ -94,7 +94,7 @@ def get_update_command(values={},conditions={},table_name="code_execution_status
     update_command+=str(set_values)
     update_command+=" from "+str(schema)+'.'+str(table_name)+" A"
     update_command+=" where  "+str(where_conditions)
-    print('update_command :',update_command)
+    print 'update_command :',update_command
     return update_command
 
 def get_insert_command(each_dict,table_name='code_execution_status',table_schema='core_stage'):
@@ -110,7 +110,7 @@ def get_insert_command(each_dict,table_name='code_execution_status',table_schema
     SQLCommand +=") VALUES ("
     SQLCommand +=value_text
     SQLCommand +=")"
-    print('SQLCommand :',SQLCommand)
+    print 'SQLCommand :',SQLCommand
     return SQLCommand
 def get_select_command(input_dict,schema='core_stage',table_name='code_execution_status',what_to_select='count(*)'):
     select_query="select "+str(what_to_select)+" from "+str(schema)+"."+str(table_name)+" where "
@@ -152,4 +152,4 @@ if __name__=="__main__":
     test_command ='select top 10 * from core_stage.code_execution_status'
     #print execute_query(test_command)
     input_dict={'vm_name':'minicusdb.fiindlabs.com','try_count':15}
-    print(execute_query(get_select_command(input_dict)))
+    print execute_query(get_select_command(input_dict))

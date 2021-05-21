@@ -46,7 +46,7 @@ def get_all_process_id(get_python_process=False,use_list=[],check_process='pytho
                     if each_id not in python_codes:
                         python_codes.append(each_id)
             except Exception as e :
-                print('Exception in getting process name :',e)
+                print 'Exception in getting process name :',e
                 pass
         return python_codes
     return total_id_list
@@ -61,7 +61,7 @@ def get_active_specific_process(existing_processes,check_process='cmd'): # get o
             #print "key_list[0][active_instances]:",key_list[0]['active_instances']
             #print "len(current_python_processes):",current_python_processes
         else:
-            print('No Active Processes !!')
+            print 'No Active Processes !!'
             current_python_processes=[]
         return current_python_processes
         
@@ -72,9 +72,9 @@ def get_all_json(input_directory): # returns all the json in the given directory
     return all_files_list
 
 def get_processed_json_files(source_directory,thread_count=1):
-    print('get_processed_json_files :')
-    print('source_directory :',source_directory)
-    print('thread_count :',thread_count)
+    print 'get_processed_json_files :'
+    print 'source_directory :',source_directory
+    print 'thread_count :',thread_count
     total_json_files=0
     log_list=[]
     for i in range(0,thread_count):
@@ -102,7 +102,7 @@ def get_vm_name():
     try:
         result=execute_query(sql_query)
     except Exception as e:
-        print('Exception in getting Host name get_vm_name:',e) 
+        print 'Exception in getting Host name get_vm_name:',e 
         pass
     if result:
         #print 'result:',result
@@ -144,4 +144,4 @@ def get_replaced_content(content,characters_list=['-',':',' '],replace_by=''):
 
 
 if __name__=="__main__":
-    print(get_printable_time_stamp(get_date_only=True))
+    print get_printable_time_stamp(get_date_only=True)

@@ -19,7 +19,7 @@ import os.path
 from os import walk
 import fnmatch
 import datetime,time
-# from Utilities import * #used for get_printable_string
+from Utilities import * #used for get_printable_string
 class FileHandling():
     def __init__(self,field_delimiter=',',trim_fields_char=None,record_trim_chars=None,debug_mode=True,developer_mode=False,print_instance=None,log_process_status=True):
         self.field_delimiter=field_delimiter
@@ -50,7 +50,7 @@ class FileHandling():
         if self.print_instance:
             self.print_instance.customPrint(input_string,skip_timestamp=skip_timestamp,add_leading_space=add_leading_space,module_name=module_name,message_priority=message_priority)
         else:
-            print_string='' + module_name + '\t' + message_priority + '\t' + input_string
+            print_string=u'' + module_name + '\t' + message_priority + '\t' + input_string
             if not skip_timestamp:
                 print_string = log_time_stamp() + print_string
             # print get_printable_string(print_string)
@@ -111,7 +111,7 @@ class FileHandling():
             self.file_name_is=file_name_is
             self.processed_line_count=-1
         else:
-            print(("File does not exist:" + file_name_is))
+            print ("File does not exist:" + file_name_is)
             self.processed_line_count=-2
             return
         if not os.path.dirname(self.file_name_is):
@@ -159,17 +159,17 @@ class FileHandling():
                     output_line=''
                     for item_key in item_dict:
                         output_line =output_line +delimiter + str(item_dict[item_key])
-                    print(output_line.strip(delimiter))
+                    print output_line.strip(delimiter)
             else:
                 for item in data_:
-                    print(item)
+                    print item
         elif isinstance(data_,dict):
             output_line=''
             for item in data_:
                 output_line =output_line +delimiter + str(data_[item])
-            print(output_line.strip(delimiter))
+            print output_line.strip(delimiter)
         else:
-            print(str(data_))
+            print str(data_)
     def get_all_files(self,directory_is=None,pattern=None,full_path=True,recursive=False):
         #directory_is or self.directory_name is mandatory
         iter=0
@@ -214,11 +214,11 @@ class FileHandling():
         else:
             file_pattern_to_select='*'+ search_string + '*.*'
         list_of_files=self.get_all_files(directory_is,file_pattern_to_select,full_path=True)
-        print(list_of_files)
+        print list_of_files
         if len(list_of_files) >0:
             for each_file in list_of_files:
                 try:
-                    print(each_file,each_file.replace(search_string,replace_string))
+                    print each_file,each_file.replace(search_string,replace_string)
                     curr_folder_name=os.path.dirname(each_file)
                     curr_file_name=os.path.basename(each_file)
                     new_file_name=curr_file_name.replace(search_string,replace_string)
@@ -240,7 +240,7 @@ class FileHandling():
         return True
     def rename_file(self,source_file,target_file=None,target_folder=None,attach_timestamp_if_exist=True,repeatation=0):
         if (not target_file) and (not target_folder):
-            print('rename_file both target_file and target_folder are none')
+            print 'rename_file both target_file and target_folder are none'
             exit()
         if target_file:
             temp_target_file=target_file
@@ -267,13 +267,13 @@ class FileHandling():
             except Exception as e:
                 if (' create a file when that file already exists' in str(e) or 'file exists' in str(e)) and attach_timestamp_if_exist and repeatation <= 1:
                     if self.developer_mode:
-                        print(str(e),'\n Now Retry')
-                        print(source_file,target_file,target_folder,temp_target_file,new_target_file_name)
+                        print str(e),'\n Now Retry'
+                        print source_file,target_file,target_folder,temp_target_file,new_target_file_name
                     time.sleep(1)
                     return self.rename_file(source_file,target_file=new_target_file_name,repeatation = repeatation+1 )
                 if self.developer_mode:
-                    print(str(e))
-                    print(source_file,target_file,target_folder,temp_target_file,new_target_file_name)
+                    print str(e)
+                    print source_file,target_file,target_folder,temp_target_file,new_target_file_name
                 #exit()
             return True
         else:
@@ -1009,14 +1009,14 @@ if __name__ == '__main__':
         cnt = 0
         for each_file in all_files:
             cnt += 1
-            print(str(cnt) + '.\t',each_file)
+            print str(cnt) + '.\t',each_file
             f_h.rename_file(each_file,target_folder="D:\\_data\\product-biz-companies")
         exit()
     elif not True:
         f_h=FileHandling()
         all_dirs=f_h.get_all_directories(directory_is='C:\\Users\\ils-prabu\\Downloads\\Harish',recursive=True)
         for each_dir in all_dirs:
-            print(each_dir)
+            print each_dir
     elif not True:
         f_h=FileHandling()
         w_o=open('all_output_files2.txt','a')
@@ -1027,9 +1027,9 @@ if __name__ == '__main__':
             each_line=each_line.strip('\n\r')
             if not os.path.isfile(each_line):continue
             if 'inncr2' in each_line:
-                print('SKIPPED\t',str(cnt) + '.\t',each_line)
+                print 'SKIPPED\t',str(cnt) + '.\t',each_line
             else:
-                print(str(cnt) + '.\t',each_line)
+                print str(cnt) + '.\t',each_line
                 f_h.rename_file(each_line,target_folder="H:\\_code\\l_html")
                 w_o.write(each_line + '\n')
         o_r.close()

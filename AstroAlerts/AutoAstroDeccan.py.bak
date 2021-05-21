@@ -1,4 +1,4 @@
-# from webSearch import  *
+from webSearch import  *
 from bs4 import BeautifulSoup
 from Create_windows_popup import *
 import argparse
@@ -10,22 +10,22 @@ class AstroDeccan():
 	def get_page_source(self):
 		print_prefix=self.class_name+"get_page_source:\t"
 		user_agent='Mozilla/%2F4.0'
-		request = urllib.request.Request(self.source_url)
+		request = urllib2.Request(self.source_url)
 		request.add_header('User-Agent', user_agent)
 		request.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
 		cj = cookielib.CookieJar()#to handle cookie
-		request_opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+		request_opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 		response=None
 		url_content=''
 		try:
 			response = request_opener.open(request)
 			url_content = response.read()
-			if self.developer_mode: print(print_prefix+'len(url_content):',len(url_content))
+			if self.developer_mode: print print_prefix+'len(url_content):',len(url_content)
 			#return url_content
 			#print url_content
 		except Exception as e:
 			#error_is=str(e)
-			print('Exception :',e)
+			print  'Exception :',e
 			#return url_content
 		return url_content
 	def get_prediction(self,my_astro=['all'],destroy_time=5,desktop_notification=True):
@@ -39,7 +39,7 @@ class AstroDeccan():
 		#print 'div_tags :',len(div_tags)
 		temp_list=[]
 		#temp_dict={'astro':'','astro_prediction':''}
-		if self.developer_mode : print(print_prefix+'astro list :'+str(my_astro))
+		if self.developer_mode : print print_prefix+'astro list :'+str(my_astro)
 		for each_div in div_tags:
 			for each_astro in my_astro: # input list
 				#print 'each_astro :',each_astro
@@ -66,22 +66,22 @@ class AstroDeccan():
 			else:
 				sub_sentence=each_dict['astro_prediction'].strip(' \t\r\n')
 				prediction_list.append(sub_sentence)
-			if self.developer_mode: print(print_prefix+'prediction_list :',prediction_list)
+			if self.developer_mode: print print_prefix+'prediction_list :',prediction_list
 			for each_line in prediction_list:
 				pass
-				if self.developer_mode: print(print_prefix+'len(each_line):', len(each_line))
-				if self.developer_mode: print(print_prefix+'each_line:',each_line)
+				if self.developer_mode: print print_prefix+'len(each_line):', len(each_line)
+				if self.developer_mode: print print_prefix+'each_line:',each_line
 				wd_obj.popup_windows(title=each_dict['astro'].upper(),msg=each_line,destroy_time=destroy_time)
 			#wd_obj.OnDestroy()
 	def get_parsed_text(self,input_list): # parsed list which split by .
 	    print_prefix=self.class_name+"get_parsed_text:\t"
 	    parsed_list=[]
-	    if self.developer_mode: print(print_prefix+'input_list:',input_list)
+	    if self.developer_mode: print print_prefix+'input_list:',input_list
 	    for i in range(0,len(input_list)):
 	        next_index=i+1
 	        if next_index>=len(input_list):next_index=0
-	        if self.developer_mode: print(print_prefix+'len(input_list) :',len(input_list))
-	        if self.developer_mode: print(print_prefix+'next_index :',next_index)
+	        if self.developer_mode: print print_prefix+'len(input_list) :',len(input_list)
+	        if self.developer_mode: print print_prefix+'next_index :',next_index
 	        if not input_list[i]: #or input_list[i].strip(' \t\r\n').startswith('#'): return ''
 	        	continue
 	        if len(input_list[i]+','+input_list[next_index])<=self.max_display_len:
@@ -91,17 +91,17 @@ class AstroDeccan():
 	            if input_list[next_index] and not input_list[next_index].strip(' \t\r\n').startswith('#'):
 	                current_sentence+=','+input_list[next_index]
 	                input_list[next_index]=''
-	            if self.developer_mode: print(print_prefix+'current_sentence first if :',current_sentence)
+	            if self.developer_mode: print print_prefix+'current_sentence first if :',current_sentence
 	        elif len(input_list[i])<=self.max_display_len:
 	            if not input_list[i].strip(' \t\r\n').startswith('#'):
 	                current_sentence=input_list[i]
 	                input_list[i]=''
-	        if self.developer_mode: print(print_prefix+'current sentence :',current_sentence)
+	        if self.developer_mode: print print_prefix+'current sentence :',current_sentence
 	        if current_sentence:
 	            current_sentence=current_sentence.strip(' ,\t\r\n')
 	            if current_sentence not in parsed_list:
 	                parsed_list.append(current_sentence.strip(' ,\t\r\n'))
-	    if self.developer_mode: print(print_prefix+'parsed_list :',parsed_list)
+	    if self.developer_mode: print print_prefix+'parsed_list :',parsed_list
 	    return parsed_list
 
 
@@ -117,5 +117,5 @@ if __name__ =='__main__':
 	#print my_astro
 	for i in my_astro:
 		count+=1
-		print(count,i)
+		print count,i
 

@@ -77,7 +77,7 @@ import datetime
 import time
 import dateutil.parser
 import os.path
-from urllib.parse import urlparse,urljoin
+from urlparse import urlparse,urljoin
 from os import walk ##required for get_all_files
 import fnmatch ##required for get_all_files
 from fuzzywuzzy import fuzz
@@ -216,14 +216,14 @@ def write_content_to_file(content_is,file_name,directory_name=None,developer_mod
             output_file_name=file_name
         if len(output_file_name)>=256:
             if developer_mode:
-                print('File cannot be save with the name with length(' + str(len(output_file_name))+ '). Will be downloaded each time.Full Path:' + output_file_name)
+                print 'File cannot be save with the name with length(' + str(len(output_file_name))+ '). Will be downloaded each time.Full Path:' + output_file_name
             return True
         w_h=open(output_file_name,'w')
         w_h.write(get_printable_string(content_is,unicode_to_entitiy_flag=True).replace('\\n','\n'))
         w_h.close
         return True
     except Exception as e:
-        print('write_content_to_file: error while saving content. Error : ', str(e))
+        print 'write_content_to_file: error while saving content. Error : ', str(e)
         return False
 def get_html_link_type(link_url,return_picture=True,return_special_for_special=False):
     #there are special schema in URI which takes format like tel: mailto:
@@ -278,7 +278,7 @@ def read_content_from_file(file_name,directory_name=None):
         r_h.close
         return file_content
     except Exception as e:
-        print('read_content_from_file: error while saving content-',file_name,' Error : ', str(e))
+        print 'read_content_from_file: error while saving content-',file_name,' Error : ', str(e)
         return False
 def get_statement_for_word_count(in_statement):
     statement_is=get_printable_string(in_statement,replace_by=' ',unicode_to_entitiy_flag=False,replace_html_entities=True,replace_lt_gt_symbol=True)
@@ -336,9 +336,9 @@ def get_smell_like_date_from_url(url_in,minimum_sub_folders=1,minimum_year=2000)
     else:
         new_url_list=url_split[1:-1]
     new_url=' ' + '/'.join(new_url_list) + ' '
-    if developer_mode: print('get_smell_like_date_from_url - modified url:',new_url)
+    if developer_mode: print 'get_smell_like_date_from_url - modified url:',new_url
     new_url=re.sub('[^0-9]',' ',new_url)
-    if developer_mode: print('get_smell_like_date_from_url - After regex replace - modified url:',new_url)
+    if developer_mode: print 'get_smell_like_date_from_url - After regex replace - modified url:',new_url
     date_like_search=re.search(r'[ ][0-9]{2,4}[^0-9][0-9]{2}[^0-9][0-9]{2,4}[ ]',new_url)
     year_end_flag=False
     if not date_like_search: 
@@ -348,18 +348,18 @@ def get_smell_like_date_from_url(url_in,minimum_sub_folders=1,minimum_year=2000)
         year_end_flag=True
     if not date_like_search: return None
     date_like_search=date_like_search.group(0).strip()
-    if developer_mode: print('get_smell_like_date_from_url - date_like_search Match found:',date_like_search)
+    if developer_mode: print 'get_smell_like_date_from_url - date_like_search Match found:',date_like_search
     if year_end_flag and len(date_like_search) == 8:
         date_like_search=date_like_search[-4:] + date_like_search[:-4]
-        if developer_mode: print('get_smell_like_date_from_url - Altered date_like_search Match:',date_like_search)
+        if developer_mode: print 'get_smell_like_date_from_url - Altered date_like_search Match:',date_like_search
     date_like_search_length=len(date_like_search)
     if date_like_search.count(' ') > 2:
-        if developer_mode: print('get_smell_like_date_from_url - More than two spaces in :',date_like_search)
+        if developer_mode: print 'get_smell_like_date_from_url - More than two spaces in :',date_like_search
         return None
     is_date_like=is_date(date_like_search)
     if (not minimum_year) or minimum_year < 1900: minimum_year = 2000
     if is_date_like: 
-        if developer_mode: print('get_smell_like_date_from_url - converted to date :',is_date_like)
+        if developer_mode: print 'get_smell_like_date_from_url - converted to date :',is_date_like
         year_part=is_date_like.year
         if year_part >= minimum_year:
             return is_date_like
@@ -383,7 +383,7 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
     input_data=re.sub(r"[^0-9a-z,:'-]",' ',input_data)
     input_data=re.sub(r',([0-9]{4})',r', \1',input_data)# daynumber,yearnumber
     input_data=re.sub(r' +',' ',input_data)
-    if developer_mode: print('\nget_smell_like_date_from_text:Input=\'',input_in,'\' formatted input=',input_data)
+    if developer_mode: print '\nget_smell_like_date_from_text:Input=\'',input_in,'\' formatted input=',input_data
     text_found=''
     day_is=''
     day_found=False
@@ -404,7 +404,7 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
         good_string=False
         word_length=len(each_word_string)
         if word_length == 0: 
-            if developer_mode: print('get_smell_like_date_from_text:content with 0 characters[except symbols]:',each_word)
+            if developer_mode: print 'get_smell_like_date_from_text:content with 0 characters[except symbols]:',each_word
             valid_character_skipped_count += 1
             if valid_character_skipped_count > 2:
                 month_found=False
@@ -417,7 +417,7 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
             continue
         valid_character_skipped_count=0
         if word_length>4 and word_length <= 10:
-            if developer_mode: print('5 to 10 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+            if developer_mode: print '5 to 10 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             if each_word_string.count('-') == 2:
                 date_found= is_date(each_word_string)
                 if date_found:
@@ -427,14 +427,14 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
                         return (1,date_found,text_found)
             else:
                 if each_word_string in months_long:
-                    if developer_mode: print('5 to 10 - valid month - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '5 to 10 - valid month - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     month_found=True
                     month_is_number=False
                     month_is=each_word_string
                     text_found=text_found + ' ' +str(each_word)
                     good_string=True
         elif word_length>4:#Section added by Radha - why do we need this if we have >4 <=10 above. do we mean >10
-            if developer_mode: print('5 to 10 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+            if developer_mode: print '5 to 10 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             if each_word_string.count('-') == 2:
                 date_found= is_date(each_word_string)
                 if date_found:
@@ -444,68 +444,68 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
                         return (1,date_found,text_found)
             else:
                 if each_word_string in months_long:
-                    if developer_mode: print('5 to 10 - valid month - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '5 to 10 - valid month - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     month_found=True
                     month_is_number=False
                     month_is=each_word_string
                     text_found=text_found + ' ' +str(each_word)
                     good_string=True
         elif word_length == 4:
-            if developer_mode: print('4 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+            if developer_mode: print '4 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             if each_word_string in months_short or each_word_string in months_long:
                 month_found=True
                 month_is_number=False
                 month_is=month_normalize[each_word_string]
                 text_found=text_found + ' ' +str(each_word)
                 good_string=True
-                if developer_mode: print('4 - Month- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '4 - Month- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             elif is_number(each_word_string,check_for_integer=True):#How #1356, January 12, 2015
                 year_found=True
                 year_is=each_word_string
                 text_found=text_found + ' ' +str(each_word)
                 good_string=True
-                if developer_mode: print('4 - Number Year- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '4 - Number Year- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             elif each_word_string[-2:] in ['th','st','nd','rd'] and is_number(each_word_string[:-2],check_for_integer=True):
                 day_found=True
                 day_is=each_word_string
                 text_found=text_found + ' ' +str(each_word)
                 good_string=True
-                if developer_mode: print('4 - nth like day- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '4 - nth like day- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
         elif word_length == 3:
-            if developer_mode: print('3 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+            if developer_mode: print '3 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             if each_word_string[0] == '\'':
                 if is_number(each_word_string[1:3]):
                     year_found=True
                     year_is='20' + str(each_word_string[1:3])
                     text_found=text_found + ' ' +str(each_word)
                     good_string=True
-                if developer_mode: print('3 - quote two digit Year- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '3 - quote two digit Year- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             elif each_word_string in months_short :
                 month_found=True
                 month_is_number=False
                 month_is=each_word_string
                 text_found=text_found + ' ' +str(each_word)
                 good_string=True
-                if developer_mode: print('3 - short month- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '3 - short month- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             elif each_word_string[-2:] in ['th','st','nd','rd'] and is_number(each_word_string[:-2],check_for_integer=True):
                 day_found=True
                 day_is=each_word_string
                 text_found=text_found + ' ' +str(each_word)
                 good_string=True
-                if developer_mode: print('3 - nth like day- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print '3 - nth like day- get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
         elif word_length <= 2:
-            if developer_mode: print('2 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'comma_found=',comma_found)
+            if developer_mode: print '2 - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'comma_found=',comma_found
             number_like=is_number(each_word_string,check_for_integer=True)
             if number_like:
-                if developer_mode: print('2 Number - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'comma_found=',comma_found)
+                if developer_mode: print '2 Number - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'comma_found=',comma_found
                 if month_found and day_found:
                     year_found=True
                     year_is=each_word_string
                     text_found=text_found + ' ' +str(each_word)
                     good_string=True
-                    if developer_mode: print('2 Number - M and D Found so Y - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '2 Number - M and D Found so Y - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                 elif month_found:
-                    if developer_mode: print('2 Number - M and No D Found - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '2 Number - M and No D Found - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     if comma_found:
                         day_found=True
                         day_is=each_word_string
@@ -519,14 +519,14 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
                     else: #fail on 12 06 15
                         pass
                 elif day_found and (not year_found) and number_like <= 12: #12 2015 August is not a valid data
-                    if developer_mode: print('2 Number - No M and D Found - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '2 Number - No M and D Found - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     month_found=True
                     month_is=each_word_string
                     text_found=text_found + ' ' +str(each_word)
                     month_is_number=True
                     good_string=True
                 else:
-                    if developer_mode: print('2 Number - No M and No D. so D - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print '2 Number - No M and No D. so D - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     if day_found:
                         month_found=False
                         year_found=False
@@ -535,25 +535,25 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
                     text_found=text_found + ' ' +str(each_word)
                     good_string=True
         if good_string:
-            if developer_mode: print('GOOD - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+            if developer_mode: print 'GOOD - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
             if day_found and month_found and year_found:
                 if month_is_number:
                     date_found=is_date(str(day_is) + '/' + str(month_is) + '/' + str(year_is))
-                    if developer_mode: print('Found - get_smell_like_date_from_text month_is_number - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                    if developer_mode: print 'Found - get_smell_like_date_from_text month_is_number - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                     #if date_found: 
                     #    year_part=date_found.year
                     #    if year_part>= minimum_year and year_part <=maximum_year:
                     #        return (1,date_found,text_found)
                 else:
                     date_found=is_date(UpperCamelCase(str(month_is)) + ' ' + str(day_is) + ', ' + str(year_is))
-                    if developer_mode: print('Found - get_smell_like_date_from_text NOT month_is_number - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'"',UpperCamelCase(str(month_is)) + ' ' + str(day_is) + ', ' + str(year_is),'"')
+                    if developer_mode: print 'Found - get_smell_like_date_from_text NOT month_is_number - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is,'"',UpperCamelCase(str(month_is)) + ' ' + str(day_is) + ', ' + str(year_is),'"'
                 if date_found: 
                     year_part=date_found.year
                     #print 'DATE FOUND',minimum_year,maximum_year,year_part
                     if year_part>= minimum_year and year_part <=maximum_year:
                         return (1,date_found,text_found)
                     elif developer_mode:
-                        print('get_smell_like_date_from_text: date condition is not matching:year_part=',year_part,',minimum_year=',minimum_year,',maximum_year=',maximum_year)
+                        print 'get_smell_like_date_from_text: date condition is not matching:year_part=',year_part,',minimum_year=',minimum_year,',maximum_year=',maximum_year
                 month_found=False
                 month_is=''
                 year_found=False
@@ -564,7 +564,7 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
         else:
             if month_found and (not month_is_number) and year_found and (not day_found) and consume_month_year:
                 date_found=is_date(month_is + ' 01, ' + str(year_is))
-                if developer_mode: print('Found - get_smell_like_date_from_text NOT month_is_number and month_found and year_found - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is)
+                if developer_mode: print 'Found - get_smell_like_date_from_text NOT month_is_number and month_found and year_found - current word:',each_word_string,day_found,month_found,year_found,day_is,month_is,year_is
                 if date_found: 
                     year_part=date_found.year
                     if year_part>= minimum_year and year_part <=maximum_year:
@@ -579,20 +579,20 @@ def get_smell_like_date_from_text(input_in,strict_year=False,consume_month_year=
             year_is=''
             day_found=False
             day_is=''
-        if developer_mode: print('END - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found)
+        if developer_mode: print 'END - get_smell_like_date_from_text - current word:\'',each_word_string,day_found,month_found,year_found
     return (0,None,text_found)
 def is_date(sting_is):
     try:
         date_is_formatted=dateutil.parser.parse(sting_is)
         return date_is_formatted
-    except Exception as e:
+    except Exception, e:
         #print e
         return False
 def to_date(string_is,date_format='%Y-%m-%d'):
     try:
         return datetime.datetime.strptime(string_is, date_format).date()
-    except Exception as e:
-        print(e)
+    except Exception, e:
+        print e
         return False
 def get_file_size(file_name):
     if file_name:
@@ -657,15 +657,15 @@ def rename_file_to_time_stamp_prefix(file_name,return_file_name=False,include_mi
                 new_file_name_is=get_time_stamp_for_file() + '_' + file_name_is
         new_file_name_is= get_file_name_with_time_stamp(file_name_is,check_file_existence=False,include_milliseconds=include_milliseconds)
         try:
-            print('File to be renamed from ',file_name_is,' to ',new_file_name_is)
+            print 'File to be renamed from ',file_name_is,' to ',new_file_name_is
             os.rename(file_name_is,new_file_name_is)
             if return_file_name: return new_file_name_is
             return True
-        except Exception as e:
-            print(str(e),file_name)
+        except Exception, e:
+            print str(e),file_name
             return False
     else:
-        print('in rename_file_to_time_stamp_prefix():File does not exist:',file_name)
+        print 'in rename_file_to_time_stamp_prefix():File does not exist:',file_name
         return False
 def get_all_files(pattern,directory_is=None,full_path=True,recursive=False):
     #directory_is or self.directory_name is mandatory
@@ -675,10 +675,10 @@ def get_all_files(pattern,directory_is=None,full_path=True,recursive=False):
         if os.path.isdir(directory_is):
             current_directory_is=directory_is
         else:
-            print("get_all_files(): Director does not exist -'" + directory_is + "'")
+            print "get_all_files(): Director does not exist -'" + directory_is + "'"
             return False
     if '*' not in pattern or (not ('.psql' in pattern or '.log' in pattern or '.process' in pattern or '.txt' in pattern or '.search' in pattern or '.succu' in pattern)):
-        print("get_all_files(): valid file extensions are - (psql,log,process,txt). Provided pattern - '" + pattern + "'")
+        print "get_all_files(): valid file extensions are - (psql,log,process,txt). Provided pattern - '" + pattern + "'"
         return False
     if not current_directory_is:
         current_directory_is=os.getcwd()
@@ -713,7 +713,7 @@ def move_processed_file(file_name,target_directory,rename_with_timestamp=True,cr
     else:
         file_search_result=get_all_files(pattern=file_name_is,directory_is=source_directory)
         if not file_search_result:
-            print("move_processed_file(): no file found with pattern - '" + file_name_is + "'")
+            print "move_processed_file(): no file found with pattern - '" + file_name_is + "'"
             return False
         else:
             for each_file_found in file_search_result:
@@ -723,17 +723,17 @@ def move_processed_file(file_name,target_directory,rename_with_timestamp=True,cr
     move_file_total=len(file_name_list)
     #print file_name_list
     for each_file in file_name_list:
-        print(each_file)
+        print each_file
         file_name_is=each_file
         move_file_count += 1
         if os.path.isfile(file_name_is):
             if not os.path.isdir(target_directory): 
                 if create_sub_directory:
                     if not create_directory(target_directory): 
-                        print("move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "): Error while creating directory - '" + target_directory + "'")
+                        print "move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "): Error while creating directory - '" + target_directory + "'"
                         return False
                 else:
-                    print("move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "): Directory does not exist - '" + target_directory + "'")
+                    print "move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "): Directory does not exist - '" + target_directory + "'"
                     return False
             try:
                 if rename_with_timestamp:
@@ -744,17 +744,17 @@ def move_processed_file(file_name,target_directory,rename_with_timestamp=True,cr
                 new_file_name=os.path.join(target_directory,new_file_name)
                 #print 'code is here',new_file_name,target_directory
                 os.rename(file_name_is,new_file_name)
-                print("move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + '):File is renamed from ',file_name_is,' to ',new_file_name)
+                print "move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + '):File is renamed from ',file_name_is,' to ',new_file_name
                 is_process_success=True
-            except Exception as e:
-                print("move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + '):' + str(e))
+            except Exception, e:
+                print "move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + '):' + str(e)
                 return False
         else:
-            print("move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "):File does not exist - '" + file_name_is + "'")
+            print "move_processed_file(" + str(move_file_count) + ' of ' + str(move_file_total)  + "):File does not exist - '" + file_name_is + "'"
             return False
     return is_process_success
 def UpperCamelCase(input_data):
-    if not (isinstance(input_data,str) or isinstance(input_data,str)): return input_data
+    if not (isinstance(input_data,str) or isinstance(input_data,unicode)): return input_data
     input_data_string=input_data.strip()
     if len(input_data_string) == 1: return input_data_string.upper()
     result_camelcase=input_data_string[:1].upper()
@@ -932,7 +932,7 @@ def select_company_name_ticker_based(company_name_in,page_title_in,company_ticke
     developer_mode=False
     #if (not company_ticker) and (not news_must_match): 
     if (not news_must_match): 
-        print('Company Name without ticker or news must match',company_name_in,page_title_in,company_ticker,news_must_match)
+        print 'Company Name without ticker or news must match',company_name_in,page_title_in,company_ticker,news_must_match
         custom_exit()
         return select_company_name_based(company_name_in,page_title_in)
     current_title=re.sub(r'[\d,]+[.][\d]+[MB]?',r' ',page_title_in)
@@ -942,13 +942,13 @@ def select_company_name_ticker_based(company_name_in,page_title_in,company_ticke
     if company_ticker:
         if len(company_ticker)>2:
             if company_ticker.upper() in current_title_ticker:
-                if developer_mode: print('processing statement_has_string_sequential():ticker matched >2')
+                if developer_mode: print 'processing statement_has_string_sequential():ticker matched >2'
                 return True
         elif len(company_ticker)>0:
             if statement_has_string_sequential(current_title_ticker,'NYSE ' + company_ticker):
-                if developer_mode: print('processing statement_has_string_sequential():ticker matched >0')
+                if developer_mode: print 'processing statement_has_string_sequential():ticker matched >0'
                 return True
-    if developer_mode: print('processing statement_has_string_sequential() with news_must_match')
+    if developer_mode: print 'processing statement_has_string_sequential() with news_must_match'
     if '&' in news_must_match:
         current_title_must_match=re.sub(r'[^\w\'`&-]+',' ',current_title)
     else:
@@ -956,14 +956,14 @@ def select_company_name_ticker_based(company_name_in,page_title_in,company_ticke
     return statement_has_string_sequential(current_title_must_match,news_must_match,threshold_words=len(company_name_in.split()))
 def statement_has_string_sequential(statement,string_to_search,threshold_words=2):
     developer_mode=False
-    if developer_mode: print('In statement_has_string_sequential(). statement=',statement,'.string_to_search=',string_to_search)
+    if developer_mode: print 'In statement_has_string_sequential(). statement=',statement,'.string_to_search=',string_to_search
     if (not statement) or (not string_to_search): return False
-    if developer_mode: print('after null check statement_has_string_sequential()')
+    if developer_mode: print 'after null check statement_has_string_sequential()'
     if len(statement.strip()) < 5 or len(string_to_search.strip())<2: return False
-    if developer_mode: print('after length check statement_has_string_sequential()')
+    if developer_mode: print 'after length check statement_has_string_sequential()'
     if '(' or ')' in string_to_search:
         if string_to_search.count('(') != string_to_search.count(')'):
-            print('invalid news_must_match pattern: count of ( and ) are not matching:' + str(string_to_search))
+            print 'invalid news_must_match pattern: count of ( and ) are not matching:' + str(string_to_search)
             custom_exit()#to error out and exit gracefully for multiprocessing
     if '|' in string_to_search:
         if '(' in string_to_search or ')' in string_to_search:
@@ -971,7 +971,7 @@ def statement_has_string_sequential(statement,string_to_search,threshold_words=2
             if all_brack:
                 for each_brack in all_brack:
                     if '|' in each_brack:
-                        print('invalid news_must_match pattern: | inside ():' + str(string_to_search))
+                        print 'invalid news_must_match pattern: | inside ():' + str(string_to_search)
                         custom_exit()#to error out and exit gracefully for multiprocessing
         string_to_search_list=string_to_search.split('|')
         for each_string_to_search in string_to_search_list:
@@ -988,10 +988,10 @@ def statement_has_string_sequential(statement,string_to_search,threshold_words=2
     if '-' in string_to_search:
         pattern_to_replace = pattern_to_replace + '-'
     pattern_to_replace = pattern_to_replace + ']+'
-    if developer_mode: print('Utilities.py:statement_has_string_sequential: pattern_to_replace:' + str(pattern_to_replace))
+    if developer_mode: print 'Utilities.py:statement_has_string_sequential: pattern_to_replace:' + str(pattern_to_replace)
     standard_statement=re.sub(pattern_to_replace,r' ',statement.lower())
     sub_string_is=standard_statement
-    if developer_mode: print('Before string split statement_has_string_sequential()',search_string.split())
+    if developer_mode: print 'Before string split statement_has_string_sequential()',search_string.split()
     index_found_list=[]
     previous_index=0
     no_of_word_in_pattern=0
@@ -1001,7 +1001,7 @@ def statement_has_string_sequential(statement,string_to_search,threshold_words=2
             temp_index=get_index_of_special_tuple(sub_string_is,each_word)
         else:
             temp_index=sub_string_is.find(' ' + str(each_word).encode('utf-8') + ' ')
-        if developer_mode: print('in search statement_has_string_sequential()','"' + each_word + '"','"' + sub_string_is + '"','\tINDEX',temp_index)
+        if developer_mode: print 'in search statement_has_string_sequential()','"' + each_word + '"','"' + sub_string_is + '"','\tINDEX',temp_index
         if temp_index >= 0:
             no_of_word_in_pattern += 1
             computed_index=previous_index+temp_index
@@ -1016,18 +1016,18 @@ def statement_has_string_sequential(statement,string_to_search,threshold_words=2
     else:
         matched_string_length=standard_statement[index_found_list[0]]
         no_of_words_in_pattern_found=matched_string_length.count(' ') + 1
-    if developer_mode:print('statement_has_string_sequential' + '\t' + repr(statement)+ '\t' + repr(string_to_search)+ '\t' + str(index_found_list)+ '\t' + str(no_of_word_in_pattern)+ '\t' + str(no_of_words_in_pattern_found) + '\t' + matched_string_length + '\t' + get_word_from_statement(standard_statement,index_found_list[0]))
+    if developer_mode:print 'statement_has_string_sequential' + '\t' + repr(statement)+ '\t' + repr(string_to_search)+ '\t' + str(index_found_list)+ '\t' + str(no_of_word_in_pattern)+ '\t' + str(no_of_words_in_pattern_found) + '\t' + matched_string_length + '\t' + get_word_from_statement(standard_statement,index_found_list[0])
     if (no_of_words_in_pattern_found - no_of_word_in_pattern) > threshold_words:
         first_word_found=get_word_from_statement(standard_statement,index_found_list[0])
         if len(first_word_found) == 0 or (not first_word_found):
-            print('Logical error search statement_has_string_sequential()',statement,string_to_search,threshold_words)
+            print 'Logical error search statement_has_string_sequential()',statement,string_to_search,threshold_words
             custom_exit()
         if standard_statement[index_found_list[0]+1:].find(first_word_found)>0: # This check for the second occurrence of the pattern
             return statement_has_string_sequential(standard_statement[index_found_list[0]+1:],string_to_search,threshold_words)
         else:
-            if developer_mode: print('in search statement_has_string_sequential()',' threshold not met : (' + str(no_of_words_in_pattern_found) + ' - ' + str(no_of_word_in_pattern) + ') > ' + str(threshold_words))
+            if developer_mode: print 'in search statement_has_string_sequential()',' threshold not met : (' + str(no_of_words_in_pattern_found) + ' - ' + str(no_of_word_in_pattern) + ') > ' + str(threshold_words)
             return False
-    if developer_mode: print('statement_has_string_sequential' + '\t' + repr(statement)+ '\t' + repr(string_to_search)+ '\t' + str(index_found_list)+ '\t' + str(no_of_word_in_pattern)+ '\t' + str(no_of_words_in_pattern_found) + '\t' + matched_string_length + '\t' + get_word_from_statement(standard_statement,index_found_list[0]))
+    if developer_mode: print 'statement_has_string_sequential' + '\t' + repr(statement)+ '\t' + repr(string_to_search)+ '\t' + str(index_found_list)+ '\t' + str(no_of_word_in_pattern)+ '\t' + str(no_of_words_in_pattern_found) + '\t' + matched_string_length + '\t' + get_word_from_statement(standard_statement,index_found_list[0])
     return True
 def get_word_from_statement(statement,at_index):
     if len(statement)>0 and at_index>=0:
@@ -1044,22 +1044,22 @@ def get_word_from_statement(statement,at_index):
         return ''
 def get_index_of_special_tuple(statement,string_to_search):
     developer_mode=False
-    if developer_mode: print('In get_index_of_special_tuple()')
+    if developer_mode: print 'In get_index_of_special_tuple()'
     if (not statement) or (not string_to_search): return -1
-    if developer_mode: print('after null check get_index_of_special_tuple()')
+    if developer_mode: print 'after null check get_index_of_special_tuple()'
     if len(string_to_search.strip())<2 or len(statement.strip()) <2: return -1#< len(string_to_search.strip()): return -1
     #if len(string_to_search.strip())<2 or len(statement.strip()) < len(string_to_search.strip()): return -1
     if ('(' not in string_to_search) or (')' not in string_to_search) or (',' not in string_to_search): return -1#or ('|' not in string_to_search)
-    if developer_mode: print('after length check get_index_of_special_tuple()')
+    if developer_mode: print 'after length check get_index_of_special_tuple()'
     search_string=re.sub(r'[()]+','',string_to_search.lower())
     search_string=re.sub(r' +',' ',search_string)
     index_found=-1
     standard_statement=statement.lower()#re.sub(r'[^\w\'`]+',r' ',statement.lower())#no character should be replaced since index is used in parent function
     sub_string_is=' ' + standard_statement + ' '
-    if developer_mode: print('Before string split get_index_of_special_tuple()',search_string.split())
+    if developer_mode: print 'Before string split get_index_of_special_tuple()',search_string.split()
     for each_word in search_string.split(','):
         temp_index=sub_string_is.find(' ' + str(each_word.strip()) + ' ')
-        if developer_mode: print('in search get_index_of_special_tuple()','"' + each_word + '"','"' + sub_string_is + '"','\tNNNZZZ',sub_string_is.find(' ' + str(each_word) + ' '),temp_index,index_found)
+        if developer_mode: print 'in search get_index_of_special_tuple()','"' + each_word + '"','"' + sub_string_is + '"','\tNNNZZZ',sub_string_is.find(' ' + str(each_word) + ' '),temp_index,index_found
         if temp_index >= 0:
             if index_found == -1:
                 index_found = temp_index
@@ -1068,7 +1068,7 @@ def get_index_of_special_tuple(statement,string_to_search):
     return index_found
 def string_list_in_statement_sequential(statement,string_to_search,replace_space_statement=True):
     if (not statement) or (not string_to_search): return []
-    if isinstance(string_to_search,str) or isinstance(string_to_search,str): return string_list_in_statement_sequential(statement,string_to_search.strip().split())
+    if isinstance(string_to_search,str) or isinstance(string_to_search,unicode): return string_list_in_statement_sequential(statement,string_to_search.strip().split())
     if isinstance(statement,str):
         unicode_statement=get_html_to_unicode_string(statement)
     else:
@@ -1082,7 +1082,7 @@ def string_list_in_statement_sequential(statement,string_to_search,replace_space
     for each_word in string_to_search:
         #if 'bench' in str(string_to_search).lower(): print 'Loop:word=',each_word,'\tc_ind=',current_index,'\tfind=',sub_string_is.find(str(each_word))
         sub_string_is=sub_string_is[current_index:]
-        if isinstance(each_word,str) or isinstance(each_word,str):
+        if isinstance(each_word,str) or isinstance(each_word,unicode):
             modified_word=each_word
         else:
             modified_word=str(each_word)
@@ -1104,7 +1104,7 @@ def statement_has_just_string_sequential(statement,string_to_search):#will not a
     sub_string_is=standard_statement
     for each_word in search_string.split():
         sub_string_is=sub_string_is[current_index:]
-        if isinstance(each_word,str) or isinstance(each_word,str):
+        if isinstance(each_word,str) or isinstance(each_word,unicode):
             modified_word=each_word
         else:
             modified_word=str(each_word)
@@ -1120,34 +1120,34 @@ def get_encoding(statement):
         result = chardet.detect(statement)
         encoding_is=result['encoding']
 def guess_statement_language(statement):
-    if isinstance(statement,str):
+    if isinstance(statement,unicode):
         u_statement=statement
     else:
         encoding_is=get_encoding(statement)
         if encoding_is:
             try:
-                u_statement=str(statement,encoding_is)
+                u_statement=unicode(statement,encoding_is)
             except Exception as e:
-                print('Utilities.py:guess_statement_language:Encoding Found: Error- ' + str(e) + repr(statement[:100]))
+                print 'Utilities.py:guess_statement_language:Encoding Found: Error- ' + str(e) + repr(statement[:100])
                 return 'error'
         else:
             try:
                 u_statement=statement.decode('utf-8')
             except Exception as e:
-                print('Utilities.py:guess_statement_language:Encoding Not Found:Error- ' + str(e) + repr(statement[:100]))
+                print 'Utilities.py:guess_statement_language:Encoding Not Found:Error- ' + str(e) + repr(statement[:100])
                 return 'error'
     statement_language=guessLanguage(u_statement)
     return statement_language
     return encoding_is 
 def is_english(statement):#TO BE ADDED: Try and except
-    if isinstance(statement,str):
+    if isinstance(statement,unicode):
         u_statement=statement
     else:
         encoding_is=get_encoding(statement)
         try:
-            u_statement=str(statement,encoding_is)
+            u_statement=unicode(statement,encoding_is)
         except Exception as e:
-            print('Utilities.py:is_english:Error- ' + str(e) + repr(statement[:100]))
+            print 'Utilities.py:is_english:Error- ' + str(e) + repr(statement[:100])
             return 'error'
     statement_language=guessLanguage(u_statement)
     if statement_language == 'en':
@@ -1190,10 +1190,10 @@ def count_list_word_in_statement_delete(statement,list_of_words):
     developer_mode=True
     statement_lower=statement.lower()
     statement_lower=' ' +  re.sub(r'[^\w-]',' ',statement_lower)  + ' '
-    if developer_mode: print('Utilities.py:count_list_word_in_statement: updated statement \t :' + statement_lower)
+    if developer_mode: print 'Utilities.py:count_list_word_in_statement: updated statement \t :' + statement_lower
     for each_word in list_of_words:
         match_found=statement_lower.count(' ' + each_word.lower() + ' ')
-        if developer_mode: print('Utilities.py:count_list_word_in_statement: Word: ' + str(each_word) +'\t Match found:' + str(match_found))
+        if developer_mode: print 'Utilities.py:count_list_word_in_statement: Word: ' + str(each_word) +'\t Match found:' + str(match_found)
         count=count + match_found
     return count
 def count_list_word_occurence_in_statement(statement,list_of_words_in,developer_mode=False):#,case_sensitive=False
@@ -1201,13 +1201,13 @@ def count_list_word_occurence_in_statement(statement,list_of_words_in,developer_
     consumed_words={}
     developer_mode=developer_mode
     list_of_words=[]
-    if isinstance(list_of_words_in,str) or isinstance(list_of_words_in,str):
+    if isinstance(list_of_words_in,str) or isinstance(list_of_words_in,unicode):
         for each_word in list_of_words_in.split():
             list_of_words.append(each_word)
     elif isinstance(list_of_words_in,list):
         list_of_words=list_of_words_in
     else:
-        print('Utilities.py:count_list_word_in_statement: list_of_words_in is not of type string or list. the data type is :' + str(type(list_of_words_in)))
+        print 'Utilities.py:count_list_word_in_statement: list_of_words_in is not of type string or list. the data type is :' + str(type(list_of_words_in))
         custom_exit(ignore_error=True)
         return occurrence_count
         
@@ -1225,12 +1225,12 @@ def count_list_word_occurence_in_statement(statement,list_of_words_in,developer_
         if ' ' + each_word + ' ' in statement_to_check:
             consumed_words[each_word] = consumed_words.get(each_word,0) + 1
     if consumed_words:
-        return list(consumed_words.keys())
+        return consumed_words.keys()
         #return [k:consumed_words[k] for k in consumed_words]
     return []
 def fetch_dict_pattern_matching_statement_from_article(article_content,dict_pattern,restrict_by=0,one_statement_per_paragraph=False):
     if 'search_keyword' not in dict_pattern:
-        print('search_keyword is not a key in dict_pattern')
+        print 'search_keyword is not a key in dict_pattern'
         custom_exit()
     finding_collection=[]
     statement_found=0
@@ -1275,7 +1275,7 @@ def has_list_word_in_statement_tuple(statement,list_of_words):
     statement_lower=statement.lower()
     statement_lower=' ' +  re.sub(r'[^\w-]',' ',statement_lower)  + ' '
     for each_word in list_of_words:
-        if isinstance(each_word,str) or isinstance(each_word,str):
+        if isinstance(each_word,str) or isinstance(each_word,unicode):
             if ' ' + each_word.lower() + ' ' in statement_lower:
                 return each_word
         elif isinstance(each_word,tuple):
@@ -1283,7 +1283,7 @@ def has_list_word_in_statement_tuple(statement,list_of_words):
             if tuple_result:
                 return tuple_result
         else:
-            print('Utilities. List of list is not supported in has_list_word_in_statement_tuple: list passed - ' + str(list_of_words))
+            print 'Utilities. List of list is not supported in has_list_word_in_statement_tuple: list passed - ' + str(list_of_words)
             custom_exit()
     return False
 # def has_list_word_in_statement(statement,list_of_words,pattern_to_replace=''):
@@ -1321,11 +1321,11 @@ def has_list_word_in_statement(statement,list_of_words,pattern_to_replace='',ret
         replace_pattern=pattern_to_replace
     else:
         replace_pattern=r'[^\w-]'
-    statement_lower=' ' +  re.sub(replace_pattern,' ',statement_lower)  + ' '
-    statement_as_it_is=' ' +  re.sub(replace_pattern,' ',statement)  + ' '
+    statement_lower=u' ' +  re.sub(replace_pattern,' ',statement_lower)  + u' '
+    statement_as_it_is=u' ' +  re.sub(replace_pattern,' ',statement)  + u' '
     if handle_unicode:
-        statement_lower = re.sub(r'[\u2000-\u206F\u2E00-\u2E7F]+',' ',statement_lower)
-        statement_as_it_is = re.sub(r'[\u2000-\u206F\u2E00-\u2E7F]+',' ',statement_as_it_is)
+        statement_lower = re.sub(ur'[\u2000-\u206F\u2E00-\u2E7F]+',' ',statement_lower)
+        statement_as_it_is = re.sub(ur'[\u2000-\u206F\u2E00-\u2E7F]+',' ',statement_as_it_is)
     statement_lower=re.sub(r' +',' ',statement_lower)
     statement_as_it_is=re.sub(r' +',' ',statement_as_it_is)
     if return_all_matches:
@@ -1333,10 +1333,10 @@ def has_list_word_in_statement(statement,list_of_words,pattern_to_replace='',ret
     for each_word in list_of_words:
         upper_case_indicator=False
         if each_word == each_word.upper() and each_word.isalnum(): upper_case_indicator=True
-        if isinstance(each_word,str):
-            compare_word=' ' + each_word + ' '
+        if isinstance(each_word,unicode):
+            compare_word=u' ' + each_word + u' '
         else:
-            compare_word=' ' + get_html_to_unicode_string(each_word) + ' '
+            compare_word=u' ' + get_html_to_unicode_string(each_word) + u' '
         if (not upper_case_indicator) and compare_word.lower() in statement_lower:
             if return_all_matches:
                 return_list.append(each_word)
@@ -1364,13 +1364,13 @@ def count_list_word_in_statement(statement,list_of_words_in,case_sensitive=False
     developer_mode=False
     check_againts_list=[]
     list_of_words=[]
-    if isinstance(list_of_words_in,str) or isinstance(list_of_words_in,str):
+    if isinstance(list_of_words_in,str) or isinstance(list_of_words_in,unicode):
         for each_word in list_of_words_in.split():
             list_of_words.append(each_word)
     elif isinstance(list_of_words_in,list):
         list_of_words=list_of_words_in
     else:
-        print('Utilities.py:count_list_word_in_statement: list_of_words_in is not of type string or list. the data type is :' + str(type(list_of_words_in)))
+        print 'Utilities.py:count_list_word_in_statement: list_of_words_in is not of type string or list. the data type is :' + str(type(list_of_words_in))
         custom_exit()
         return occurrence_count
     if case_sensitive:
@@ -1381,7 +1381,7 @@ def count_list_word_in_statement(statement,list_of_words_in,case_sensitive=False
     if distinct_word: 
         consumed_words=[]
     if developer_mode:
-        print('Utilities.py:count_list_word_in_statement:List of words:' + ','.join(check_againts_list))
+        print 'Utilities.py:count_list_word_in_statement:List of words:' + ','.join(check_againts_list)
     for each_word in statement.split():
         each_word_norm=re.sub(r'[^\w]+',' ',each_word.lower())
         each_word_norm=re.sub(r' +',' ',each_word_norm).strip()
@@ -1396,9 +1396,9 @@ def count_list_word_in_statement(statement,list_of_words_in,case_sensitive=False
                     consumed_words.append(each_word_norm)
             else:
                 occurrence_count += 1
-            if developer_mode: print('Utilities.py:count_list_word_in_statement:\t Match found:each_word_norm: ' + str(each_word_norm))
+            if developer_mode: print 'Utilities.py:count_list_word_in_statement:\t Match found:each_word_norm: ' + str(each_word_norm)
         elif developer_mode:
-            print('Utilities.py:count_list_word_in_statement:\t Match NOT found: each_word_norm: ' + str(each_word_norm))
+            print 'Utilities.py:count_list_word_in_statement:\t Match NOT found: each_word_norm: ' + str(each_word_norm)
     return occurrence_count
 def remove_list_word_in_statement(statement,list_of_words,case_sensitive=False):
     output_string=''
@@ -1493,7 +1493,7 @@ def get_all_dates(input_string,restrict_to=1):
                 if has_list_word_in_statement(str(each_date[0]),months_long):
                     date_collection.append(str(each_date[1]) + ' ' + str(each_date[2]) + ', ' + str(each_date[3]))
             else:
-                print(each_date)
+                print each_date
     if len(date_collection) > 0: return date_collection[0]
     return date_collection
 def remove_middle_name(name_string):
@@ -1762,7 +1762,7 @@ def get_news_must_match(company_id_in,developer_mode=False):
         else:
             input_company_name=input_company_name + ' '
     if developer_mode:
-        print('input_company_name=',type(input_company_name),get_printable_string(input_company_name))
+        print 'input_company_name=',type(input_company_name),get_printable_string(input_company_name)
     input_company_name=re.sub(r' +',' ',input_company_name).strip()
     input_company_name_list_words=input_company_name.split()
     if len(input_company_name_list_words) == 1 or len(input_company_name)<4: return input_company_name.lower()
@@ -1776,7 +1776,7 @@ def get_news_must_match(company_id_in,developer_mode=False):
     company_normalized_name=standardize_company_name_for_normalizer(company_id)
     #print 'Start:' + '\tInput' + str(company_id) 
     for each_word in input_company_name_list_words:
-        if developer_mode: print('Start:' + '\tInput' + get_printable_string(company_id) + '\tCurr Word:' + get_printable_string(each_word) + '\tCurr Output:' + get_printable_string(news_must_match))
+        if developer_mode: print 'Start:' + '\tInput' + get_printable_string(company_id) + '\tCurr Word:' + get_printable_string(each_word) + '\tCurr Output:' + get_printable_string(news_must_match)
         if each_word.lower() in remove_on_encounter: continue
         #if each_word.lower() in stopwords_generic and each_word.lower() not in ['a']: continue
         if word_found <2:#True for 1st and 2nd word
@@ -1820,39 +1820,39 @@ def get_news_must_match(company_id_in,developer_mode=False):
             #break
             if len(company_normalized_name.split()) > 4:
                 news_must_match = news_must_match + ' ' + company_normalized_name.split()[-1]
-                if developer_mode: print('consuming last word from "company_normalized_name"=',company_normalized_name)
+                if developer_mode: print 'consuming last word from "company_normalized_name"=',company_normalized_name
             else:
                 if each_word.lower() not in common_company_words:
                     news_must_match = news_must_match + ' ' + str(each_word)
-                    if developer_mode: print('adding word as it is=',each_word)
+                    if developer_mode: print 'adding word as it is=',each_word
                 elif has_special_symbol and len(news_must_match)<=3:
                     if each_word.lower() in company_abbr_tuple:
                         news_must_match = news_must_match + ' ' + company_abbr_tuple[each_word.lower()]
-                        if developer_mode: print('common company word: replacing with tuple',each_word)
+                        if developer_mode: print 'common company word: replacing with tuple',each_word
                     else:
                         news_must_match = news_must_match + ' ' + str(each_word)
-                        if developer_mode: print('common company word:adding word as it is=',each_word)
+                        if developer_mode: print 'common company word:adding word as it is=',each_word
             break
         news_must_match=news_must_match.strip()
         if len(each_word)>=8: longest_word_found=True
         if word_found == 2:# and False:
-            if developer_mode: print('at word_found == 2, break start')
+            if developer_mode: print 'at word_found == 2, break start'
             if longest_word_found or len(news_must_match)>=13:break
             if len(company_normalized_name.split()) >4: break#it will not occur in real time
             if has_special_symbol and len(news_must_match)>3:
-                if developer_mode: print('break on special symbol',len(news_must_match))
+                if developer_mode: print 'break on special symbol',len(news_must_match)
                 break
-            if developer_mode: print('at word_found == 2, didn\' break')
+            if developer_mode: print 'at word_found == 2, didn\' break'
         #print 'End:' + '\tInput' + str(company_id) + '\tCurr Word:' + str(each_word) + '\tCurr Output:' + str(news_must_match)
     return news_must_match.lower().strip()
 def get_company_name_without_common_words(company_name,duplicate_for_amp_hyphen=False,replace_char_for_amp_hyphen=' '):
     remove_on_encounter=['com','net']
     #common_company_words=['group','holding','holdings','llc','plc','industry','industries','us','usa','co','company','ltd','limited','pvt','private','inc','incorporated','corp','corporation','tech','technology','international','intl','sys','system']
     input_company_name=''
-    if isinstance(company_name,str) or isinstance(company_name,str):
+    if isinstance(company_name,str) or isinstance(company_name,unicode):
         pass
     else:
-        print('get_company_name_without_common_words. Expected input is string or unicode. But received:' + str(type(company_name)))
+        print 'get_company_name_without_common_words. Expected input is string or unicode. But received:' + str(type(company_name))
         custom_exit()
     company_id_len=len(company_name)
     for c_iter in range(company_id_len):
@@ -2100,10 +2100,10 @@ def select_statement_new(statement_in,type='news'):
 def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=True,replace_html_entities=False,replace_lt_gt_symbol=False,developer_mode=False):
     #HTML Entity (decimal)    &#8217;
     #HTML Entity (hex)    &#x2019;r'[&][#]([0-9]{,5})[;]'
-    if not (isinstance(input_string,str) or isinstance(input_string,str)): return input_string
+    if not (isinstance(input_string,str) or isinstance(input_string,unicode)): return input_string
     if isinstance(input_string,str):
         try:
-            input_string=str(input_string,'utf-8')
+            input_string=unicode(input_string,'utf-8')
         except Exception as e:
             pass
     entity_to_ascii_map={
@@ -2135,7 +2135,7 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
         replace_html_entities=False
     for iter_i in range(input_string_len):
         each_char=input_string[iter_i]
-        if developer_mode and representation_set: print('Entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+        if developer_mode and representation_set: print 'Entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
         if replace_html_entities:
             if each_char == '&':
                 if representation_set:
@@ -2162,7 +2162,7 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                 if char_collection == '&' and ((not character_representation) or len(character_representation) == 0):
                     char_collection = char_collection + '#'
                 else:
-                    if developer_mode and representation_set: print('Entity::# else::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                    if developer_mode and representation_set: print 'Entity::# else::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                     output_string=output_string + char_collection + '#'
                     char_collection=''
                     representation_set=False
@@ -2180,10 +2180,10 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                     type_of_representation=''
                 continue
             elif each_char == ';' and representation_set:
-                if developer_mode and representation_set: print('Entity::completing with ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                if developer_mode and representation_set: print 'Entity::completing with ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                 if len(character_representation) > 0 and len(char_collection)>0:
                     if type_of_representation == 'hex':
-                        if developer_mode and representation_set: print('Entity::Complete-hex::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-hex::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         c_o=unicode_to_decimal(character_representation)
                         if c_o:
                             c_o_h=get_printable_for_ord(c_o)
@@ -2194,16 +2194,16 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                         elif replace_by:
                             output_string=output_string + replace_by
                     elif type_of_representation == 'dec':
-                        if developer_mode and representation_set: print('Entity::Complete-dec::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-dec::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         c_o=int(character_representation,10)
                         c_o_h=get_printable_for_ord(c_o)
-                        if developer_mode and representation_set: print('Entity::Complete-dec-decode::','\tc_o=',c_o,'\tc_o_h=',c_o_h)
+                        if developer_mode and representation_set: print 'Entity::Complete-dec-decode::','\tc_o=',c_o,'\tc_o_h=',c_o_h
                         if c_o_h:
                             output_string=output_string + c_o_h
                         elif replace_by:
                             output_string=output_string + replace_by
                     elif type_of_representation == 'entity':
-                        if developer_mode and representation_set: print('Entity::Complete-entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         if '&' + character_representation + ';' in entity_to_ascii_map:
                             if (not replace_lt_gt_symbol) and character_representation in ('lt','gt'):
                                 output_string=output_string + '&' + character_representation + ';'
@@ -2212,10 +2212,10 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                         elif replace_by:
                             output_string=output_string + replace_by
                     else:
-                        print('get_printable_string: Logical error - type_of_representation=',type_of_representation)
+                        print 'get_printable_string: Logical error - type_of_representation=',type_of_representation
                         custom_exit()
                 else:
-                    if developer_mode and representation_set: print('Entity::Complete-other::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                    if developer_mode and representation_set: print 'Entity::Complete-other::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                     output_string=output_string + char_collection + ';'
                 char_collection=''
                 representation_set=False
@@ -2223,7 +2223,7 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                 type_of_representation=''
                 continue
             elif representation_set:
-                if developer_mode and representation_set: print('Entity::char rep starts for ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                if developer_mode and representation_set: print 'Entity::char rep starts for ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                 if (type_of_representation == 'hex' and char_collection == '&#x') or (type_of_representation == 'dec' and char_collection == '&#') or (type_of_representation == 'entity' and char_collection == '&'):
                     if (is_number(each_char) or each_char == '0') and type_of_representation in ('hex','dec'):
                         character_representation = character_representation + each_char
@@ -2239,11 +2239,11 @@ def get_printable_string(input_string,replace_by=' ',unicode_to_entitiy_flag=Tru
                 continue
         c_o=ord(each_char)
         if c_o > 126 and unicode_to_entitiy_flag:
-            if developer_mode: print("Input:",repr(each_char),'\t ord=',c_o,'\toutput_string=',output_string)
+            if developer_mode: print "Input:",repr(each_char),'\t ord=',c_o,'\toutput_string=',output_string
             output_string=output_string + '&#' + str(c_o) + ';'
             continue
         c_o_h=get_printable_for_ord(c_o)
-        if developer_mode: print("Input:",repr(each_char),'\t ord=',c_o,'\tprint=',c_o_h)
+        if developer_mode: print "Input:",repr(each_char),'\t ord=',c_o,'\tprint=',c_o_h
         if c_o_h:
             output_string=output_string + c_o_h
         elif replace_by:
@@ -2253,24 +2253,24 @@ def print_list(list_is,beautiful_print=True):
     if isinstance(list_is,list) or isinstance(list_is,tuple):
         for each in list_is:
             if isinstance(each,dict):
-                print('New Dictionary Item in print_list')
+                print 'New Dictionary Item in print_list'
                 for each_key in each:
-                    print('\t',each_key,'\t:', each[each_key])
-                print('\n')
+                    print '\t',each_key,'\t:', each[each_key]
+                print '\n'
             else:
-                print(each)
-                print('\n')
+                print each
+                print '\n'
     elif isinstance(list_is,dict):
         for each_key in list_is:
             if isinstance(list_is[each_key],list):
-                print('\t',each_key)
+                print '\t',each_key
                 for each_list_item in list_is[each_key]:
-                    print('\t\t\t:', each_list_item)
+                    print '\t\t\t:', each_list_item
             else:
-                print('\t',each_key,'\t:', list_is[each_key])
-        print('\n')
+                print '\t',each_key,'\t:', list_is[each_key]
+        print '\n'
     else:
-        print(list_is)
+        print list_is
 def print_list_new(list_is,depth_level=0,beautiful_print=True):
     print_prefix=''
     if depth_level>0:
@@ -2278,23 +2278,23 @@ def print_list_new(list_is,depth_level=0,beautiful_print=True):
             print_prefix=print_prefix +'\t'
     if isinstance(list_is,list) or isinstance(list_is,tuple):
         for each in list_is:
-            if isinstance(each,str) or isinstance(each,str):
-                print(print_prefix + str(each))
-                if beautiful_print: print('')
+            if isinstance(each,str) or isinstance(each,unicode):
+                print print_prefix + str(each)
+                if beautiful_print: print ''
             else:
                 print_list_new(each,depth_level=depth_level+1,beautiful_print=beautiful_print)
     elif isinstance(list_is,dict):
         print_empty_line=True
         for each_key in list_is:
-            if isinstance(list_is[each_key],str) or isinstance(list_is[each_key],str):
-                print(print_prefix + str(each_key) +'\t:' + str(list_is[each_key]))
+            if isinstance(list_is[each_key],str) or isinstance(list_is[each_key],unicode):
+                print print_prefix + str(each_key) +'\t:' + str(list_is[each_key])
             else:
                 print_list_new(list_is[each_key],depth_level=depth_level+1,beautiful_print=beautiful_print)
                 print_empty_line=False
-        if beautiful_print and print_empty_line: print('')
+        if beautiful_print and print_empty_line: print ''
     else:
-        print(print_prefix + str(list_is))
-        if beautiful_print: print('')
+        print print_prefix + str(list_is)
+        if beautiful_print: print ''
 def get_file_age(filename,use_modified_time=True,format='tuple'):
     if os.path.isfile(filename):
         if use_modified_time:
@@ -2391,10 +2391,10 @@ def remove_unhealthy_html_tags(input_content):
 def exit_custom(exit_message=None):
     custom_exit(exit_message)
 def custom_exit(exit_message=None):
-    if exit_message: print(exit_message)
+    if exit_message: print exit_message
     exit()
 def abbreviate_name(input_name_in,upper_case_indicator=True):
-    if isinstance(input_name_in,str):
+    if isinstance(input_name_in,(str,unicode)):
         if upper_case_indicator:
             input_name=input_name_in.upper()
         else:
@@ -2525,7 +2525,7 @@ def get_top_occurrence(input_list):
                     if each_record[0] not in all_top_occurences:
                         all_top_occurences.append(each_record[0])
             return (current_selection,current_occurrence,occurrence_details,all_top_occurences)
-    if isinstance(input_list,str) or isinstance(input_list,str): return (input_list,0,[],[])
+    if isinstance(input_list,str) or isinstance(input_list,unicode): return (input_list,0,[],[])
     if isinstance(input_list,tuple): return get_top_occurrence(list(input_list))
     return ('',0)
 def get_html_to_unicode_string(input_string):
@@ -2800,16 +2800,16 @@ def get_html_to_unicode_string(input_string):
                     ,'&hearts;':9829
                     ,'&diams;':9830
     }
-    if isinstance(input_string,str):
+    if isinstance(input_string,unicode):
         intermediate_string=input_string
     elif isinstance(input_string,str):
         current_encoding=get_encoding(input_string)
         #print 'current_encoding',current_encoding
         if current_encoding:
             try:
-                intermediate_string=str(input_string,current_encoding)
+                intermediate_string=unicode(input_string,current_encoding)
             except Exception as e:
-                print('get_html_to_unicode_string: Logical:Encoding Found: Error-:' + str(e) + repr(input_string[:100]))
+                print 'get_html_to_unicode_string: Logical:Encoding Found: Error-:' + str(e) + repr(input_string[:100])
                 exit()
         else:
             try:
@@ -2817,14 +2817,14 @@ def get_html_to_unicode_string(input_string):
             except Exception as e:
                 #Temp approach to send get_printable_string
                 #http://www.beyondsoft.com/aboutus#overview '\x81@ \x81@'
-                print('Utilities.py:get_html_to_unicode_string:Encoding Not Found:Error- ' + str(e) + '\t Input:' + repr(input_string[:100]))
+                print 'Utilities.py:get_html_to_unicode_string:Encoding Not Found:Error- ' + str(e) + '\t Input:' + repr(input_string[:100])
                 return get_printable_string(input_string)
                 exit()
     else:
-        print('Utilities.py:get_html_to_unicode_string: Either str or unicode expected. Received:'+ str(type(input_string)))
+        print 'Utilities.py:get_html_to_unicode_string: Either str or unicode expected. Received:'+ str(type(input_string))
         input_string.startswith('ErrorExit')
         custom_exit()
-    output_string=''
+    output_string=u''
     output_list=[]
     output_list_method=True
     developer_mode=False
@@ -2834,13 +2834,13 @@ def get_html_to_unicode_string(input_string):
     representation_set=False
     replace_html_entities=True
     input_string_len=len(intermediate_string)
-    if developer_mode: print(print_prefix + '\t' + str(get_timestamp_for_file(True)) + '\t' + 'replace_html_entities:' + str(replace_html_entities))
+    if developer_mode: print print_prefix + '\t' + str(get_timestamp_for_file(True)) + '\t' + 'replace_html_entities:' + str(replace_html_entities)
     for iter_i in range(input_string_len):
         each_char=intermediate_string[iter_i]
-        if developer_mode and representation_set: print('Entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+        if developer_mode and representation_set: print 'Entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
         if replace_html_entities:
             if each_char == '&':
-                if developer_mode: print(print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = &')
+                if developer_mode: print print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = &'
                 if representation_set:
                     #concatenate already collected string to output
                     if not output_list_method:
@@ -2868,11 +2868,11 @@ def get_html_to_unicode_string(input_string):
                         output_list.append(each_char)
                 continue
             elif each_char == '#' and representation_set:
-                if developer_mode: print(print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = # and representation_set is True')
+                if developer_mode: print print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = # and representation_set is True'
                 if char_collection == '&' and ((not character_representation) or len(character_representation) == 0):
                     char_collection = char_collection + '#'
                 else:
-                    if developer_mode and representation_set: print('Entity::# else::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                    if developer_mode and representation_set: print 'Entity::# else::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                     if not output_list_method:
                         output_string=output_string + char_collection + '#'
                     else:
@@ -2883,7 +2883,7 @@ def get_html_to_unicode_string(input_string):
                     type_of_representation=''
                 continue
             elif each_char == 'x' and representation_set:
-                if developer_mode: print(print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = x and representation_set is True')
+                if developer_mode: print print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = x and representation_set is True'
                 if char_collection == '&#' and ((not character_representation) or len(character_representation) == 0):
                     char_collection = char_collection + 'x'
                 else:
@@ -2897,18 +2897,18 @@ def get_html_to_unicode_string(input_string):
                     type_of_representation=''
                 continue
             elif each_char == ';' and representation_set:
-                if developer_mode: print(print_prefix + '\t'  + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = ";" and representation_set is True')
-                if developer_mode and representation_set: print('Entity::completing with ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                if developer_mode: print print_prefix + '\t'  + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'current character = ";" and representation_set is True'
+                if developer_mode and representation_set: print 'Entity::completing with ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                 if len(character_representation) > 0 and len(char_collection)>0:
                     if type_of_representation == 'hex':
-                        if developer_mode and representation_set: print('Entity::Complete-hex::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-hex::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         c_o=unicode_to_decimal(character_representation)
                         if c_o:
                             try:
                                 if not output_list_method:
-                                    output_string=output_string + chr(c_o)
+                                    output_string=output_string + unichr(c_o)
                                 else:
-                                    output_list.append(chr(c_o))
+                                    output_list.append(unichr(c_o))
                             except:
                                 if not output_list_method:
                                     output_string=output_string + ' '
@@ -2920,14 +2920,14 @@ def get_html_to_unicode_string(input_string):
                             else:
                                 output_list.append(' ')
                     elif type_of_representation == 'dec':
-                        if developer_mode and representation_set: print('Entity::Complete-dec::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-dec::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         c_o=int(character_representation,10)
                         if c_o:
                             try:
                                 if not output_list_method:
-                                    output_string=output_string + chr(c_o)
+                                    output_string=output_string + unichr(c_o)
                                 else:
-                                    output_list.append(chr(c_o))
+                                    output_list.append(unichr(c_o))
                             except:
                                 if not output_list_method:
                                     output_string=output_string + ' '
@@ -2939,7 +2939,7 @@ def get_html_to_unicode_string(input_string):
                             else:
                                 output_list.append(' ')
                     elif type_of_representation == 'entity':
-                        if developer_mode and representation_set: print('Entity::Complete-entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                        if developer_mode and representation_set: print 'Entity::Complete-entity::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                         if '&' + character_representation + ';' in entity_to_ascii_map:
                             if not output_list_method:
                                 output_string=output_string + entity_to_ascii_map['&' + character_representation + ';']
@@ -2948,9 +2948,9 @@ def get_html_to_unicode_string(input_string):
                         elif '&' + character_representation + ';' in entity_to_unicode_master:
                             try:
                                 if not output_list_method:
-                                    output_string=output_string + chr(entity_to_unicode_master['&' + character_representation + ';'])
+                                    output_string=output_string + unichr(entity_to_unicode_master['&' + character_representation + ';'])
                                 else:
-                                    output_list.append(chr(entity_to_unicode_master['&' + character_representation + ';']))
+                                    output_list.append(unichr(entity_to_unicode_master['&' + character_representation + ';']))
                             except:
                                 if not output_list_method:
                                     output_string=output_string + ' '
@@ -2962,10 +2962,10 @@ def get_html_to_unicode_string(input_string):
                             else:
                                 output_list.append(' ')
                     else:
-                        print('get_printable_string: Logical error - type_of_representation=',type_of_representation)
+                        print 'get_printable_string: Logical error - type_of_representation=',type_of_representation
                         sys.exit()
                 else:
-                    if developer_mode and representation_set: print('Entity::Complete-other::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                    if developer_mode and representation_set: print 'Entity::Complete-other::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                     if not output_list_method:
                         output_string=output_string + char_collection + ';'
                     else:
@@ -2976,8 +2976,8 @@ def get_html_to_unicode_string(input_string):
                 type_of_representation=''
                 continue
             elif representation_set:
-                if developer_mode: print(print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t'  + 'representation_set is True')
-                if developer_mode and representation_set: print('Entity::char rep starts for ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation)
+                if developer_mode: print print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t'  + 'representation_set is True'
+                if developer_mode and representation_set: print 'Entity::char rep starts for ',each_char,'::','\tchar_collection=',char_collection,'\tcharacter_representation=',character_representation,'\ttype_of_representation=',type_of_representation
                 if (type_of_representation == 'hex' and char_collection == '&#x') or (type_of_representation == 'dec' and char_collection == '&#') or (type_of_representation == 'entity' and char_collection == '&'):
                     if (is_number(each_char) or each_char == '0') and type_of_representation in ('hex','dec'):
                         character_representation = character_representation + each_char
@@ -2994,13 +2994,13 @@ def get_html_to_unicode_string(input_string):
                 character_representation=''
                 type_of_representation=''
                 continue
-        if developer_mode: print(print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'After replace_html_entities block')
+        if developer_mode: print print_prefix + '\t' + str(iter_i) + '\t:\t' + str(get_timestamp_for_file(True)) + '\t' + 'After replace_html_entities block'
         if not output_list_method:
             output_string=output_string + each_char
         else:
             output_list.append(each_char)
     if output_list_method:
-        output_string=''.join(output_list)
+        output_string=u''.join(output_list)
     return output_string
 def check_all_combination_abbreviation(input_full_form,input_abbreviation,check_half_name_match,developer_mode=False,check_stopwords_removal_too=True):
     if check_stopwords_removal_too:
@@ -3022,16 +3022,16 @@ def check_all_combination_abbreviation(input_full_form,input_abbreviation,check_
     name_abbreviation=input_abbreviation.strip().lower()
     name_abbreviation=re.sub(r'[^a-z0-9]+','',name_abbreviation)
     abbreviation_length=len(name_abbreviation)
-    if developer_mode: print(print_prefix + 'Input:' + input_full_form + '\tAbbr:' + input_abbreviation)
+    if developer_mode: print print_prefix + 'Input:' + input_full_form + '\tAbbr:' + input_abbreviation
     if abbreviation_length <= 1 or len(name_full_form)<=1:
-        if developer_mode: print(print_prefix + 'Abbreviation/Input Legnth is less than 1')
+        if developer_mode: print print_prefix + 'Abbreviation/Input Legnth is less than 1'
         return False
     if ' ' not in name_full_form:
         if input_full_form == input_abbreviation:
-            if developer_mode: print(print_prefix + 'Single word input exactly matches with abbreviation')
+            if developer_mode: print print_prefix + 'Single word input exactly matches with abbreviation'
             return True
         else:
-            if developer_mode: print(print_prefix + 'Single word input does not match with abbreviation')
+            if developer_mode: print print_prefix + 'Single word input does not match with abbreviation'
             return False
     current_abbreviation_index=0
     looping_count=0
@@ -3042,37 +3042,37 @@ def check_all_combination_abbreviation(input_full_form,input_abbreviation,check_
         looping_count += 1
         current_input_word=name_full_form_words[current_input_index]
         current_remaining_abbreviation_part=name_abbreviation[current_abbreviation_index:]
-        if developer_mode: print(print_prefix + 'Abbrevation remaining:' + current_remaining_abbreviation_part + '(' + str(len(current_remaining_abbreviation_part)) + ')\tCurrent Input word:' + current_input_word)
+        if developer_mode: print print_prefix + 'Abbrevation remaining:' + current_remaining_abbreviation_part + '(' + str(len(current_remaining_abbreviation_part)) + ')\tCurrent Input word:' + current_input_word
         if current_remaining_abbreviation_part.startswith(current_input_word):
             current_abbreviation_index += len(current_input_word)
             current_input_index += 1
-            if developer_mode: print(print_prefix + 'current word of input(' + current_input_word + ') is a part of abbrevation. Advance to next character.')
+            if developer_mode: print print_prefix + 'current word of input(' + current_input_word + ') is a part of abbrevation. Advance to next character.'
         elif current_input_word[0] == current_remaining_abbreviation_part[0]:
-            if developer_mode: print(print_prefix + 'Current character of abbrevation(' + current_input_word[0] + ') is matching with first char of input(' + current_input_word + '). Advance to next character.')
+            if developer_mode: print print_prefix + 'Current character of abbrevation(' + current_input_word[0] + ') is matching with first char of input(' + current_input_word + '). Advance to next character.'
             current_abbreviation_index += 1
             current_input_index += 1
         else:
-            if developer_mode: print(print_prefix + 'Abbreviation does not match when processing word:' + current_input_word)
+            if developer_mode: print print_prefix + 'Abbreviation does not match when processing word:' + current_input_word
             return False
         if current_abbreviation_index >= abbreviation_length:
             #Matches fully 
             if current_input_index >= name_full_form_words_length:
-                if developer_mode: print(print_prefix + 'All strings are consumed and matches with abbreviation')
+                if developer_mode: print print_prefix + 'All strings are consumed and matches with abbreviation'
                 return True
             else:
                 if check_half_name_match:
-                    if developer_mode: print(print_prefix + 'The part of input (first few words) are matching with abbreviation')
+                    if developer_mode: print print_prefix + 'The part of input (first few words) are matching with abbreviation'
                     return True
                 else:
-                    if developer_mode: print(print_prefix + 'Abbrevation is a part of input string and still a part of input string is unmatched')
+                    if developer_mode: print print_prefix + 'Abbrevation is a part of input string and still a part of input string is unmatched'
                     return False
         if current_input_index >= name_full_form_words_length:
             #The function is at the deciding state
             if current_abbreviation_index >= name_full_form_words_length: #
-                if developer_mode: print(print_prefix + 'All strings are consumed and matches with abbreviation')
+                if developer_mode: print print_prefix + 'All strings are consumed and matches with abbreviation'
                 return True
             else:
-                if developer_mode: print(print_prefix + 'All strings are consumed and but abbrevation is not matching completely')
+                if developer_mode: print print_prefix + 'All strings are consumed and but abbrevation is not matching completely'
                 return False
     return False
 def string_fits_one_in_another(string_1,string_2,perfect_fit=True):#unicode handling is pending
@@ -3089,7 +3089,7 @@ def string_fits_one_in_another(string_1,string_2,perfect_fit=True):#unicode hand
     for each_word in string_1_formatted.split():
         string_2_formatted = ' ' + string_2_formatted.strip() + ' '
         if developer_mode:
-            print('String 1: current word:' + repr(each_word))
+            print 'String 1: current word:' + repr(each_word)
         compare_word=each_word
         if len(each_word) <= 2 or perfect_fit:#logical failure when als in minerals
             compare_word = ' ' + compare_word + ' '
@@ -3107,7 +3107,7 @@ def string_fits_one_in_another(string_1,string_2,perfect_fit=True):#unicode hand
     for each_word in string_2_formatted.split():
         string_1_formatted = ' ' + string_1_formatted.strip() + ' '
         if developer_mode:
-            print('String 2: current word:' + repr(each_word))
+            print 'String 2: current word:' + repr(each_word)
         compare_word=each_word
         if len(each_word) <= 2 or perfect_fit:#logical failure when als in minerals
             compare_word = ' ' + compare_word + ' '
@@ -3126,50 +3126,50 @@ def make_company_name_comparable(input_company_name):
     'l.p':'lp'
     ,'p.l.c':'plc'
     }
-    company_abbr_standardize={'co':'company'
-        ,'company':'company'
-        ,'ltd':'limited'
-        ,'limited':'limited'
-        ,'pvt':'private'
-        ,'private':'private'
-        ,'pte':'private'
-        ,'inc':'incorporated'
-        ,'incorporated':'incorporated'
-        ,'corp':'corporation'
-        ,'corporation':'corporation'
-        ,'tech':'technology'
-        ,'technology':'technology'
-        ,'international':'international'
-        ,'intl':'international'
-        ,'sys':'system'
-        ,'system':'system'
-        ,'pty':'proprietary'
-        ,'proprietary':'proprietary'
+    company_abbr_standardize={u'co':u'company'
+        ,u'company':u'company'
+        ,u'ltd':u'limited'
+        ,u'limited':u'limited'
+        ,u'pvt':u'private'
+        ,u'private':u'private'
+        ,u'pte':u'private'
+        ,u'inc':u'incorporated'
+        ,u'incorporated':u'incorporated'
+        ,u'corp':u'corporation'
+        ,u'corporation':u'corporation'
+        ,u'tech':u'technology'
+        ,u'technology':u'technology'
+        ,u'international':u'international'
+        ,u'intl':u'international'
+        ,u'sys':u'system'
+        ,u'system':u'system'
+        ,u'pty':u'proprietary'
+        ,u'proprietary':u'proprietary'
         }
     input_modified=get_html_to_unicode_string(input_company_name.lower())
     input_modified=get_html_to_unicode_string(input_modified)#do we need this?
-    if '.' in input_modified:
+    if u'.' in input_modified:
         intermediate_string=''
         for each_word in input_modified.split():
             if each_word.strip(',.') in company_abbr_dot:
-                intermediate_string=intermediate_string + ' ' + company_abbr_dot[each_word.strip(',.')]
+                intermediate_string=intermediate_string + u' ' + company_abbr_dot[each_word.strip(',.')]
             else:
-                intermediate_string=intermediate_string + ' ' + each_word
+                intermediate_string=intermediate_string + u' ' + each_word
         input_modified=intermediate_string
     input_string_len=len(input_modified)
     
-    output_string=''
-    current_word=''
+    output_string=u''
+    current_word=u''
     for iter_i in range(input_string_len):
         each_char=input_modified[iter_i]
         char_code=ord(each_char)
-        temp_char=''
+        temp_char=u''
         break_happens=False
         if developer_mode:
-            print(str(iter_i) + '.Before:Char:' + get_printable_string(each_char) + '(' +str(char_code) + ')\tC-Word:' + get_printable_string(current_word) + '\tC-Output:' + get_printable_string(output_string))
+            print str(iter_i) + '.Before:Char:' + get_printable_string(each_char) + '(' +str(char_code) + ')\tC-Word:' + get_printable_string(current_word) + '\tC-Output:' + get_printable_string(output_string)
         if char_code>126:
             if developer_mode:
-                print(str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Unicode')
+                print str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Unicode'
             temp_char=each_char
             break_happens=True
         elif each_char.isdigit():
@@ -3178,28 +3178,28 @@ def make_company_name_comparable(input_company_name):
             current_word=current_word + each_char
         else:
             if developer_mode:
-                print(str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Non-Unicode')
-            temp_char=' '
+                print str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Non-Unicode'
+            temp_char=u' '
             break_happens=True
         if break_happens or (iter_i+1) == input_string_len:
             if developer_mode:
-                print(str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Code')
+                print str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Code'
             if len(current_word.strip())>0:
                 if current_word.strip() in company_abbr_standardize:
-                    output_string = output_string + ' ' + company_abbr_standardize[current_word.strip()]
+                    output_string = output_string + u' ' + company_abbr_standardize[current_word.strip()]
                 else:
                     output_string = output_string + current_word
                 current_word=temp_char
             else:
                 if developer_mode:
-                    print(str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Code : Current word is empty')
+                    print str(iter_i) + ':Char:' + get_printable_string(each_char) + '(' +str(char_code) + '): Break point - Code : Current word is empty'
                 current_word=temp_char
-                output_string=output_string + ' '
+                output_string=output_string + u' '
         if (iter_i+1) == input_string_len:
             output_string=output_string + temp_char
             break
         if developer_mode:
-            print(str(iter_i) + '.After:Char:' + get_printable_string(each_char) + '(' +str(char_code) + ')\tC-Word:' + get_printable_string(current_word) + '\tC-Output:' + get_printable_string(output_string))
+            print str(iter_i) + '.After:Char:' + get_printable_string(each_char) + '(' +str(char_code) + ')\tC-Word:' + get_printable_string(current_word) + '\tC-Output:' + get_printable_string(output_string)
     return output_string
 def get_absolute_path(parent_url,child_url):
     #self.current_function_name='get_absolute_path'
@@ -3213,7 +3213,7 @@ def get_absolute_path(parent_url,child_url):
     try:
         return urljoin(parent_url,child_url)
     except ValueError as e:#To escape IPv4 Value error. Ex: url= http://www.balfourbeattyinvestments.com/cookies.aspx . href: http://www.balfourbeatty.com[insert 
-        print('get_absolute_path: Exception for P=' + parent_url + '. c=' + child_url + '. Error:' + str(e))
+        print 'get_absolute_path: Exception for P=' + parent_url + '. c=' + child_url + '. Error:' + str(e)
         return ''
 def guess_name_for_domain(input_statement,domain_name,developer_mode=False,check_stopwords_removal_too=True):
     if check_stopwords_removal_too:
@@ -3240,19 +3240,19 @@ def guess_name_for_domain(input_statement,domain_name,developer_mode=False,check
     domain_name_modified=domain_name.strip().lower()
     domain_name_modified=re.sub(r'[^a-z0-9]+','',domain_name_modified)
     domain_name_length=len(domain_name_modified)
-    if developer_mode: print(print_prefix + 'Input:' + name_full_form + '\t Domain Name:' + domain_name_modified)
+    if developer_mode: print print_prefix + 'Input:' + name_full_form + '\t Domain Name:' + domain_name_modified
     if domain_name_length <= 1 or len(name_full_form)<=1:
-        if developer_mode: print(print_prefix + 'Domain Name/Input Legnth is less than 1')
+        if developer_mode: print print_prefix + 'Domain Name/Input Legnth is less than 1'
         return False
     if ' ' not in name_full_form:
         if name_full_form.lower() == domain_name_modified:
-            if developer_mode: print(print_prefix + 'Single word input exactly matches with Domain Name')
+            if developer_mode: print print_prefix + 'Single word input exactly matches with Domain Name'
             return name_full_form
         elif name_full_form.lower() in domain_name_modified:
-            if developer_mode: print(print_prefix + 'Single word input is part of Domain Name')
+            if developer_mode: print print_prefix + 'Single word input is part of Domain Name'
             return name_full_form
         else:
-            if developer_mode: print(print_prefix + 'Single word input does not match with Domain Name')
+            if developer_mode: print print_prefix + 'Single word input does not match with Domain Name'
             return ''
     #return ''
     current_domain_index=0
@@ -3266,19 +3266,19 @@ def guess_name_for_domain(input_statement,domain_name,developer_mode=False,check
         current_input_word=name_full_form_words[current_input_index]
         current_input_word_lower=current_input_word.lower()
         current_remaining_domain_name_part=domain_name_modified[current_domain_index:]
-        if developer_mode: print(print_prefix + 'Domain Name remaining:' + current_remaining_domain_name_part + '(' + str(len(current_remaining_domain_name_part)) + ')\tCurrent Input word:' + current_input_word)
+        if developer_mode: print print_prefix + 'Domain Name remaining:' + current_remaining_domain_name_part + '(' + str(len(current_remaining_domain_name_part)) + ')\tCurrent Input word:' + current_input_word
         if current_remaining_domain_name_part.startswith(current_input_word_lower):
             matching_string = matching_string + ' ' + current_input_word
             current_domain_index += len(current_input_word)
             current_input_index += 1
-            if developer_mode: print(print_prefix + 'current word of input(' + current_input_word + ') is a part of abbrevation. Advance to next character.')
+            if developer_mode: print print_prefix + 'current word of input(' + current_input_word + ') is a part of abbrevation. Advance to next character.'
         elif current_input_word_lower[0] == current_remaining_domain_name_part[0]:
             matching_string = matching_string + ' ' + current_input_word
-            if developer_mode: print(print_prefix + 'Current character of abbrevation(' + current_input_word[0] + ') is matching with first char of input(' + current_input_word + '). Advance to next character.')
+            if developer_mode: print print_prefix + 'Current character of abbrevation(' + current_input_word[0] + ') is matching with first char of input(' + current_input_word + '). Advance to next character.'
             current_domain_index += 1
             current_input_index += 1
         else:
-            if developer_mode: print(print_prefix + 'Abbreviation does not match when processing word:' + current_input_word)
+            if developer_mode: print print_prefix + 'Abbreviation does not match when processing word:' + current_input_word
             return matching_string
         if current_domain_index >= domain_name_length:
             #Matches fully 
@@ -3289,18 +3289,18 @@ def guess_name_for_domain(input_statement,domain_name,developer_mode=False,check
     return matching_string
 if __name__ == '__main__':
     if True:
-        keyword_list=['forespørsler']
-        statement_is='Tradisjonelt har fasader i Norge, Sverige og Dan‘ ’ ‚ ‛ “ ” „ ‟ † ‡ • ‣ ․ ‥ …mark handlet om behandling av granpanel eller furukledning. Men de siste 3-5 årene har vi fått stadig flere forespørsler om andre treslag til fasade.'
-        print(repr(has_list_word_in_statement(statement_is,keyword_list,handle_unicode=True)))
+        keyword_list=[u'forespørsler']
+        statement_is=u'Tradisjonelt har fasader i Norge, Sverige og Dan‘ ’ ‚ ‛ “ ” „ ‟ † ‡ • ‣ ․ ‥ …mark handlet om behandling av granpanel eller furukledning. Men de siste 3-5 årene har vi fått stadig flere forespørsler om andre treslag til fasade.'
+        print repr(has_list_word_in_statement(statement_is,keyword_list,handle_unicode=True))
         exit()
     elif not True:
-        company_name_list=['Dürr Systems Inc']
+        company_name_list=[u'Dürr Systems Inc']
         for each_company in company_name_list:
             news_must_match=get_news_must_match(each_company,developer_mode=True)
-            print(get_printable_string(company_name_list),'news_must_match:',news_must_match,type(news_must_match))
+            print get_printable_string(company_name_list),'news_must_match:',news_must_match,type(news_must_match)
         exit()
     elif not True:
-        print(has_list_word_in_statement('oil & gas exploration df natural gas & pipelines LynWoodward, Founder of the Activate Your Mind Program Lyn had been involved in the Health and Fitness Industry',['oil   gas']))
+        print has_list_word_in_statement('oil & gas exploration df natural gas & pipelines LynWoodward, Founder of the Activate Your Mind Program Lyn had been involved in the Health and Fitness Industry',['oil   gas'])
     elif not True:
         list_of_string_pair=[
             ('ATI Technologies','Empower Technologies Corporation'),
@@ -3327,22 +3327,22 @@ if __name__ == '__main__':
             ('Alcidion Corp Pty Ltd','Alcidion Group Limited')
         ]
         for each_string_pair in list_of_string_pair:
-            print('String 1:\t' + get_printable_string(each_string_pair[0]) + '\tString 2:\t' + get_printable_string(each_string_pair[1]) + '\tResult:\t' + str(string_fits_one_in_another(each_string_pair[0],each_string_pair[1])) + '\tStandard Result:\t' + str(string_fits_one_in_another(make_company_name_comparable(each_string_pair[0]),make_company_name_comparable(each_string_pair[1]))) + '\tStr1 Standardized:\t' + get_printable_string(make_company_name_comparable(each_string_pair[0])) + '\tStr2 Standardized:\t' + get_printable_string(make_company_name_comparable(each_string_pair[1])))
+            print 'String 1:\t' + get_printable_string(each_string_pair[0]) + '\tString 2:\t' + get_printable_string(each_string_pair[1]) + '\tResult:\t' + str(string_fits_one_in_another(each_string_pair[0],each_string_pair[1])) + '\tStandard Result:\t' + str(string_fits_one_in_another(make_company_name_comparable(each_string_pair[0]),make_company_name_comparable(each_string_pair[1]))) + '\tStr1 Standardized:\t' + get_printable_string(make_company_name_comparable(each_string_pair[0])) + '\tStr2 Standardized:\t' + get_printable_string(make_company_name_comparable(each_string_pair[1]))
             break
         custom_exit()
     elif not True:
-        print(get_all_files(directory_is=os.getcwd(),pattern='*.process'))
+        print get_all_files(directory_is=os.getcwd(),pattern='*.process')
         exit()
     elif not True:
         #print move_processed_file(file_name='core_stage_post_feed.log',target_directory='psql_processed',rename_with_timestamp=True,create_sub_directory=True)
         #print move_processed_file(file_name='core_stage_post_feed.psql',target_directory='psql_processed',rename_with_timestamp=True,create_sub_directory=True)
-        print(move_processed_file(file_name='*.txt',target_directory='D:\\_data\\logs',rename_with_timestamp=False,create_sub_directory=True))
+        print move_processed_file(file_name='*.txt',target_directory='D:\\_data\\logs',rename_with_timestamp=False,create_sub_directory=True)
         exit()
     elif not True:
         input_string='&#8220;some language display  &#x5A;&#x5a&#9986; &#90; space is "&#032;" "Hypher minus=&#045;".\nSingle quote="" &lt;'
         #input_string='some &#x5A;&#x5a;&#90; &lt; &venr;'
-        print("input_string=",repr(input_string))
-        print("Output=",get_printable_string(input_string,unicode_to_entitiy_flag=False,replace_html_entities=True,replace_lt_gt_symbol=True))
+        print "input_string=",repr(input_string)
+        print "Output=",get_printable_string(input_string,unicode_to_entitiy_flag=False,replace_html_entities=True,replace_lt_gt_symbol=True)
         exit()
     elif not True:
         news_link_like_keywords=['news','press','releases','blog','media']
@@ -3354,7 +3354,7 @@ if __name__ == '__main__':
                     ,'http://www.assurant.com/en/Room/All/2015/10/13/Assurant-2015-Property-Catastrophe-Reinsurance-Program'
                     ]
         for each_statement in statement_list:
-            print(each_statement,'\t=\t',is_a_press_release_link(each_statement),'\t',has_list_string_in_statement(each_statement,news_link_like_keywords),'\t',get_smell_like_date_from_url(each_statement))
+            print each_statement,'\t=\t',is_a_press_release_link(each_statement),'\t',has_list_string_in_statement(each_statement,news_link_like_keywords),'\t',get_smell_like_date_from_url(each_statement)
         exit()
     if True:
         statement_is=['business---financial-press | Sep 4, 2015','07 August 2015','05/01/2015','07/23/2015','25/6/2015','25/23/2015'
@@ -3375,7 +3375,7 @@ if __name__ == '__main__':
                 ,'July 03, 2015'
                 ]
         for each_statement in statement_is[-1:]:
-            print('is smell like date: ',each_statement,'=',get_smell_like_date_from_text(each_statement,maximum_year=2200,developer_mode=True))
+            print 'is smell like date: ',each_statement,'=',get_smell_like_date_from_text(each_statement,maximum_year=2200,developer_mode=True)
             #print 'get_statement_for_word_count: ',each_statement,'=',get_statement_for_word_count(each_statement)
             #exit()
         for each_statement in statement_is:
@@ -3384,11 +3384,11 @@ if __name__ == '__main__':
     elif not True:
         statement_is=['07 August 2015','05/01/2015','07/23/2015','25/6/2015','25/23/2015']
         for each_statement in statement_is:
-            print('is_date of ',each_statement,'=',is_date(each_statement))
+            print 'is_date of ',each_statement,'=',is_date(each_statement)
         exit()
     elif not True:
-        print(get_file_as_list('Testing_semaphore.auto.process'))
-        print(get_file_as_list('Testing_semaphore.auto.process',skip_empty_lines=False))
+        print get_file_as_list('Testing_semaphore.auto.process')
+        print get_file_as_list('Testing_semaphore.auto.process',skip_empty_lines=False)
         exit()
     elif not True:
         companies=[
@@ -3406,7 +3406,7 @@ if __name__ == '__main__':
             'Macy\'s, Inc.'
             ]
         for each_company in companies:
-            print(each_company,'\t\t',standardize_company_name_for_normalizer(each_company))
+            print each_company,'\t\t',standardize_company_name_for_normalizer(each_company)
         exit()
     elif not True:
         statement_is=''
@@ -3420,211 +3420,211 @@ if __name__ == '__main__':
         exit()
     elif not True:
         statement_is='Mid-Day Changers: PHI Inc. (PHIIK), GoPro, Inc. (GPRO), Titan International Inc ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='STMicroelectronics NV Upgraded by Banca Akros to Accumulate (STM) - Dakota Financial News'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Shares of General Mills, Inc. (NYSE:GIS) Sees Large Inflow of Net Money Flow - Money Flow Index'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Ecolab Schedules Webcast of Industry Conference for May 19 - Finances.com'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Consumer Goods Sector Movers: Ecolab Inc. (ECL), Dr Pepper Snapple Group ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Can General Mills, Inc. (NYSE:GIS) Surprise Analysts? - Investor Newswire'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Consumer Goods Sector Movers: Ecolab Inc. (ECL), Sanderson Farms, Inc ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='News Buzz - Applied Micro Circuits (AMCC), Ecolab (ECL), Net Ease (NTES ... - Techsonian (press release)'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Morning Stock Trends: J. C. Penney Company, Inc. (JCP), Adobe Systems ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Can Estee Lauder (EL) Continue its Business Momentum? - Zacks.com'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Monday Pre-Market Info: Park-Ohio Holdings Corp. (PKOH), Michael Kors ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='STMicroelectronics NV Stock Rating Upgraded by Banca Akros (STM) - The Legacy'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Stock Watchlist: Tempur Sealy International, Inc. (NYSE:TPX) - The Markets Daily'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='New Report From Adobe Systems Incorporated (NASDAQ:ADBE) Reveals Apple ... - WallStreetPR (blog)'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='Today`s Morning Insights: Everest Re Group Ltd. (RE), HSN, Inc. (HSNI), Energy ... - WallStreet Scope'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         statement_is='John B. Morse, Jr. Sells 10000 Shares of HSN Stock (HSNI) - WKRB News'
-        print(statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n')
+        print statement_is,'\nIs Analyst:',is_analyst_post(statement_is),'\nStatement with no bracker:',get_statement_without_bracket(statement_is),'\nRemove generic words:',remove_list_word_in_statement(statement_is,COMP_EXTENSIONS + stopwords_generic),'\n','Stemming:',stem_the_statement(statement_is),'\n','data_feed_identifier:',data_feed_identifier_extraction(statement_is),'\n'
         exit()
     elif not True:
         statement_is='Accuride Corp. (ACW) is Trading Lower on Unusual Volume for June 15 - Reuters - Reuters -  Thomson Reuters UK '
-        print(statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':['agust'],'june':['uk']}))
+        print statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':['agust'],'june':['uk']})
         statement_is='Accuride Corp. (ACW) is Trading Lower on Unusual Volume for June 15 - Reuters - Reuters -  Thomson Reuters UK '
-        print(statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'june':['uk']}))
+        print statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'june':['uk']})
         statement_is='Accuride Corp. (ACW) is Trading Lower on Unusual Volume for June 15 - Reuters - Reuters -  Thomson Reuters UK '
-        print(statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':['agust']}))
+        print statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':['agust']})
         statement_is='Accuride Corp. (ACW) is Trading Lower on Unusual Volume for June 15 - Reuters - Reuters -  Thomson Reuters UK '
-        print(statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':[('lower','june'),'thomson'],'june':[('lower','uk')]}))
+        print statement_is,':',has_dict_pattern_in_statement(statement_is,{'search_keyword':['trading','june'],'trading':[('lower','june'),'thomson'],'june':[('lower','uk')]})
         exit()
     elif not True:
         statement_is='Slow it - Reuters - Firstpost (press release)'
-        print(statement_is,'=',data_detail_extraction(statement_is))
+        print statement_is,'=',data_detail_extraction(statement_is)
         statement_is='Nike seen avoiding charges in football bribery probe lawyers - Reuters - Firstpost (press release)'
-        print(statement_is,'=',data_detail_extraction(statement_is))
+        print statement_is,'=',data_detail_extraction(statement_is)
         statement_is='Mid-Day Changers: PHI Inc. (PHIIK), GoPro, Inc. (GPRO), Titan International Inc ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='STMicroelectronics NV Upgraded by Banca Akros to Accumulate (STM) - Dakota Financial News'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Shares of General Mills, Inc. (NYSE:GIS) Sees Large Inflow of Net Money Flow - Money Flow Index'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Ecolab Schedules Webcast of Industry Conference for May 19 - Finances.com'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Consumer Goods Sector Movers: Ecolab Inc. (ECL), Dr Pepper Snapple Group ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Can General Mills, Inc. (NYSE:GIS) Surprise Analysts? - Investor Newswire'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Consumer Goods Sector Movers: Ecolab Inc. (ECL), Sanderson Farms, Inc ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='News Buzz - Applied Micro Circuits (AMCC), Ecolab (ECL), Net Ease (NTES ... - Techsonian (press release)'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Morning Stock Trends: J. C. Penney Company, Inc. (JCP), Adobe Systems ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Can Estee Lauder (EL) Continue its Business Momentum? - Zacks.com'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Monday Pre-Market Info: Park-Ohio Holdings Corp. (PKOH), Michael Kors ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='STMicroelectronics NV Stock Rating Upgraded by Banca Akros (STM) - The Legacy'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Stock Watchlist: Tempur Sealy International, Inc. (NYSE:TPX) - The Markets Daily'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='New Report From Adobe Systems Incorporated (NASDAQ:ADBE) Reveals Apple ... - WallStreetPR (blog)'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='Today`s Morning Insights: Everest Re Group Ltd. (RE), HSN, Inc. (HSNI), Energy ... - WallStreet Scope'
-        print(statement_is,':',data_detail_extraction(statement_is))
+        print statement_is,':',data_detail_extraction(statement_is)
         statement_is='John B. Morse, Jr. Sells 10000 Shares of HSN Stock (HSNI) - WKRB News'
-        print(statement_is,':',data_detail_extraction(statement_is))
-        print("****************")
-        print(statement_is1,'=',data_feed_identifier_extraction(data_detail_extraction(statement_is)))
+        print statement_is,':',data_detail_extraction(statement_is)
+        print "****************"
+        print statement_is1,'=',data_feed_identifier_extraction(data_detail_extraction(statement_is))
         #print statement_is,'=',has_list_word_in_statement_case_sensitive(statement_is,['equities.com'])
         exit()
     elif not True:
         statement_is=r'This is http://t.co/wrxeyhduis'
-        print(statement_is,' Remove URL:',re.sub(REGEX_URL_PATTERN,'',statement_is))
+        print statement_is,' Remove URL:',re.sub(REGEX_URL_PATTERN,'',statement_is)
         exit()
     elif not True:
-        print('move_processed_file psql_processed:',move_processed_file('core_stage_topics_trending.psql','psql_processed'))
-        print('rename_file_to_time_stamp_prefix:',rename_file_to_time_stamp_prefix(os.path.join(os.getcwd(),os.path.join('psql_processed','core_stage_topics_trending.psql'))))
+        print 'move_processed_file psql_processed:',move_processed_file('core_stage_topics_trending.psql','psql_processed')
+        print 'rename_file_to_time_stamp_prefix:',rename_file_to_time_stamp_prefix(os.path.join(os.getcwd(),os.path.join('psql_processed','core_stage_topics_trending.psql')))
         exit()
     elif not True:
-        print('Create directory: psql_processed:',create_directory('psql_processed'))
+        print 'Create directory: psql_processed:',create_directory('psql_processed')
         exit()
     elif not True:
         statement_is='26 FAQs people freds ask about issuing fred\'s and transferring private company shares.'
         pattern_is='people transferring'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         pattern_is='people (transferring)'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         pattern_is='people (about,company) and'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         pattern_is='people (company,about) and'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         pattern_is='people (company,about) ask'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         pattern_is='(fred,fred\'s) (company,about) (share,shares)'
-        print(statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is))
+        print statement_is,'\t',pattern_is,'\t',statement_has_string_sequential(statement_is,pattern_is)
         exit()
     elif not True:
-        print('(FAQs,public)','26   FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26   FAQs people ask about issuing and transferring private company shares.','(FAQs,public)'))
-        print('\n\n\n\n','(public,FAQs)','26   FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26   FAQs people ask about issuing and transferring private company shares.','(public,FAQs)'))
-        print('\n\n\n\n','(FAQspublic)','26  FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26 FAQs people ask about issuing and transferring private company shares.','(FAQspublic)'))
-        print('\n\n\n\n','(ask,about,issuing,and,transferring,private,company,shares,26)','aa 26 FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple(' 26 FAQs people ask about issuing and transferring private company shares.','(ask,about,issuing,and,transferring,private,company,shares,26)'))
+        print '(FAQs,public)','26   FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26   FAQs people ask about issuing and transferring private company shares.','(FAQs,public)')
+        print '\n\n\n\n','(public,FAQs)','26   FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26   FAQs people ask about issuing and transferring private company shares.','(public,FAQs)')
+        print '\n\n\n\n','(FAQspublic)','26  FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple('26 FAQs people ask about issuing and transferring private company shares.','(FAQspublic)')
+        print '\n\n\n\n','(ask,about,issuing,and,transferring,private,company,shares,26)','aa 26 FAQs people ask about issuing and transferring private company shares.',get_index_of_special_tuple(' 26 FAQs people ask about issuing and transferring private company shares.','(ask,about,issuing,and,transferring,private,company,shares,26)')
         exit()
     elif not True:
-        print('26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['FAQs','public']))
-        print('26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','public')]))
-        print('26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')]))
-        print('26 FAQs fred\'s people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')]))
-        print('26 FAQs people ask about freds issuing and fred\'s transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')]))
+        print '26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['FAQs','public'])
+        print '26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','public')])
+        print '26 FAQs people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')])
+        print '26 FAQs fred\'s people ask about issuing and transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')])
+        print '26 FAQs people ask about freds issuing and fred\'s transferring private company shares.',has_list_word_in_statement_tuple('26 FAQs people ask about issuing and transferring private company shares.',['public',('FAQs','private')])
         exit()
     elif not True:
-        print('Get File Size of ' + r'D:\Projects\o9\Newsss' + ':',get_file_size(r'D:\Projects\o9\Newsss\ArticleHandling.py'))
-        print('Get File Size of ' + r'D:\Projects\o9\Newss' + ':',get_file_size(r'D:\Projects\o9\Newss\ArticleHandling.py'))
+        print 'Get File Size of ' + r'D:\Projects\o9\Newsss' + ':',get_file_size(r'D:\Projects\o9\Newsss\ArticleHandling.py')
+        print 'Get File Size of ' + r'D:\Projects\o9\Newss' + ':',get_file_size(r'D:\Projects\o9\Newss\ArticleHandling.py')
         time.sleep(10)
         exit()
     elif not True:
-        print(['operating','system'],has_all_list_word_in_statement('Operating System is a subject',['operating','system']))
-        print(['operating','system','5th'],has_all_list_word_in_statement('Operating System is a subject',['operating','system','5th']))
-        print(('operating','system'),has_all_list_word_in_statement('Operating is a subject',('operating','system')))
-        print(('operating','system','5th'),has_all_list_word_in_statement('Operating System is a 5th subject',('operating','system','5th')))
+        print ['operating','system'],has_all_list_word_in_statement('Operating System is a subject',['operating','system'])
+        print ['operating','system','5th'],has_all_list_word_in_statement('Operating System is a subject',['operating','system','5th'])
+        print ('operating','system'),has_all_list_word_in_statement('Operating is a subject',('operating','system'))
+        print ('operating','system','5th'),has_all_list_word_in_statement('Operating System is a 5th subject',('operating','system','5th'))
         exit()
     elif not True:
-        print(['list'],UpperCamelCase(['list']))
-        print('prabu',UpperCamelCase('prabu'))
-        print('PraBu',UpperCamelCase('PraBu'))
-        print('PraBu  ',UpperCamelCase('Prabu  '))
-        print('  Prabu  ',UpperCamelCase('  Prabu  '))
-        print('l',UpperCamelCase('l'))
-        print('la',UpperCamelCase('la'))
+        print ['list'],UpperCamelCase(['list'])
+        print 'prabu',UpperCamelCase('prabu')
+        print 'PraBu',UpperCamelCase('PraBu')
+        print 'PraBu  ',UpperCamelCase('Prabu  ')
+        print '  Prabu  ',UpperCamelCase('  Prabu  ')
+        print 'l',UpperCamelCase('l')
+        print 'la',UpperCamelCase('la')
         exit()
     elif not True:
-        print(compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabus'}))
-        print(compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabus','prabu':'prabu','check':'check'}))
-        print(compare_two_objects({'prabu':'prabu','maay':'maay'},{}))
-        print(compare_two_objects({},{'prabu':'prabu','maay':'maay'}))
-        print(compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabu','maay':'maay'}))
-        print(compare_two_objects(['prabu','maay'],['prabu']))
-        print(compare_two_objects(['prabu','maay'],['prabu','maay','check']))
-        print(compare_two_objects([],['prabu','maay','check']))
-        print(compare_two_objects(['prabu','maay'],[]))
-        print(compare_two_objects(['prabu','maay'],['prabu','maay']))
+        print compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabus'})
+        print compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabus','prabu':'prabu','check':'check'})
+        print compare_two_objects({'prabu':'prabu','maay':'maay'},{})
+        print compare_two_objects({},{'prabu':'prabu','maay':'maay'})
+        print compare_two_objects({'prabu':'prabu','maay':'maay'},{'prabu':'prabu','maay':'maay'})
+        print compare_two_objects(['prabu','maay'],['prabu'])
+        print compare_two_objects(['prabu','maay'],['prabu','maay','check'])
+        print compare_two_objects([],['prabu','maay','check'])
+        print compare_two_objects(['prabu','maay'],[])
+        print compare_two_objects(['prabu','maay'],['prabu','maay'])
         exit()
     elif not True:
-        print('3M Co. (MMM) Falls 2.52% for April 17 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Falls 2.52% for April 17 - Equities.com','MMM','3m company'))
-        print('SOFTlab, 3M & BBDO collaborate to create lifelab at SXSW - Designboom' , select_company_name_ticker_based('3M Company','SOFTlab, 3M & BBDO collaborate to create lifelab at SXSW - Designboom','MMM','3m company'))
-        print('3M Co. (MMM) Among Biggest DJIA Losers on April 23 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Among Biggest DJIA Losers on April 23 - Equities.com','MMM','3m company'))
-        print('3M Co. (MMM) Closes 0.42% Down on the Day for April 24 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.42% Down on the Day for April 24 - Equities.com','MMM','3m company'))
-        print('Interesting October Stock Options for 3M - Nasdaq' , select_company_name_ticker_based('3M Company','Interesting October Stock Options for 3M - Nasdaq','MMM','3m company'))
-        print('Earnings: AT&T, Pfizer, Procter & Gamble, DuPont, Caterpillar, 3M, and Apple - Richmond.com' , select_company_name_ticker_based('3M Company','Earnings: AT&T, Pfizer, Procter & Gamble, DuPont, Caterpillar, 3M, and Apple - Richmond.com','MMM','3m company'))
-        print('3M Co. (MMM) Closes 0.64% Down on the Day for April 27 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.64% Down on the Day for April 27 - Equities.com','MMM','3m company'))
-        print('Block Trading and Options Highlights for 3M Company (MMM) - AVAFIN' , select_company_name_ticker_based('3M Company','Block Trading and Options Highlights for 3M Company (MMM) - AVAFIN','MMM','3m company'))
-        print('3M Co Beats Earnings Estimates; Misses on Revenue; Updates FY2014 Outlook ... - Dividend.com' , select_company_name_ticker_based('3M Company','3M Co Beats Earnings Estimates; Misses on Revenue; Updates FY2014 Outlook ... - Dividend.com','MMM','3m company'))
-        print('3M Co. (MMM) Closes 0.22% Up on the Day for April 28 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.22% Up on the Day for April 28 - Equities.com','MMM','3m company'))
-        print('Apple Watch launch may top 3M sales, analyst says - TechnoBuffalo' , select_company_name_ticker_based('3M Company','Apple Watch launch may top 3M sales, analyst says - TechnoBuffalo','MMM','3m company'))
-        print('Radamel Falcao has cost Manchester United  3M in wages since his last shot ... - Daily Mail' , select_company_name_ticker_based('3M Company','Radamel Falcao has cost Manchester United  3M in wages since his last shot ... - Daily Mail','MMM','3m company'))
+        print '3M Co. (MMM) Falls 2.52% for April 17 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Falls 2.52% for April 17 - Equities.com','MMM','3m company')
+        print 'SOFTlab, 3M & BBDO collaborate to create lifelab at SXSW - Designboom' , select_company_name_ticker_based('3M Company','SOFTlab, 3M & BBDO collaborate to create lifelab at SXSW - Designboom','MMM','3m company')
+        print '3M Co. (MMM) Among Biggest DJIA Losers on April 23 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Among Biggest DJIA Losers on April 23 - Equities.com','MMM','3m company')
+        print '3M Co. (MMM) Closes 0.42% Down on the Day for April 24 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.42% Down on the Day for April 24 - Equities.com','MMM','3m company')
+        print 'Interesting October Stock Options for 3M - Nasdaq' , select_company_name_ticker_based('3M Company','Interesting October Stock Options for 3M - Nasdaq','MMM','3m company')
+        print 'Earnings: AT&T, Pfizer, Procter & Gamble, DuPont, Caterpillar, 3M, and Apple - Richmond.com' , select_company_name_ticker_based('3M Company','Earnings: AT&T, Pfizer, Procter & Gamble, DuPont, Caterpillar, 3M, and Apple - Richmond.com','MMM','3m company')
+        print '3M Co. (MMM) Closes 0.64% Down on the Day for April 27 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.64% Down on the Day for April 27 - Equities.com','MMM','3m company')
+        print 'Block Trading and Options Highlights for 3M Company (MMM) - AVAFIN' , select_company_name_ticker_based('3M Company','Block Trading and Options Highlights for 3M Company (MMM) - AVAFIN','MMM','3m company')
+        print '3M Co Beats Earnings Estimates; Misses on Revenue; Updates FY2014 Outlook ... - Dividend.com' , select_company_name_ticker_based('3M Company','3M Co Beats Earnings Estimates; Misses on Revenue; Updates FY2014 Outlook ... - Dividend.com','MMM','3m company')
+        print '3M Co. (MMM) Closes 0.22% Up on the Day for April 28 - Equities.com' , select_company_name_ticker_based('3M Company','3M Co. (MMM) Closes 0.22% Up on the Day for April 28 - Equities.com','MMM','3m company')
+        print 'Apple Watch launch may top 3M sales, analyst says - TechnoBuffalo' , select_company_name_ticker_based('3M Company','Apple Watch launch may top 3M sales, analyst says - TechnoBuffalo','MMM','3m company')
+        print 'Radamel Falcao has cost Manchester United  3M in wages since his last shot ... - Daily Mail' , select_company_name_ticker_based('3M Company','Radamel Falcao has cost Manchester United  3M in wages since his last shot ... - Daily Mail','MMM','3m company')
         statement_is='AT&T Falls 2.52% for April 17 - Equities.com'
-        print(statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t'))
+        print  statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t')
         statement_is='conference at T-mobile shop Falls 2.52% for April 17 - Equities.com'
-        print(statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t'))
+        print  statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t')
         statement_is='conference at T-mobile(NYSE:T) shop Falls 2.52% for April 17 - Equities.com'
-        print(statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t'))
+        print  statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t')
         statement_is='conference at T-mobile and AT&T shop Falls 2.52% for April 17 - Equities.com'
-        print(statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t'))
+        print  statement_is, select_company_name_ticker_based('AT&T Inc',statement_is,'T','at&t')
         exit()
     elif False:
-        print('"Logitech","Analysts expect that Logitech International SA will post $0.89 EPS for the current fiscal year."' , select_company_name_based("Logitech","Analysts expect that Logitech International SA will post $0.89 EPS for the current fiscal year."))
-        print('"Logitech","Analysts polled by Bloomberg indicates that the majority of the sell-side firms are bullish on Logitech."' , select_company_name_based("Logitech","Analysts polled by Bloomberg indicates that the majority of the sell-side firms are bullish on Logitech."))
-        print('"Logitech","Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)"' , select_company_name_based("Logitech","Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)"))
-        print('"Logitech","Bracken P. Darrell, Konzernchef von Logitech."' , select_company_name_based("Logitech","Bracken P. Darrell, Konzernchef von Logitech."))
-        print('"Logitech","Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices."' , select_company_name_based("Logitech","Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices."))
-        print('"Logitech","By Brian Westover Analyst, Hardware"' , select_company_name_based("Logitech","By Brian Westover Analyst, Hardware"))
-        print('"Logitech","Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog"' , select_company_name_based("Logitech","Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog"))
-        print('"Logitech","Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques"' , select_company_name_based("Logitech","Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques"))
-        print('"Logitech","DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu"' , select_company_name_based("Logitech","DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu"))
-        print('"Logitech","Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren."' , select_company_name_based("Logitech","Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren."))
-        print('"Logitech","Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:"' , select_company_name_based("Logitech","Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:"))
-        print('"Logitech","Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog"' , select_company_name_based("Logitech","Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog"))
-        print('"Logitech","H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6"' , select_company_name_based("Logitech","H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6"))
-        print('"Logitech","H Logitech IIIuII-I-IIu II I12II III III12II-IoI1 I-IoIII3II12II-I IIII gamers - I IIII IIII"' , select_company_name_based("Logitech","H Logitech IIIuII-I-IIu II I12II III III12II-IoI1 I-IoIII3II12II-I IIII gamers - I IIII IIII"))
+        print '"Logitech","Analysts expect that Logitech International SA will post $0.89 EPS for the current fiscal year."' , select_company_name_based("Logitech","Analysts expect that Logitech International SA will post $0.89 EPS for the current fiscal year.")
+        print '"Logitech","Analysts polled by Bloomberg indicates that the majority of the sell-side firms are bullish on Logitech."' , select_company_name_based("Logitech","Analysts polled by Bloomberg indicates that the majority of the sell-side firms are bullish on Logitech.")
+        print '"Logitech","Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)"' , select_company_name_based("Logitech","Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)")
+        print '"Logitech","Bracken P. Darrell, Konzernchef von Logitech."' , select_company_name_based("Logitech","Bracken P. Darrell, Konzernchef von Logitech.")
+        print '"Logitech","Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices."' , select_company_name_based("Logitech","Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices.")
+        print '"Logitech","By Brian Westover Analyst, Hardware"' , select_company_name_based("Logitech","By Brian Westover Analyst, Hardware")
+        print '"Logitech","Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog"' , select_company_name_based("Logitech","Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog")
+        print '"Logitech","Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques"' , select_company_name_based("Logitech","Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques")
+        print '"Logitech","DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu"' , select_company_name_based("Logitech","DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu")
+        print '"Logitech","Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren."' , select_company_name_based("Logitech","Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren.")
+        print '"Logitech","Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:"' , select_company_name_based("Logitech","Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:")
+        print '"Logitech","Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog"' , select_company_name_based("Logitech","Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog")
+        print '"Logitech","H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6"' , select_company_name_based("Logitech","H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6")
+        print '"Logitech","H Logitech IIIuII-I-IIu II I12II III III12II-IoI1 I-IoIII3II12II-I IIII gamers - I IIII IIII"' , select_company_name_based("Logitech","H Logitech IIIuII-I-IIu II I12II III III12II-IoI1 I-IoIII3II12II-I IIII gamers - I IIII IIII")
         exit()
     elif not True:
-        print("EDITORIAL: Toyo Tire & Rubber`s appalling disregard for safety",is_english("EDITORIAL: Toyo Tire & Rubber`s append disregard for safety",1,10))
-        print(" Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)",  is_english("Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)"))
-        print(" Bracken P. Darrell, Konzernchef von Logitech.",  is_english("Bracken P. Darrell, Konzernchef von Logitech."))
-        print(" Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices.",  is_english("Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices."))
-        print(" By Brian Westover Analyst, Hardware",  is_english("By Brian Westover Analyst, Hardware"))
-        print(" Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog",  is_english("Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog"))
-        print(" Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques",  is_english("Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques"))
-        print(" DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu",  is_english("DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu"))
-        print(" Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren.",  is_english("Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren."))
-        print(" Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:",  is_english("Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:"))
-        print(" Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog",  is_english("Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog"))
-        print(" H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6",  is_english("H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6"))
+        print "EDITORIAL: Toyo Tire & Rubber`s appalling disregard for safety",is_english("EDITORIAL: Toyo Tire & Rubber`s append disregard for safety",1,10)
+        print " Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)",  is_english("Bracken Darrell: Logitech ne sera frein par aucun obstacle (12.03.2015)")
+        print " Bracken P. Darrell, Konzernchef von Logitech.",  is_english("Bracken P. Darrell, Konzernchef von Logitech.")
+        print " Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices.",  is_english("Brian Westover is an Analyst for the Hardware Team, reviewing laptops, desktops, and storage devices.")
+        print " By Brian Westover Analyst, Hardware",  is_english("By Brian Westover Analyst, Hardware")
+        print " Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog",  is_english("Click on This Logitech Mouse Deal From Best Buy - NerdWallet blog")
+        print " Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques",  is_english("Bon plan a Lensemble claviersouris MX800 de Logitech pour 90 a - Les NumAcriques")
+        print " DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu",  is_english("DD-DD34N D3DuD1D14DuNNDoD34D1 D14NNDoD Logitech Daedalus Apex G303 - Gagadget com D12DuNDoNND12ND1 NDdegD1N D34 NDuND12DDoDu")
+        print " Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren.",  is_english("Der Turnaround bei der Profitabilitt sei auf dem richtigen Weg dank hherer Bruttomargen und disziplinierten Ausgaben, liess sich CEO Bracken Darrell in der Mitteilung zitieren.")
+        print " Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:",  is_english("Enter your email address below to get the latest news and analysts ratings for Logitech International SA with our FREE daily email newsletter:")
+        print " Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog",  is_english("Focus In on Logitech Webcam Deal From Newegg - NerdWallet blog")
+        print " H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6",  is_english("H Logitech II-IIIII1I-IIu II G303 Daedalus Apex - NovaIPSI II FM 94 6")
     elif not True:
         input_combinations=[
                         ('1-PAGE LIMITED','1-page')
@@ -3655,7 +3655,7 @@ if __name__ == '__main__':
                         ,('ACRUX LIMITED','acrux')
                         ]
         for each_input in input_combinations:
-            print('Input:\t' + each_input[0] + '\tAbbrevations:\t'  + each_input[1] + '\tResult:\t' + str(check_all_combination_abbreviation(each_input[0],each_input[1],check_half_name_match=True,developer_mode=False)))
+            print 'Input:\t' + each_input[0] + '\tAbbrevations:\t'  + each_input[1] + '\tResult:\t' + str(check_all_combination_abbreviation(each_input[0],each_input[1],check_half_name_match=True,developer_mode=False))
         exit()
     elif not True:
         print_list(get_all_dates('On January 9, 2015, Emerson Electric Co. announced that Edgar M. Purvis, Jr. would be appointed as its new Chief Operating Officer, effective February 3, 2015. Mr. Purvis, 57, has been with Emerson for 31 years and has served as Executive Vice President and Business Leader for Emerson Climate Technologies since 2008. Edward L. Monser, 64, has held the title of Chief Operating Officer since 2001, and will continue to serve as President of Emerson, a position he has held since 2010.'))
@@ -3668,11 +3668,11 @@ if __name__ == '__main__':
         print_list(paragraph_to_sentence('Sales decreased by $27.1 million , or 2.9% , from 2012  to 2013 , due to lower unit sales volume and the unfavorable effects of movements in foreign currency exchange rates, partially offset by a favorable change in average selling prices and mix. The translation of foreign currency-denominated sales transactions decreased consolidated sales by $2.3 million  in 2013  compared to 2012 , primarily due to the relatively stronger U.S. Dollar in comparison to the Brazilian Real and Japanese Yen, partially offset by a relatively weaker U.S. Dollar in comparison to the Euro. International sales decreased by $30.0 million (5.8%), including the currency effects described above, while domestic sales increased by $2.9 million (0.7%). FLAG segment sales decreased $37.4 million , or 5.7% , FRAG segment sales increased $9.5 million , or 3.8% , and sales of concrete cutting and finishing products were up $0.9 million, or 3.2%. See further discussion below under Segment Results.'))
         print_list(paragraph_to_sentence('Sales order backlog for the FLAG segment at December 31, 2013  was $150.9 million  compared to $167.9 million  at December 31, 2012 . The reduction in sales order backlog reflects reduced demand for our FLAG products, as customers managed field inventory levels and deferred some orders to 2014.'))
     elif not True:
-        print('ThisName ThatName I.\t',remove_middle_name('ThisName ThatName I.'))
-        print('I. ThisName ThatName\t',remove_middle_name('I. ThisName ThatName'))
-        print('ThisName I. ThatName\t',remove_middle_name('ThisName I. ThatName'))
-        print('ThisName I ThatName\t',remove_middle_name('ThisName I ThatName'))
-        print('ThisName ThatName\t',remove_middle_name('ThisName ThatName'))
+        print 'ThisName ThatName I.\t',remove_middle_name('ThisName ThatName I.')
+        print 'I. ThisName ThatName\t',remove_middle_name('I. ThisName ThatName')
+        print 'ThisName I. ThatName\t',remove_middle_name('ThisName I. ThatName')
+        print 'ThisName I ThatName\t',remove_middle_name('ThisName I ThatName')
+        print 'ThisName ThatName\t',remove_middle_name('ThisName ThatName')
     elif not True:
         list_of_url=['http://blog.executivebiz.com/2015/03/orbital-atk-helps-nasa-launch-scientific-balloon-on-test-flight-john-pullen-comments/',
                 'http://techcrunch.com/2015/04/13/if-apple-designed-an-ios-user-interface-for-kids/',
@@ -3717,6 +3717,6 @@ if __name__ == '__main__':
                 'http://www.carscoops.com/2015/03/haw-haw-minis-chrome-line-exterior.html'
             ]
         for each_url in list_of_url:
-            print(each_url,'=',get_smell_like_date_from_url(each_url))
+            print each_url,'=',get_smell_like_date_from_url(each_url)
         exit()
         
