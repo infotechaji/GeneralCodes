@@ -1,48 +1,42 @@
 from pynse import * 
 import datetime 
-import logging 
+
 from datetime import timedelta, date
+import ast
+import json
+import csv
 
-
-from sqlalchemy import create_engine
-engine = create_engine('sqlite://', echo=False)
-
+# import logging 
 # logging.basicConfig(level = logging.DEBUG)
 # logging.basicConfig(level=logging.DEBUG)
 
 nse = Nse()
 
-market_status = nse.market_status()
-with open('market_status.txt','w') as fp:
-    fp.write(str(market_status))
+# market_status = nse.market_status()
+# with open('market_status.txt','w') as fp:
+#     fp.write(str(market_status))
 
-# print ( nse.info('SBIN')) 
-
-# print ( nse.info('TCS')) 
-
-
-# print ( nse.get_quote('RELIANCE',Segment.FUT)) 
-
-
-# print ( nse.get_quote('RELIANCE',Segment.FUT)) 
-
-# dates = ['']
-# for 
 def get_all_weekdays(start_date,end_date,ignore_weekend=True):
+    # if start_date == end_date: return [end_date]
     outlist = []
+    from datetime import date
+    today = date.today()
+    # print ('Given end_date :',end_date)
+    if start_date>today:
+        start_date = today
+        print ('start date is changed to today :',end_date)
+    if end_date>today:
+        end_date = today
+        print ('end date is changed to today :',end_date)
     def daterange(date1, date2):
         for n in range(int ((date2 - date1).days)+1):
             yield date1 + timedelta(n)
-
-    # start_dt = date(2019,1,21)
-    # end_dt = date(2019,2,4)
     start_dt = start_date
     end_dt = end_date
     weekends = [5,6] 
     
     for dt in daterange(start_dt, end_dt):
         
-        # if ignore_weekend:
         if dt.weekday() not in weekends:                    # to print only the weekdates
             full_date = dt.strftime("%Y-%m-%d")
             year = dt.strftime("%Y")
@@ -52,55 +46,142 @@ def get_all_weekdays(start_date,end_date,ignore_weekend=True):
     return outlist
 
 
-# res=  get_all_weekdays(start_date  = date(2021,6,1),end_date= date(2021,6,30)) 
+def download_bhav_copy(start_date,end_date,date_requirements= ['company_wise'],output_format = 'zip',developer_mode= False,output_directory=os.getcwd(),selected_companies = [],overrite = False): # date_requirement= ['company_wise','date_wise']  , output_format = 'single_files'
+    res=  get_all_weekdays(start_date  = start_date,end_date= end_date) 
+    # tot_comp_res = [] 
+    if selected_companies:
+        selected_companies = list(map(lambda x:x.upper(), selected_companies))
+    if developer_mode:
+        print ('download_bhav_copy : res ',res)
+    main_results = {}
+    comment = ''
+    status = True
+    total_files=0
+    errored = 0
+    for each_date in res:
+        print('processing :',each_date['full_date'])
+        try:
+            bhav_copy = nse.bhavcopy(datetime.date(int(each_date['year']),int(each_date['month']),int(each_date['date'])))
+            # if 'date_wise' in date_requirements:
+            #     bhav_copy.to_csv(os.path.join(output_directory,str(each_date['full_date'])+'.csv'))
+            bhav_copy.to_csv(os.path.join('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\Bulk-test\\dailyreport',str(each_date['full_date'])+'.csv'))
+            if 'company_wise' in date_requirements:
+                temp_dict = bhav_copy.to_dict('index') 
+                for i in temp_dict:
+                    # print ('each key in dict i:',i,'\n',temp_dict[i])
 
-# for i in res:
-#     print(i['full_date'])
-#     try:
-#         bhav_copy = nse.bhavcopy(datetime.date(int(i['year']),int(i['month']),int(i['date'])))
-#         bhav_copy.to_csv(os.path.join('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\Downloaded-files',str(i['full_date'])+'.csv'))
-#     except Exception as e :
-#         print ('Exception while bhav copy : ',e)
+                    dict_key = i[0]
+                    dict_val = temp_dict[i]
+                    dict_val['COMPANY_NAME'] = dict_key
+                    dict_val['DATE1'] = dict_val['DATE1']
+                    if selected_companies:
+                        if developer_mode:
+                            print ('Looping inside selected companies...')
+                        
+                        if dict_key.upper() in selected_companies:
+                            if developer_mode:
+                                print ('Selected companies got passed ')
+                            pass
+                        else: 
+                            if developer_mode:
+                                print ('Skipping Company .. :',dict_key)
+                            if len(main_results)>= len(selected_companies):
+                                break
+                            continue
+                    if dict_key not in main_results:
+                        main_results[dict_key]= []
+                        total_files+=1
+                    main_results[dict_key].append(dict_val)
+            # elif 'date_wise' in date_requirements:
+            #     bhav_copy.to_csv((each_date['full_date'])+'.csv'))
+
+        except Exception as e :
+            print ('Error while getting bhav copy : ',e)
+            comment= str(e)
+            status = False
+            errored +=1
+            pass
     
+    try:
+        if developer_mode:
+            print ('************************************************************************')
+            print ('Total results found :',len(main_results))
+        for each_company in sorted (main_results.keys()):
+            if developer_mode:
+                print ('Looping :',each_company,main_results[each_company])
+            
+            if 'company_wise' in date_requirements:
+                # headers  = ['COMPANY_NAME', 'DATE1', 'OPEN_PRICE','HIGH_PRICE','LOW_PRICE','LAST_PRICE','CLOSE_PRICE'
+                            # 'AVG_PRICE','TTL_TRD_QNTY','TURNOVER_LACS','NO_OF_TRADES','DELIV_QTY','DELIV_PER']
+                headers  = ['COMPANY_NAME', 'DATE1', 'OPEN_PRICE','HIGH_PRICE','LOW_PRICE','LAST_PRICE','CLOSE_PRICE']
+                filename = str(each_company).upper()+'.csv'
+                filename = os.path.join(output_directory,filename)
+                if overrite:
+                    if os.path.exists(filename):
+                        os.remove(filename)
+                        if developer_mode:
+                            print ('Existing file deleted :',filename)
+                write_csv(filename= filename,fields = headers, mydict = main_results[each_company])
     
-bhav_copy = nse.bhavcopy(datetime.date(2021,6,21))
-# print (bhav_copy)
-# print (bhav_copy.to_dict())
-# print ( bhav_copy.to_dict('records'))
-main_dict = bhav_copy.to_dict('index')
-
-for each_dict in main_dict:
-    print (each_dict)
-    print (main_dict[each_dict])
-    input('---------------')
-    #  just format the data using company wise thats all. 
+    except Exception as e :
+            print ('Error while writing results : ',e)
+            comment= str(e)
+            status = False
+        # zip_file= get_zip_file(comp_wise_data)
+        # company_data = get_company_wise_split(total_results)
+    return {'status' :status,'comments' : comment,'total_files': total_files }
 
 
+def write_csv(filename,fields, mydict,developer_mode = False):
+    try:
+        if developer_mode:
+            print ('write_csv:\t filename :',filename)
+            print ('write_csv:\t fields :',fields)
+            print ('write_csv:\t mydict :',mydict)
+        with open(filename, 'w',newline='') as csvfile: 
+            # writer = csv.DictWriter(csvfile, fieldnames = fields,extrasaction='raise') 
+            writer = csv.DictWriter(csvfile, fieldnames = fields,extrasaction='ignore') 
+            writer.writeheader()
+            writer.writerows(mydict)
+    except Exception as e:
+        print ('Error while writing csv file :',e)
+
+        return False
+    return True
 
 
-# print ( bhav_copy.to_dict('split'))
-    # each company_data and store it into dict based on the company structure. 
-
-# bhav_copy.to_sql('users', con=engine)
-# print ( engine.execute("SELECT top 10 * FROM users").fetchall())
-
-
-
-
-
-# print (bhav_copy.to_dict())
-
-# for index, row in bhav_copy.iterrows():
-#     # print(index,row['c1'], row['c2'])
-#     print('index :',index,type(index))
-#     print('row :',row,type(row))
-#     input('proceeed to next line ')
+if __name__ == "__main__":
+    start = time.time()
+    start_date = date(2021,5,1)
+    end_date = date(2021,6,20)
+    output_directory = 'G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\Bulk-test\\june-26'
+    print (download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= [],developer_mode=False,overrite= True))
+    # print (download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= [],developer_mode=False,overrite= True))
+    # download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= ['20MICRONS','ABSLNN50ET','ZYDUSWELL'],developer_mode=True,overrite= True)
+    end = time.time()
+    print('Total Time taken in seconds : {:.1f}'.format(end - start))
+    print('Total Time taken in Minutes : {:.2f}"'.format((end - start) / 60))
+    exit()
 
 
-# print(type(bhav_copy))
+    
+    # '20MICRONS','ABSLNN50ET'
+    # file_dict = ast.literal_eval(open('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\temp_bhav_copy.txt').read())
+    # file_content = open('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\temp_bhav_copy.txt').read()
+    # # print ('file_content :',file_content)
+    # print ('type(file_content) :',type(file_content))
+    # # file_dict = json.loads(str(file_content))
+    # file_dict = ast.literal_eval(str(file_content))
+    # print ('type(file_dict) :',type(file_dict))
+    # total_results = [file_dict,file_dict]
+    # print (get_company_wise_split(total_results))
 
-# bhav_copy.to_csv('file_name.csv')
 
-
-
-
+    # tmp_str = "{('20MICRONS', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 64.1, 'OPEN_PRICE': 65.95, 'HIGH_PRICE': 65.95, 'LOW_PRICE': 58.75, 'LAST_PRICE': 59.45, 'CLOSE_PRICE': 59.35, 'AVG_PRICE': 60.35, 'TTL_TRD_QNTY': 456527, 'TURNOVER_LACS': 275.5, 'NO_OF_TRADES': 4260, 'DELIV_QTY': '259809', 'DELIV_PER': '56.91'}, ('21STCENMGM', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 15.1, 'OPEN_PRICE': 15.4, 'HIGH_PRICE': 15.4, 'LOW_PRICE': 15.2, 'LAST_PRICE': 15.25, 'CLOSE_PRICE': 15.35, 'AVG_PRICE': 15.36, 'TTL_TRD_QNTY': 3436, 'TURNOVER_LACS': 0.53, 'NO_OF_TRADES': 33, 'DELIV_QTY': '3318', 'DELIV_PER': '96.57'}, ('3IINFOTECH', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 8.75, 'OPEN_PRICE': 8.8, 'HIGH_PRICE': 9.1, 'LOW_PRICE': 8.45, 'LAST_PRICE': 8.9, 'CLOSE_PRICE': 8.9, 'AVG_PRICE': 8.8, 'TTL_TRD_QNTY': 28218389, 'TURNOVER_LACS': 2482.07, 'NO_OF_TRADES': 22567, 'DELIV_QTY': '13352209', 'DELIV_PER': '47.32'}}"
+    # tmp_str = tmp_str.replace("'",'"')
+    # print ('type(tmp_str) :',type(tmp_str))
+    # print ('tmp_str :',tmp_str)
+    # # dictt = json.loads(tmp_str)
+    # dictt = ast.literal_eval(tmp_str)
+    # print ('dictt :',dictt)
+    # print ('type(dictt) :',type(dictt))
