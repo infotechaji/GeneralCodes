@@ -1,3 +1,14 @@
+"""
+Functionality : Downloading bhav copy in bulk.
+Version : v1.0
+History:
+        v1.0 - 26/06/2021 - initial version 
+
+Cases to handle : 
+        1. Download as zip file.
+
+
+"""
 from pynse import * 
 import datetime 
 
@@ -155,33 +166,10 @@ if __name__ == "__main__":
     start_date = date(2021,5,1)
     end_date = date(2021,6,20)
     output_directory = 'G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\Bulk-test\\june-26'
-    print (download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= [],developer_mode=False,overrite= True))
+    print (download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= [],developer_mode=False,overrite= True,output_format = 'zip'))
     # print (download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= [],developer_mode=False,overrite= True))
     # download_bhav_copy(start_date=start_date,end_date=end_date,output_directory= output_directory,selected_companies= ['20MICRONS','ABSLNN50ET','ZYDUSWELL'],developer_mode=True,overrite= True)
     end = time.time()
     print('Total Time taken in seconds : {:.1f}'.format(end - start))
     print('Total Time taken in Minutes : {:.2f}"'.format((end - start) / 60))
     exit()
-
-
-    
-    # '20MICRONS','ABSLNN50ET'
-    # file_dict = ast.literal_eval(open('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\temp_bhav_copy.txt').read())
-    # file_content = open('G:\\Ajith\\Others\\Ajith-self-instresed\\NSE\\temp_bhav_copy.txt').read()
-    # # print ('file_content :',file_content)
-    # print ('type(file_content) :',type(file_content))
-    # # file_dict = json.loads(str(file_content))
-    # file_dict = ast.literal_eval(str(file_content))
-    # print ('type(file_dict) :',type(file_dict))
-    # total_results = [file_dict,file_dict]
-    # print (get_company_wise_split(total_results))
-
-
-    # tmp_str = "{('20MICRONS', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 64.1, 'OPEN_PRICE': 65.95, 'HIGH_PRICE': 65.95, 'LOW_PRICE': 58.75, 'LAST_PRICE': 59.45, 'CLOSE_PRICE': 59.35, 'AVG_PRICE': 60.35, 'TTL_TRD_QNTY': 456527, 'TURNOVER_LACS': 275.5, 'NO_OF_TRADES': 4260, 'DELIV_QTY': '259809', 'DELIV_PER': '56.91'}, ('21STCENMGM', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 15.1, 'OPEN_PRICE': 15.4, 'HIGH_PRICE': 15.4, 'LOW_PRICE': 15.2, 'LAST_PRICE': 15.25, 'CLOSE_PRICE': 15.35, 'AVG_PRICE': 15.36, 'TTL_TRD_QNTY': 3436, 'TURNOVER_LACS': 0.53, 'NO_OF_TRADES': 33, 'DELIV_QTY': '3318', 'DELIV_PER': '96.57'}, ('3IINFOTECH', 'EQ'): {'DATE1': datetime.date(2021, 6, 1), 'PREV_CLOSE': 8.75, 'OPEN_PRICE': 8.8, 'HIGH_PRICE': 9.1, 'LOW_PRICE': 8.45, 'LAST_PRICE': 8.9, 'CLOSE_PRICE': 8.9, 'AVG_PRICE': 8.8, 'TTL_TRD_QNTY': 28218389, 'TURNOVER_LACS': 2482.07, 'NO_OF_TRADES': 22567, 'DELIV_QTY': '13352209', 'DELIV_PER': '47.32'}}"
-    # tmp_str = tmp_str.replace("'",'"')
-    # print ('type(tmp_str) :',type(tmp_str))
-    # print ('tmp_str :',tmp_str)
-    # # dictt = json.loads(tmp_str)
-    # dictt = ast.literal_eval(tmp_str)
-    # print ('dictt :',dictt)
-    # print ('type(dictt) :',type(dictt))

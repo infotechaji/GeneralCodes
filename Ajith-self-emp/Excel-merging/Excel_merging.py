@@ -8,7 +8,6 @@ def get_input_excel(excel_file_name, developer_mode=False):
      :param excel_file_name: name of the uploaded excel file
      :return: names along with the defect IDS
      """
-
 	loc = excel_file_name
 	# To open Workbook
 	wb = xlrd.open_workbook(loc)
