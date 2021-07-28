@@ -14,44 +14,81 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(581, 381)
+        MainWindow.resize(613, 417)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.startdate = QtWidgets.QDateEdit(self.centralwidget)
-        self.startdate.setGeometry(QtCore.QRect(200, 40, 110, 22))
-        self.startdate.setObjectName("startdate")
-        self.enddate = QtWidgets.QDateEdit(self.centralwidget)
-        self.enddate.setGeometry(QtCore.QRect(200, 80, 110, 22))
-        self.enddate.setObjectName("enddate")
+        self.edt_startdate = QtWidgets.QDateEdit(self.centralwidget)
+        self.edt_startdate.setGeometry(QtCore.QRect(310, 50, 110, 22))
+        self.edt_startdate.setObjectName("edt_startdate")
+        self.edt_enddate = QtWidgets.QDateEdit(self.centralwidget)
+        self.edt_enddate.setGeometry(QtCore.QRect(310, 80, 110, 22))
+        self.edt_enddate.setObjectName("edt_enddate")
+        self.GetBhavCopy = QtWidgets.QPushButton(self.centralwidget,clicked = lambda: self.generate_bhav_copy(start_date = self.edt_startdate.text(), 
+                                                                                                        end_date = self.edt_enddate.text() ,
+                                                                                                        splits=[self.get_bhav_type()]))
+        self.GetBhavCopy.setGeometry(QtCore.QRect(170, 230, 251, 41))
+        palette = QtGui.QPalette()
+        brush = QtGui.QBrush(QtGui.QColor(170, 85, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(170, 85, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(170, 85, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        self.GetBhavCopy.setPalette(palette)
         
-        self.GetBhavCopy = QtWidgets.QPushButton(self.centralwidget)
-        self.GetBhavCopy.setGeometry(QtCore.QRect(200, 210, 111, 41))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.GetBhavCopy.setFont(font)
         self.GetBhavCopy.setObjectName("GetBhavCopy")
-        
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(76, 43, 110, 30))
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(76, 82, 101, 21))
-        self.label_2.setObjectName("label_2")
+        self.lbl_str_dt = QtWidgets.QLabel(self.centralwidget)
+        self.lbl_str_dt.setGeometry(QtCore.QRect(170, 43, 110, 30))
+        self.lbl_str_dt.setObjectName("lbl_str_dt")
+        self.lbl_end_dt = QtWidgets.QLabel(self.centralwidget)
+        self.lbl_end_dt.setGeometry(QtCore.QRect(170, 82, 101, 21))
+        self.lbl_end_dt.setObjectName("lbl_end_dt")
+        self.rdb_comp_wise = QtWidgets.QRadioButton(self.centralwidget)
+        self.rdb_comp_wise.setGeometry(QtCore.QRect(320, 130, 161, 31))
+        self.rdb_comp_wise.setObjectName("rdb_comp_wise")
+        self.rdb_comp_wise.setChecked(True)
+        self.rdb_date_wise = QtWidgets.QRadioButton(self.centralwidget)
+        self.rdb_date_wise.setGeometry(QtCore.QRect(320, 150, 121, 31))
+        self.rdb_date_wise.setObjectName("rdb_date_wise")
+        self.lbl_bvcp_type = QtWidgets.QLabel(self.centralwidget)
+        self.lbl_bvcp_type.setGeometry(QtCore.QRect(170, 130, 121, 41))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.lbl_bvcp_type.setFont(font)
+        self.lbl_bvcp_type.setObjectName("lbl_bvcp_type")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 581, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    def get_bhav_type(self): # company wise / date wise
+        if self.rdb_comp_wise.isChecked()==True:
+            print('company_wise')
+            return 'company_wise'
+        elif self.rdb_date_wise.isChecked()==True:
+            print('date_wise')
+            return 'date_wise'
+        
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.GetBhavCopy.setText(_translate("MainWindow", "Get Bhav Copy"))
-        self.label.setText(_translate("MainWindow", "Choose Start Date"))
-        self.label_2.setText(_translate("MainWindow", "Choose End Date"))
+        self.GetBhavCopy.setText(_translate("MainWindow", "Download Bhav Copy"))
+        self.lbl_str_dt.setText(_translate("MainWindow", "Choose Start Date"))
+        self.lbl_end_dt.setText(_translate("MainWindow", "Choose End Date"))
+        self.rdb_comp_wise.setText(_translate("MainWindow", "Company wise files"))
+        self.rdb_date_wise.setText(_translate("MainWindow", "Date wise files"))
+        self.lbl_bvcp_type.setText(_translate("MainWindow", "Bhav copy type"))
+    def generate_bhav_copy(self,start_date ,end_date,splits):
+        print('generate_bhav_copy called')
+    
 
 
 if __name__ == "__main__":
