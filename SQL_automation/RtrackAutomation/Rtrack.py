@@ -47,7 +47,7 @@ class Rtrack():
 		self.use_selenium = use_selenium
 		self.developer_mode = developer_mode
 		if not url:
-			url = 'https://rtrackconnect.ramco.com/secure/Dashboard.jspa'
+			url = ''
 		if self.use_selenium == True:
 			self.browser = webdriver.Chrome()
 			developer_print('Browser started...')
@@ -86,7 +86,7 @@ class Rtrack():
 		# try:
 		# 	# self.browser.find_element_by_class_name('shortcuts - merge_requests').click() # clicking merge requests on left side
 		# 	self.browser.find_element_by_class_name('shortcuts - merge_requests').click() # clicking merge requests on left side
-		# 	merge_url = 'https://ops.ramcouat.com/gitlab/ramco-logistics/lgt/blgt/merge_requests'
+		# 	merge_url = ''
 		# 	self.browser.get(url)
 		# 	print('RamcoGIT:\t raise_merge_request:\t Clicked Merge requests :')
 		# except Exception as e:
@@ -261,7 +261,7 @@ class Rtrack():
 		each_tag=soup.find_all("div",{"class":"attendee-detail__info"})
 		header=each_element.find('h5').text.strip()
 
-	def get_rtrack_defect_link(self,defect_id,rtrack_defect_link = 'https://rtrackconnect.ramco.com/browse/',developer_mode = False):
+	def get_rtrack_defect_link(self,defect_id,rtrack_defect_link = 'rtrack_link',developer_mode = False):
 		rtrack_link_temp = ''
 		if defect_id:
 			defect_id = str(defect_id).strip().upper()
