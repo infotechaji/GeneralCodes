@@ -37,7 +37,7 @@ from Datastructure_help import *
 
 from ObjectMerge import *
 
-each_server = {'hostname': '172.27.7.94'}
+each_server = {'hostname': ''}
 CONNECTION_STRING = get_connection_string(db_details = each_server)
 CURSOR=connect(CONNECTION_STRING)# connects to the server
 
@@ -730,11 +730,10 @@ if __name__ == '__main__':
 
 			file_name = input_file
 			extract_from_header = True
-			host_list =[{'hostname': '172.27.4.198'}
-					,{'hostname': '172.27.4.77'} # UT - 189 
-				,{'hostname': '172.27.5.174'} # ST - 189
-				# ,{'hostname': '172.27.4.198'}
-				# ,{'hostname': '172.27.5.174'}
+			host_list =[{'hostname': 'server_ip_1'}
+					,{'hostname': 'server_ip_1'} # UT - 189 
+				,{'hostname': 'server_ip_1'} # ST - 189
+				
 			]
 			if validate_sp  == True:
 				print('Total servers to check : ',len(host_list))
@@ -751,17 +750,15 @@ if __name__ == '__main__':
 
 
 		elif sp_name:
-			# db_details = {}
-			# db_details = {'hostname': '172.27.5.174'}
+			
 			servers_list = [
-							{'hostname': '172.27.4.198'}, # ST-188 
-							# {'hostname': '172.27.5.174'}  # 189 
-							# {'hostname': '172.27.4.77'} # UT
-							{'hostname': '172.27.7.94'} # UT
+							{'hostname': 'server_ip_1'}, # ST-188 
+							
+							{'hostname': 'server_ip_1'} # UT
 							]
-			# 			'username': 'select',
-			# 			'password': 'select',
-			# 			'database': 'scmdb',
+			# 			'username': 'user',
+			# 			'password': 'pwd',
+			# 			'database': 'dbname',
 			# 			'timeout': 60
 			# 			}
 			cursors =[]
@@ -817,7 +814,7 @@ if __name__ == '__main__':
 				# if not os.path.exists(file_directory): os.mkdirs(file_directory)
 			# file_directory='G:\\Ajith\\Issues\\Logistics\\2020\\Pss-Enhancement-Merge\\Objects-Enhancement'
 
-			cursor=connect(get_connection_string(db_details = {'hostname' :'172.27.5.174'}))# connects to the ST
+			cursor=connect(get_connection_string(db_details = {'hostname' :'server_ip_1'}))# connects to the ST
 			# cursor=connect(get_connection_string(db_details = {'hostname' :'172.27.4.198'}))# connects to the UT
 			file_lines=get_file_content(args.input_file)
 			for index,each_line in enumerate(file_lines):
