@@ -1,11 +1,9 @@
-USER_NAME = 'O48090'
-GIT_SOURCE_LINK = 'https://ops.ramcouat.com/gitlab/users/sign_in'
-PASSWORD = 'Ajisedin@123'
+USER_NAME = ''
+GIT_SOURCE_LINK = ''
+PASSWORD = ''
 
-# NEW_MERGE_REQUEST_PATTERN = 'https://ops.ramcouat.com/gitlab/ramco-logistics/lgt/blgt/merge_requests/new?utf8=%E2%9C%93&merge_request%5Bsource_project_id%5D=438&merge_request%5Bsource_branch%5D=<source_branch>&merge_request%5Btarget_project_id%5D=438&merge_request%5Btarget_branch%5D=<destination_branch>'
-# NEW_MERGE_REQUEST_PATTERN = 'https://ops.ramcouat.com/gitlab/ramco-logistics/lgt/blgt/merge_requests/new?utf8=%E2%9C%93&merge_request%5Bsource_project_id%5D=438&merge_request%5Bsource_branch%5D=dev-<epe_id>-V3.189-Controlled&merge_request%5Btarget_project_id%5D=438&merge_request%5Btarget_branch%5D=<destination_branch>'
-NEW_MERGE_REQUEST_PATTERN = 'https://ops.ramcouat.com/gitlab/ramco-logistics/lgt/blgt/merge_requests/new?utf8=%E2%9C%93&merge_request%5Bsource_project_id%5D=438&merge_request%5Bsource_branch%5D=<source_branch>&merge_request%5Btarget_project_id%5D=438&merge_request%5Btarget_branch%5D=<destination_branch>'
-EPE_TRACE_PATTERN = 'https://ops.ramcouat.com/gitlab/ramco-logistics/lgt/blgt/merge_requests?scope=all&utf8=%E2%9C%93&state=all&search=<epe_id>'
+NEW_MERGE_REQUEST_PATTERN = ''
+EPE_TRACE_PATTERN = ''
 
 SUBMIT_TEXTS = ['submit merge request','submit']
 CASES_TO_IGNORE = ['compare branches and continue']

@@ -1,8 +1,8 @@
 import os 
 #  Credentials
-USER_NAME = 'O48090'
+USER_NAME = ''
 MAIL_ID = ''
-PASSWORD = 'Ajisedin@123'
+PASSWORD = ''
 
 # Deployment file patters
 GIT_DEPLOYMENT_PATTERN_1 = os.path.join(os.getcwd(),'GIT_template_01.txt')
